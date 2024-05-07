@@ -3,7 +3,7 @@ const app = express();
 const port = 3000;
 
 const mongoose = require("mongoose");
-const Todo = require("./model/todo.js");
+const Todos = require("./model/todo.js");
 
 require("dotenv").config(); //for using the variable in .env
 
