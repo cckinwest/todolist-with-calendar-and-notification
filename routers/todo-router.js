@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Todo = require("../model/Todo");
+const Todo = require("../models/Todo");
 
 router.get("/", async (res, req) => {
   try {
@@ -43,7 +43,9 @@ router.put("/update/:id", async (res, req) => {
 router.delete("/delete/:id", async (res, req) => {
   try {
     await Todo.findByIdAndDelete(req.params.id);
-    res.status(204).json({ message: `todo ${req.params.id} is deleted successfully!`})
+    res
+      .status(204)
+      .json({ message: `todo ${req.params.id} is deleted successfully!` });
   } catch (error) {
     res.status(500).json({ message: "internal server error!" });
   }
