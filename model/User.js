@@ -10,10 +10,6 @@ const userSchema = Schema({
   password: {
     type: String,
   },
-
-  secretKey: {
-    type: String,
-  },
 });
 
 const User = mongoose("User", userSchema);
