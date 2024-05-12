@@ -15,13 +15,15 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
   try {
-    const user = await User.findOne(req.body.username);
+    const user = await User.findOne({ username: username });
     if (!user) {
       return res.status(401).json({ message: "invalid username or password!" });
     }
 
-    if (user.password !== req.body.password) {
+    if (user.password !== password) {
       return res.status(401).json({ message: "invalid username or password!" });
     }
 

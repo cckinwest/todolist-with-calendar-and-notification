@@ -9,6 +9,10 @@ const verifyJWT = require("./middleware/middleware");
 
 require("dotenv").config(); //for using the variable in .env
 
+var bodyParser = require("body-parser");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 mongoose.connect(process.env.MONGODB_URL).then(() => {
   console.log("MongoDB is connected!");
 });
