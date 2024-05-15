@@ -22,6 +22,7 @@ app.use("/todo", todoRouter);
 
 app.get("/decode", verifyJWT, (req, res) => {
   const { username } = req.user;
+  console.log(`${username} is logged in!`);
   res.json({ username });
 });
 

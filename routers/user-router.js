@@ -35,6 +35,7 @@ router.post("/login", async (req, res) => {
       process.env.SECRET_KEY
     );
 
+    res.setHeader('authorization', token);
     res.json({ token });
   } catch (error) {
     console.log(error);
