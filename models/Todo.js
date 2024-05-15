@@ -11,6 +11,10 @@ const todoSchema = new Schema({
   description: {
     type: String,
   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 //name the model defined as Todo
