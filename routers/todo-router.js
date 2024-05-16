@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Todo = require("../models/Todo");
+const User = require("../models/User");
+const verifyJWT = require("../middleware/middleware");
 
 router.get("/", async (req, res) => {
   try {
@@ -20,9 +22,17 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/create", async (req, res) => {
+router.post("/create", verifyJWT, async (req, res) => {
   try {
-    const todo = await Todo.create(req.body);
+    const { title, description } = req.body;
+    const { id } = req.user;
+    const todo = await Todo.create({
+      title: title,
+      description: description,
+      createdBy: id,
+    });
+    const user = await User.findById(id);
+    await user.populate("todos");
     res.status(200).json(todo);
   } catch (error) {
     console.log(error);

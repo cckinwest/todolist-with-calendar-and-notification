@@ -14,13 +14,12 @@ const userSchema = Schema({
     unique: true,
     required: true,
   },
+});
 
-  todos: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Todo",
-    },
-  ],
+userSchema.virtual("todos", {
+  ref: "Todo",
+  localField: "_id",
+  foreignField: "createdBy",
 });
 
 const User = mongoose.model("User", userSchema);

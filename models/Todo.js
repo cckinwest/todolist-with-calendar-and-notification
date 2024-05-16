@@ -15,6 +15,10 @@ const todoSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }
 });
 
 //name the model defined as Todo
