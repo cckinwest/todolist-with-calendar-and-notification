@@ -4,9 +4,10 @@ const Todo = require("../models/Todo");
 const User = require("../models/User");
 const verifyJWT = require("../middleware/middleware");
 
-router.get("/", async (req, res) => {
+router.get("/", verifyJWT, async (req, res) => {
   try {
-    const todos = await Todo.find();
+    const { id } = req.user;
+    const todos = await Todo.find({ createdBy: id });
     res.status(200).json(todos);
   } catch (error) {
     res.status(500).json({ message: "internal server error!" });
@@ -51,9 +52,19 @@ router.put("/update/:id", async (req, res) => {
   }
 });
 
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/delete/:id", verifyJWT, async (req, res) => {
   try {
+    const { id } = req.user;
+
     await Todo.findByIdAndDelete(req.params.id);
+    const user = await User.findById(id);
+
+    user.todos = user.todos.filter((todoId) => {
+      return todoId !== req.params.id;
+    });
+
+    await user.save();
+
     res
       .status(204)
       .json({ message: `todo ${req.params.id} is deleted successfully!` });
