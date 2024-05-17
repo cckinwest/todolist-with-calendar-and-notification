@@ -1,4 +1,5 @@
 import TaskList from "./components/TaskList";
+import LoginForm from "./components/loginForm";
 
 const task_list = [
   {
@@ -21,7 +22,7 @@ const task_list = [
 ];
 
 function App() {
-  return <TaskList tasks={task_list} />;
+  return <LoginForm />;
 }
 
 export default App;
