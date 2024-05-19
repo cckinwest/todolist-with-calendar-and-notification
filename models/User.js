@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
-
 const { Schema } = mongoose;
+
+const bcrypt = require("bcrypt");
 
 const userSchema = Schema({
   username: {
@@ -14,13 +15,28 @@ const userSchema = Schema({
     unique: true,
     required: true,
   },
+
+  todos: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Todo",
+    },
+  ],
 });
 
-userSchema.virtual("todos", {
-  ref: "Todo",
-  localField: "_id",
-  foreignField: "createdBy",
+userSchema.pre("save", async function (next) {
+  if (this.isNew || this.isModified) {
+    const saltRounds = 10;
+    this.password = await bcrypt.hash(this.password, saltRounds);
+  }
+
+  next();
 });
+
+userSchema.methods.isPassword = async function (password) {
+  const match = await bcrypt.compare(password, this.password);
+  return match;
+};
 
 const User = mongoose.model("User", userSchema);
 

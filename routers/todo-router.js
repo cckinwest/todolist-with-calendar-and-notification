@@ -7,8 +7,8 @@ const verifyJWT = require("../middleware/middleware");
 router.get("/", verifyJWT, async (req, res) => {
   try {
     const { id } = req.user;
-    const todos = await Todo.find({ createdBy: id });
-    res.status(200).json(todos);
+    const user = await User.findById(id);
+    res.status(200).json(user.todos);
   } catch (error) {
     res.status(500).json({ message: "internal server error!" });
   }
@@ -27,13 +27,19 @@ router.post("/create", verifyJWT, async (req, res) => {
   try {
     const { title, description } = req.body;
     const { id } = req.user;
+
     const todo = await Todo.create({
       title: title,
       description: description,
       createdBy: id,
     });
-    const user = await User.findById(id);
-    await user.populate("todos");
+
+    const user = await User.updateOne(
+      { _id: id },
+      { $addToSet: { todos: todo.id } }
+    );
+
+    console.log(user.todos);
     res.status(200).json(todo);
   } catch (error) {
     console.log(error);
@@ -57,13 +63,12 @@ router.delete("/delete/:id", verifyJWT, async (req, res) => {
     const { id } = req.user;
 
     await Todo.findByIdAndDelete(req.params.id);
-    const user = await User.findById(id);
+    const user = await User.updateOne(
+      { _id: id },
+      { $pull: { todos: req.params.id } }
+    );
 
-    user.todos = user.todos.filter((todoId) => {
-      return todoId !== req.params.id;
-    });
-
-    await user.save();
+    console.log(user.todos);
 
     res
       .status(204)
