@@ -1,18 +1,39 @@
 import React from "react";
 import { useState } from "react";
+import axios from "axios";
 
-function LoginForm() {
+function SignupForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [warning, setWarning] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!username || !password) {
       setWarning("Invalid username or password!");
     } else {
-      setWarning(`${username} with ${password} is registered successfully!`);
+      const userData = {
+        username: username,
+        password: password,
+      };
+
+      const res = await axios.post(
+        "http://localhost:3001/user/signup",
+        userData
+      );
+
+      console.log(res);
+
+      if (res.data.username) {
+        setWarning(`${username} is registered successfully!`);
+        localStorage.setItem("username", res.data.username);
+      } else {
+        setWarning("There are some errors in the registration!");
+      }
     }
+
+    setUsername("");
+    setPassword("");
   };
 
   return (
@@ -43,10 +64,10 @@ function LoginForm() {
           }}
         />
         <br />
-        <button type="submit">Login</button>
+        <button type="submit">Signup</button>
       </form>
     </div>
   );
 }
 
-export default LoginForm;
+export default SignupForm;

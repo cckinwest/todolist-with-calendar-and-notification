@@ -7,6 +7,9 @@ const userRouter = require("./routers/user-router");
 const todoRouter = require("./routers/todo-router");
 const verifyJWT = require("./middleware/middleware");
 
+var cors = require("cors");
+app.use(cors());
+
 require("dotenv").config(); //for using the variable in .env
 
 var bodyParser = require("body-parser");

@@ -39,7 +39,6 @@ router.post("/create", verifyJWT, async (req, res) => {
       { $addToSet: { todos: todo.id } }
     );
 
-    console.log(user.todos);
     res.status(200).json(todo);
   } catch (error) {
     console.log(error);
