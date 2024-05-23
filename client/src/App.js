@@ -1,29 +1,25 @@
 import TaskList from "./components/TaskList";
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
-
-const task_list = [
-  {
-    name: "review MongoDB",
-    description: "how to setup MongoDB, how to setup an API",
-    priority: "high",
-  },
-
-  {
-    name: "review JWT",
-    description: "the theory of JWT, how to setup token",
-    priority: "high",
-  },
-
-  {
-    name: "review React",
-    description: "install React, setup component",
-    priority: "low",
-  },
-];
+import TaskForm from "./components/TaskForm";
+import Header from "./components/Header";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
-  return <SignupForm />;
+  return (
+    <Router>
+      <div className="mainContainer">
+        <Header />
+        <div className="pageContainer">
+          <Routes>
+            <Route exact path="/dashboard" element={<TaskForm />} />
+            <Route exact path="/signup" element={<SignupForm />} />
+            <Route exact path="/login" element={<LoginForm />} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
+  );
 }
 
 export default App;

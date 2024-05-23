@@ -23,19 +23,18 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/create", verifyJWT, async (req, res) => {
+router.post("/create", async (req, res) => {
   try {
-    const { title, description } = req.body;
-    const { id } = req.user;
+    const { title, description, userId } = req.body;
 
     const todo = await Todo.create({
       title: title,
       description: description,
-      createdBy: id,
+      createdBy: userId,
     });
 
     const user = await User.updateOne(
-      { _id: id },
+      { _id: userId },
       { $addToSet: { todos: todo.id } }
     );
 
