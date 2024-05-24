@@ -11,6 +11,11 @@ const Header = () => {
     user = jwtDecode(token);
   }
 
+  const logout = () => {
+    localStorage.removeItem("token");
+    window.location.assign("/");
+  };
+
   return (
     <header>
       <div>
@@ -26,6 +31,7 @@ const Header = () => {
               <Link to="/dashboard">Dashboard</Link>
             </li>
           )}
+          {user && <button onClick={logout}>Logout</button>}
         </ul>
       </div>
     </header>

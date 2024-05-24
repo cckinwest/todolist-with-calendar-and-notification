@@ -19,8 +19,6 @@ function LoginForm() {
       };
 
       axios.post("http://localhost:3001/user/login", userData).then((res) => {
-        console.log(res);
-
         if (res.data.token) {
           setWarning(`${username} login successfully!`);
           localStorage.setItem("token", res.data.token);

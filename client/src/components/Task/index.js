@@ -1,18 +1,22 @@
 import React from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
-const Task = ({ task }) => {
+const Task = ({ taskId }) => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    axios.get(`http://localhost:3001/todo/task?id=${taskId}`).then((res) => {
+      setTitle(res.data.title);
+      setDescription(res.data.description);
+    });
+  }, []);
+
   return (
     <div style={{ backgroundColor: "yellow", marginBottom: "5px" }}>
-      <h4>Name: {task.name}</h4>
-      <p>Description: {task.description}</p>
-      <p>
-        Priority:{" "}
-        {task.priority === "high" ? (
-          <span style={{ color: "red" }}>HIGH</span>
-        ) : (
-          <span style={{ color: "green" }}>LOW</span>
-        )}
-      </p>
+      <h4>Title: {title}</h4>
+      <p>Description: {description}</p>
     </div>
   );
 };

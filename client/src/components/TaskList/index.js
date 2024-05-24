@@ -4,10 +4,10 @@ import Task from "../Task";
 const TaskList = ({ tasks }) => {
   return (
     <ul className="taskList">
-      {tasks.map((task) => {
+      {tasks.map((taskId) => {
         return (
-          <li>
-            <Task task={task} />
+          <li key={taskId}>
+            <Task taskId={taskId} />
           </li>
         );
       })}

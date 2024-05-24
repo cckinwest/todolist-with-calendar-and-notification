@@ -4,19 +4,18 @@ const Todo = require("../models/Todo");
 const User = require("../models/User");
 const verifyJWT = require("../middleware/middleware");
 
-router.get("/", verifyJWT, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const { id } = req.user;
-    const user = await User.findById(id);
+    const user = await User.findOne({ username: req.query.username });
     res.status(200).json(user.todos);
   } catch (error) {
     res.status(500).json({ message: "internal server error!" });
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/task", async (req, res) => {
   try {
-    const todo = await Todo.findById(req.params.id);
+    const todo = await Todo.findById(req.query.id);
     res.status(200).json(todo);
   } catch (error) {
     res.status(500).json({ message: "internal server error!" });

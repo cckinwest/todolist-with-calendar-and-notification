@@ -1,4 +1,4 @@
-import TaskList from "./components/TaskList";
+import Dashboard from "./components/Dashboard";
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
 import TaskForm from "./components/TaskForm";
@@ -12,7 +12,7 @@ function App() {
         <Header />
         <div className="pageContainer">
           <Routes>
-            <Route exact path="/dashboard" element={<TaskForm />} />
+            <Route exact path="/dashboard" element={<Dashboard />} />
             <Route exact path="/signup" element={<SignupForm />} />
             <Route exact path="/login" element={<LoginForm />} />
           </Routes>

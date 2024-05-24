@@ -13,7 +13,6 @@ function TaskForm() {
 
   if (token) {
     user = jwtDecode(token);
-    console.log(user);
   }
 
   const handleSubmit = async (e) => {
@@ -28,8 +27,7 @@ function TaskForm() {
     axios
       .post("http://localhost:3001/todo/create", taskData)
       .then((res) => {
-        console.log(res.data);
-        setWarning("The task is added successfully!");
+        window.location.reload();
       })
       .catch((err) => {
         setWarning("There are some errors occured!");

@@ -21,7 +21,6 @@ function SignupForm() {
       };
 
       axios.post("http://localhost:3001/user/signup", userData).then((res) => {
-        console.log(res.data);
         if (
           res.data.message &&
           res.data.message === "The username is already used!"
