@@ -6,17 +6,12 @@ const verifyJWT = require("../middleware/middleware");
 
 router.get("/", async (req, res) => {
   try {
-    const user = await User.findOne({ username: req.query.username });
-    res.status(200).json(user.todos);
-  } catch (error) {
-    res.status(500).json({ message: "internal server error!" });
-  }
-});
+    const user = await User.findOne({ username: req.query.username }).populate({
+      path: "todos",
+      select: "-__v",
+    });
 
-router.get("/task", async (req, res) => {
-  try {
-    const todo = await Todo.findById(req.query.id);
-    res.status(200).json(todo);
+    res.status(200).json(user.todos);
   } catch (error) {
     res.status(500).json({ message: "internal server error!" });
   }
@@ -55,21 +50,22 @@ router.put("/update/:id", async (req, res) => {
   }
 });
 
-router.delete("/delete/:id", verifyJWT, async (req, res) => {
+router.put("/delete", async (req, res) => {
   try {
-    const { id } = req.user;
+    const taskId = req.body.taskId;
+    const todo = await Todo.findById(taskId);
+    const userId = todo.createdBy;
 
-    await Todo.findByIdAndDelete(req.params.id);
+    await Todo.findByIdAndDelete(taskId);
+
     const user = await User.updateOne(
-      { _id: id },
-      { $pull: { todos: req.params.id } }
+      { _id: userId },
+      { $pull: { todos: taskId } }
     );
-
-    console.log(user.todos);
 
     res
       .status(204)
-      .json({ message: `todo ${req.params.id} is deleted successfully!` });
+      .json({ message: `todo ${taskId} is deleted successfully!` });
   } catch (error) {
     res.status(500).json({ message: "internal server error!" });
   }
