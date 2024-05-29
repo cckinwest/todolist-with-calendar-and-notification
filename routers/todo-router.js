@@ -39,11 +39,12 @@ router.post("/create", async (req, res) => {
   }
 });
 
-router.put("/update/:id", async (req, res) => {
+router.put("/update", async (req, res) => {
   try {
-    const todo = await Todo.findByIdAndUpdate(req.params.id, req.body, {
+    const todo = await Todo.findByIdAndUpdate(req.body.id, req.body, {
       new: true,
     });
+
     res.status(200).json(todo);
   } catch (error) {
     res.status(500).json({ message: "internal server error!" });

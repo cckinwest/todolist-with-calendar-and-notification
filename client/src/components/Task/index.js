@@ -17,11 +17,27 @@ const Task = ({ taskId, title, description }) => {
 
   const handleEdit = () => {
     setEdit(!edit);
+
+    if (edit) {
+      const taskData = {
+        id: taskId,
+        title: formData.tasktitle,
+        description: formData.taskdescription,
+      };
+
+      axios
+        .put("http://localhost:3001/todo/update", taskData)
+        .then((res) => {
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const handleDelete = () => {
     const taskData = { taskId: taskId };
-    console.log(taskData);
 
     axios
       .put("http://localhost:3001/todo/delete", taskData)
@@ -35,7 +51,9 @@ const Task = ({ taskId, title, description }) => {
 
   return edit ? (
     <form>
-      <label htmlFor="tasktitle">Title: </label>
+      <label htmlFor="tasktitle">
+        <h4>Title: </h4>
+      </label>
       <input
         name="tasktitle"
         id="tasktitle"
