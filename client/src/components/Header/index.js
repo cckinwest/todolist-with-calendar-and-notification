@@ -1,7 +1,8 @@
 import React from "react";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+
+import { Container, Nav, Navbar, Button } from "react-bootstrap";
 
 const Header = () => {
   const token = localStorage.getItem("token");
@@ -13,28 +14,27 @@ const Header = () => {
 
   const logout = () => {
     localStorage.removeItem("token");
-    window.location.assign("/");
+    window.location.assign("/login");
   };
 
   return (
-    <header>
-      <div>
-        <ul className="menuList">
-          <li className="menuItem">
-            <Link to="/signup">Signup</Link>
-          </li>
-          <li className="menuItem">
-            <Link to="/login">Login</Link>
-          </li>
-          {user && (
-            <li className="menuItem">
-              <Link to="/dashboard">Dashboard</Link>
-            </li>
-          )}
-          {user && <button onClick={logout}>Logout</button>}
-        </ul>
-      </div>
-    </header>
+    <Navbar expand="lg" className="bg-body-tertiary">
+      <Container>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link href="/signup">Signup</Nav.Link>
+            <Nav.Link href="/login">Login</Nav.Link>
+            {user && <Nav.Link href="/dashboard">Dashboard</Nav.Link>}
+            {user && (
+              <Button variant="light" onClick={logout}>
+                Logout
+              </Button>
+            )}
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 

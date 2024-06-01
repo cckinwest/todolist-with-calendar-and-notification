@@ -53,7 +53,7 @@ router.post("/login", async (req, res) => {
       },
       process.env.SECRET_KEY,
       {
-        expiresIn: "30s",
+        expiresIn: "5min",
       }
     );
 

@@ -26,12 +26,7 @@ function TokenCounter() {
     return () => clearTimeout(timer);
   });
 
-  return (
-    <div>
-      {!isExpire && <p>TimeLeft: {timeLeft} seconds</p>}
-      <p>{isExpire ? "Your token is expired." : "Your token is active."}</p>
-    </div>
-  );
+  return <div>{!isExpire && <p>TimeLeft: {timeLeft} seconds</p>}</div>;
 }
 
 export default TokenCounter;

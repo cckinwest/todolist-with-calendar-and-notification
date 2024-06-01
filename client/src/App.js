@@ -1,7 +1,7 @@
 import Dashboard from "./components/Dashboard";
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
-import TaskForm from "./components/TaskForm";
+import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
@@ -17,6 +17,7 @@ function App() {
             <Route exact path="/login" element={<LoginForm />} />
           </Routes>
         </div>
+        <Footer />
       </div>
     </Router>
   );
