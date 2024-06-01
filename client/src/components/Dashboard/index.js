@@ -4,6 +4,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import TaskList from "../TaskList";
 import TaskForm from "../TaskForm";
+import TokenCounter from "../TokenCounter";
 
 function Dashboard() {
   const [tasks, setTasks] = useState([]);
@@ -21,6 +22,7 @@ function Dashboard() {
 
   return (
     <div>
+      <TokenCounter />
       <TaskForm />
       <TaskList tasks={tasks} />
     </div>
