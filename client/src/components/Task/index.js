@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { Form, Button, Card, Alert } from "react-bootstrap";
 
 const Task = ({ taskId, title, description }) => {
   const [formData, setFormData] = useState({
@@ -50,37 +51,43 @@ const Task = ({ taskId, title, description }) => {
   };
 
   return edit ? (
-    <form>
-      <label htmlFor="tasktitle">
-        <h4>Title: </h4>
-      </label>
-      <input
-        name="tasktitle"
-        id="tasktitle"
-        value={formData.tasktitle}
-        onChange={handleChange}
-      />
-      <br />
-      <label htmlFor="taskdescription">Description: </label>
-      <input
-        name="taskdescription"
-        id="taskdescription"
-        value={formData.taskdescription}
-        onChange={handleChange}
-      />
-      <br />
-      <button type="submit" onClick={handleEdit}>
+    <Form>
+      <Form.Group className="mb-3" controlId="EditTitle">
+        <Form.Control
+          type="text"
+          value={formData.tasktitle}
+          onChange={handleChange}
+        />
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="EditDescription">
+        <Form.Control
+          type="text"
+          value={formData.taskdescription}
+          onChange={handleChange}
+        />
+      </Form.Group>
+
+      <Button variant="light" onClick={handleEdit}>
         Save
-      </button>
-      <button onClick={handleDelete}>Delete</button>
-    </form>
+      </Button>
+      <Button variant="danger" onClick={handleDelete}>
+        Delete
+      </Button>
+    </Form>
   ) : (
-    <div style={{ backgroundColor: "yellow", marginBottom: "5px" }}>
-      <h4>Title: {formData.tasktitle}</h4>
-      <p>Description: {formData.taskdescription}</p>
-      <button onClick={handleEdit}>Edit</button>
-      <button onClick={handleDelete}>Delete</button>
-    </div>
+    <Card bg="light">
+      <Card.Body>
+        <Card.Title>{formData.tasktitle}</Card.Title>
+        <Card.Text>{formData.taskdescription}</Card.Text>
+        <Button variant="light" onClick={handleEdit}>
+          Edit
+        </Button>
+        <Button variant="danger" onClick={handleDelete}>
+          Delete
+        </Button>
+      </Card.Body>
+    </Card>
   );
 };
 

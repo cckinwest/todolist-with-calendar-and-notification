@@ -1,19 +1,23 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
+import { Form, Button, Alert } from "react-bootstrap";
 
 function SignupForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [warning, setWarning] = useState("");
+  const [msg, setMsg] = useState("");
+  const [isWarning, setIsWarning] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!username || !password || !confirm) {
-      setWarning("Invalid username or password!");
+      setMsg("Invalid username or password!");
+      setIsWarning(true);
     } else if (password !== confirm) {
-      setWarning("Password cannot be confirmed!");
+      setMsg("Password cannot be confirmed!");
+      setIsWarning(true);
     } else {
       const userData = {
         username: username,
@@ -25,13 +29,16 @@ function SignupForm() {
           res.data.message &&
           res.data.message === "The username is already used!"
         ) {
-          setWarning("The username is already used!");
+          setMsg("The username is already used!");
+          setIsWarning(true);
         } else if (res.data.token) {
-          setWarning(`${username} is registered successfully!`);
+          setMsg(`${username} is registered successfully!`);
+          setIsWarning(false);
           localStorage.setItem("token", res.data.token);
           window.location.assign("/dashboard");
         } else {
-          setWarning("There are some errors in the signup!");
+          setMsg("There are some errors in the signup!");
+          setIsWarning(true);
         }
       });
     }
@@ -42,48 +49,51 @@ function SignupForm() {
   };
 
   return (
-    <div style={{ fontFamily: "Arial" }}>
-      <p>{warning}</p>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Username: </label>
-        <input
+    <Form onSubmit={handleSubmit}>
+      {msg && <Alert variant={isWarning ? "danger" : "light"}>{msg}</Alert>}
+      <Form.Group className="mb-3" controlId="SignupUsername">
+        <Form.Label>Username</Form.Label>
+        <Form.Control
+          type="text"
           placeholder="username"
-          name="username"
-          id="username"
           value={username}
           onChange={(e) => {
             setUsername(e.target.value);
-            setWarning("");
+            setMsg("");
           }}
         />
-        <br />
-        <label htmlFor="password">Password: </label>
-        <input
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="SignupPassword">
+        <Form.Label>Password</Form.Label>
+        <Form.Control
+          type="password"
           placeholder="password"
-          name="password"
-          id="password"
           value={password}
           onChange={(e) => {
             setPassword(e.target.value);
-            setWarning("");
+            setMsg("");
           }}
         />
-        <br />
-        <label htmlFor="confirm">Confirm password: </label>
-        <input
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="SignupConfirm">
+        <Form.Label>Confirm</Form.Label>
+        <Form.Control
+          type="password"
           placeholder="confirm password"
-          name="confirm"
-          id="confirm"
           value={confirm}
           onChange={(e) => {
             setConfirm(e.target.value);
-            setWarning("");
+            setMsg("");
           }}
         />
-        <br />
-        <button type="submit">Signup</button>
-      </form>
-    </div>
+      </Form.Group>
+
+      <Button variant="light" type="submit">
+        Signup
+      </Button>
+    </Form>
   );
 }
 

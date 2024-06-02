@@ -1,17 +1,20 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
+import { Form, Button, Alert } from "react-bootstrap";
 
 function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [warning, setWarning] = useState("");
+  const [msg, setMsg] = useState("");
+  const [isWarning, setIsWarning] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!username || !password) {
-      setWarning("Invalid username or password!");
+      setMsg("Invalid username or password!");
+      setIsWarning(true);
     } else {
       const userData = {
         username: username,
@@ -20,47 +23,51 @@ function LoginForm() {
 
       axios.post("http://localhost:3001/user/login", userData).then((res) => {
         if (res.data.token) {
-          setWarning(`${username} login successfully!`);
+          setMsg(`${username} login successfully!`);
+          setIsWarning(false);
           localStorage.setItem("token", res.data.token);
           window.location.assign("/dashboard");
         } else {
-          setWarning("There are some errors in login!");
+          setMsg("There are some errors in login!");
+          setIsWarning(true);
         }
       });
     }
   };
 
   return (
-    <div style={{ fontFamily: "Arial" }}>
-      <p>{warning}</p>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Username: </label>
-        <input
+    <Form onSubmit={handleSubmit}>
+      {msg && <Alert variant={isWarning ? "danger" : "light"}>{msg}</Alert>}
+      <Form.Group className="mb-3" controlId="LoginUsername">
+        <Form.Label>Username</Form.Label>
+        <Form.Control
+          type="text"
           placeholder="username"
-          name="username"
-          id="username"
           value={username}
           onChange={(e) => {
             setUsername(e.target.value);
-            setWarning("");
+            setMsg("");
           }}
         />
-        <br />
-        <label htmlFor="password">Password: </label>
-        <input
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="LoginPassword">
+        <Form.Label>Password</Form.Label>
+        <Form.Control
+          type="password"
           placeholder="password"
-          name="password"
-          id="password"
           value={password}
           onChange={(e) => {
             setPassword(e.target.value);
-            setWarning("");
+            setMsg("");
           }}
         />
-        <br />
-        <button type="submit">Login</button>
-      </form>
-    </div>
+      </Form.Group>
+
+      <Button variant="light" type="submit">
+        Login
+      </Button>
+    </Form>
   );
 }
 

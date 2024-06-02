@@ -23,8 +23,8 @@ function Dashboard() {
   return (
     <div>
       <TokenCounter />
-      <TaskForm />
       <TaskList tasks={tasks} />
+      <TaskForm />
     </div>
   );
 }
