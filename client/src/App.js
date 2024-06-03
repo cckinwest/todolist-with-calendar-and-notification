@@ -12,6 +12,7 @@ function App() {
         <Header />
         <div className="pageContainer">
           <Routes>
+            <Route exact path="/" element={<LoginForm />} />
             <Route exact path="/dashboard" element={<Dashboard />} />
             <Route exact path="/signup" element={<SignupForm />} />
             <Route exact path="/login" element={<LoginForm />} />

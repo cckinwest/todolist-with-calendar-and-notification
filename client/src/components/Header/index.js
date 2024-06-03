@@ -1,7 +1,8 @@
 import React from "react";
 import { jwtDecode } from "jwt-decode";
+import icon from "../../assets/todolistIcon.jpg";
 
-import { Container, Nav, Navbar, Button } from "react-bootstrap";
+import { Container, Nav, Navbar, Button, Image } from "react-bootstrap";
 
 const Header = () => {
   const token = localStorage.getItem("token");
@@ -19,6 +20,9 @@ const Header = () => {
   return (
     <Navbar expand="lg" className="bg-light">
       <Container>
+        <Navbar.Brand>
+          <Image src={icon} roundedCircle style={{ height: "50px" }} />
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
