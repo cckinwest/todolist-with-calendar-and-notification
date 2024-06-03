@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import TaskList from "../TaskList";
 import TaskForm from "../TaskForm";
 import TokenCounter from "../TokenCounter";
+import ExpireForm from "../ExpireForm";
 
 function Dashboard() {
   const [tasks, setTasks] = useState([]);
@@ -22,7 +23,7 @@ function Dashboard() {
 
   return (
     <div>
-      <TokenCounter />
+      <ExpireForm />
       <TaskList tasks={tasks} />
       <TaskForm />
     </div>

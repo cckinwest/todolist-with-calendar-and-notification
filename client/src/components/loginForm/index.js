@@ -21,17 +21,18 @@ function LoginForm() {
         password: password,
       };
 
-      axios.post("http://localhost:3001/user/login", userData).then((res) => {
-        if (res.data.token) {
+      axios
+        .post("http://localhost:3001/user/login", userData)
+        .then((res) => {
           setMsg(`${username} login successfully!`);
           setIsWarning(false);
           localStorage.setItem("token", res.data.token);
           window.location.assign("/dashboard");
-        } else {
+        })
+        .catch((err) => {
           setMsg("There are some errors in login!");
           setIsWarning(true);
-        }
-      });
+        });
     }
   };
 
