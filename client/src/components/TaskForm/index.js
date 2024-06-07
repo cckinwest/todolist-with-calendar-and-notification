@@ -9,10 +9,12 @@ function TaskForm() {
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [frequency, setFrequency] = useState("none");
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    startTime: "",
+    frequency: "none",
+  });
 
   const [msg, setMsg] = useState("");
   const [isWarning, setIsWarning] = useState(false);
@@ -26,15 +28,21 @@ function TaskForm() {
     setShowForm(false);
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setMsg("");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (title) {
+    if (formData.title) {
       const taskData = {
-        title: title,
-        description: description,
-        startTime: startTime,
-        frequency: frequency,
+        title: formData.title,
+        description: formData.description,
+        startTime: formData.startTime,
+        frequency: formData.frequency,
         userId: user.id,
       };
 
@@ -54,10 +62,12 @@ function TaskForm() {
       setIsWarning(true);
     }
 
-    setTitle("");
-    setDescription("");
-    setStartTime("");
-    setFrequency("none");
+    setFormData({
+      title: "",
+      description: "",
+      startTime: "",
+      frequency: "none",
+    });
   };
 
   return showForm ? (
@@ -70,11 +80,9 @@ function TaskForm() {
         <Form.Control
           type="text"
           placeholder="Enter the task title"
-          value={title}
-          onChange={(e) => {
-            setTitle(e.target.value);
-            setMsg("");
-          }}
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
         />
       </Form.Group>
 
@@ -82,32 +90,26 @@ function TaskForm() {
         <Form.Control
           type="text"
           placeholder="Enter the task description"
-          value={description}
-          onChange={(e) => {
-            setDescription(e.target.value);
-            setMsg("");
-          }}
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
         />
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="TaskStartTime">
         <Form.Control
           type="date"
-          value={startTime}
-          onChange={(e) => {
-            setStartTime(e.target.value);
-            setMsg("");
-          }}
+          name="startTime"
+          value={formData.startTime}
+          onChange={handleChange}
         />
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="TaskFrequency">
         <Form.Select
-          value={frequency}
-          onChange={(e) => {
-            setFrequency(e.target.value);
-            setMsg("");
-          }}
+          value={formData.frequency}
+          onChange={handleChange}
+          name="frequency"
         >
           <option value="none">None</option>
           <option value="daily">Daily</option>
