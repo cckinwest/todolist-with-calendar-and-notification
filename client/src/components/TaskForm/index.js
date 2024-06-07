@@ -7,29 +7,34 @@ import { Form, Button, Alert, CloseButton } from "react-bootstrap";
 
 function TaskForm() {
   const token = localStorage.getItem("token");
+  const user = jwtDecode(token);
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [frequency, setFrequency] = useState("none");
+
   const [msg, setMsg] = useState("");
   const [isWarning, setIsWarning] = useState(false);
   const [showForm, setShowForm] = useState(false);
-
-  const user = jwtDecode(token);
 
   const handleClick = () => {
     setShowForm(true);
   };
 
-  const handleCLose = () => {
+  const handleClose = () => {
     setShowForm(false);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (title && description) {
+    if (title) {
       const taskData = {
         title: title,
         description: description,
+        startTime: startTime,
+        frequency: frequency,
         userId: user.id,
       };
 
@@ -45,12 +50,14 @@ function TaskForm() {
 
       setShowForm(false);
     } else {
-      setMsg("You must fill in the title and description of the task!");
+      setMsg("You must fill in the title of the task!");
       setIsWarning(true);
     }
 
     setTitle("");
     setDescription("");
+    setStartTime("");
+    setFrequency("none");
   };
 
   return showForm ? (
@@ -83,12 +90,38 @@ function TaskForm() {
         />
       </Form.Group>
 
+      <Form.Group className="mb-3" controlId="TaskStartTime">
+        <Form.Control
+          type="date"
+          value={startTime}
+          onChange={(e) => {
+            setStartTime(e.target.value);
+            setMsg("");
+          }}
+        />
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="TaskFrequency">
+        <Form.Select
+          value={frequency}
+          onChange={(e) => {
+            setFrequency(e.target.value);
+            setMsg("");
+          }}
+        >
+          <option value="none">None</option>
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="annually">Annually</option>
+        </Form.Select>
+      </Form.Group>
+
       <Button variant="light" type="submit">
         Add Task
       </Button>
 
       <CloseButton
-        onClick={handleCLose}
+        onClick={handleClose}
         style={{ top: "5px", right: "5px" }}
         className="position-absolute"
       />

@@ -13,6 +13,8 @@ const TaskList = ({ tasks }) => {
               taskId={task._id}
               title={task.title}
               description={task.description}
+              startTime={task.startTime}
+              frequency={task.frequency}
             />
           </ListGroup.Item>
         );

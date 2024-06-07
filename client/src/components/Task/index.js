@@ -3,18 +3,13 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 
-const Task = ({ taskId, title, description }) => {
-  const [formData, setFormData] = useState({
-    tasktitle: title,
-    taskdescription: description,
-  });
+const Task = ({ taskId, title, description, startTime, frequency }) => {
+  const [tasktitle, setTitle] = useState(title);
+  const [taskdescription, setDescription] = useState(description);
+  const [taskStartTime, setStartTime] = useState(startTime);
+  const [taskFrequency, setFrequency] = useState(frequency);
 
   const [edit, setEdit] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
 
   const handleEdit = () => {
     setEdit(!edit);
@@ -22,8 +17,10 @@ const Task = ({ taskId, title, description }) => {
     if (edit) {
       const taskData = {
         id: taskId,
-        title: formData.tasktitle,
-        description: formData.taskdescription,
+        title: tasktitle,
+        description: taskdescription,
+        startTime: taskStartTime,
+        frequency: taskFrequency,
       };
 
       axios
@@ -52,20 +49,50 @@ const Task = ({ taskId, title, description }) => {
 
   return edit ? (
     <Form>
-      <Form.Group className="mb-3" controlId="EditTitle">
+      <Form.Group className="mb-3 mt-3" controlId="EditTitle">
         <Form.Control
           type="text"
-          value={formData.tasktitle}
-          onChange={handleChange}
+          placeholder="Enter the task title"
+          value={tasktitle}
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
         />
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="EditDescription">
         <Form.Control
           type="text"
-          value={formData.taskdescription}
-          onChange={handleChange}
+          placeholder="Enter the task description"
+          value={taskdescription}
+          onChange={(e) => {
+            setDescription(e.target.value);
+          }}
         />
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="EditStartTime">
+        <Form.Control
+          type="date"
+          value={taskStartTime}
+          onChange={(e) => {
+            setStartTime(e.target.value);
+          }}
+        />
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="EditFrequency">
+        <Form.Select
+          value={taskFrequency}
+          onChange={(e) => {
+            setFrequency(e.target.value);
+          }}
+        >
+          <option value="none">None</option>
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="annually">Annually</option>
+        </Form.Select>
       </Form.Group>
 
       <Button variant="light" onClick={handleEdit}>
@@ -78,8 +105,10 @@ const Task = ({ taskId, title, description }) => {
   ) : (
     <Card bg="light">
       <Card.Body>
-        <Card.Title>{formData.tasktitle}</Card.Title>
-        <Card.Text>{formData.taskdescription}</Card.Text>
+        <Card.Title>Title: {tasktitle}</Card.Title>
+        <Card.Text>Description: {taskdescription}</Card.Text>
+        <Card.Text>Start time: {taskStartTime.split("T")[0]}</Card.Text>
+        <Card.Text>Frequency: {taskFrequency}</Card.Text>
         <Button variant="light" onClick={handleEdit}>
           Edit
         </Button>

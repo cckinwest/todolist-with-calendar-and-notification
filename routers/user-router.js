@@ -20,7 +20,7 @@ router.post("/signup", async (req, res) => {
       },
       process.env.SECRET_KEY,
       {
-        expiresIn: "5min",
+        expiresIn: "1h",
       }
     );
 
@@ -53,7 +53,7 @@ router.post("/login", async (req, res) => {
       },
       process.env.SECRET_KEY,
       {
-        expiresIn: "5min",
+        expiresIn: "1h",
       }
     );
 

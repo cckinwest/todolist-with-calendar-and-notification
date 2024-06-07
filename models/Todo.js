@@ -7,9 +7,18 @@ const { Schema } = mongoose;
 const todoSchema = new Schema({
   title: {
     type: String,
+    required: true,
   },
   description: {
     type: String,
+  },
+  startTime: {
+    type: Date,
+    default: Date.now,
+  },
+  frequency: {
+    type: String,
+    enum: ["none", "daily", "weekly", "monthly", "annually"],
   },
   createdAt: {
     type: Date,
@@ -17,8 +26,8 @@ const todoSchema = new Schema({
   },
   createdBy: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
-  }
+    ref: "User",
+  },
 });
 
 //name the model defined as Todo
