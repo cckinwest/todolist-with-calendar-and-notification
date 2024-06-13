@@ -3,7 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
-import { Form, Button, Alert, CloseButton } from "react-bootstrap";
+import { Form, Button, Alert, CloseButton, Stack } from "react-bootstrap";
 
 function TaskForm() {
   const token = localStorage.getItem("token");
@@ -71,6 +71,7 @@ function TaskForm() {
   };
 
   return showForm ? (
+    /*
     <Form
       className="p-3 m-3 bg-light position-relative"
       onSubmit={handleSubmit}
@@ -128,8 +129,85 @@ function TaskForm() {
         className="position-absolute"
       />
     </Form>
+    */
+    <Form
+      style={{ width: "99vw" }}
+      className="border border-1 rounded-3 bg-light bg-gradient p-3 m-2"
+      onSubmit={handleSubmit}
+    >
+      {msg && <Alert variant={isWarning ? "danger" : "light"}>{msg}</Alert>}
+      <Stack direction="horizontal" className="d-flex justify-content-between">
+        <Form.Group
+          style={{ width: "33%", textAlign: "left" }}
+          className="mb-3"
+          controlId="TaskTitle"
+        >
+          <Form.Control
+            type="text"
+            placeholder="Enter the task title"
+            value={formData.title}
+            onChange={handleChange}
+            name="title"
+          />
+        </Form.Group>
+
+        <Form.Group
+          style={{ width: "33%", textAlign: "center" }}
+          className="mb-3"
+          controlId="TaskStartTime"
+        >
+          <Form.Control
+            type="date"
+            value={formData.startTime.split("T")[0]}
+            onChange={handleChange}
+            name="startTime"
+          />
+        </Form.Group>
+
+        <Form.Group
+          style={{ width: "33%", textAlign: "right" }}
+          className="mb-3"
+          controlId="TaskFrequency"
+        >
+          <Form.Select
+            value={formData.frequency}
+            onChange={handleChange}
+            name="frequency"
+          >
+            <option value="none">None</option>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="annually">Annually</option>
+          </Form.Select>
+        </Form.Group>
+      </Stack>
+
+      <Form.Group className="mb-3" controlId="TaskDescription">
+        <Form.Control
+          type="text"
+          placeholder="Enter the task description"
+          value={formData.description}
+          onChange={handleChange}
+          name="description"
+        />
+      </Form.Group>
+
+      <Stack direction="horizontal" gap={2}>
+        <Button variant="outline-primary" onClick={handleSubmit}>
+          Submit
+        </Button>
+        <Button variant="outline-danger" onClick={handleClose}>
+          Close
+        </Button>
+      </Stack>
+    </Form>
   ) : (
-    <Button className="m-3" variant="light" onClick={handleClick}>
+    <Button
+      className="m-2"
+      variant="outline-primary"
+      onClick={handleClick}
+      style={{ width: "99vw" }}
+    >
       Add Task
     </Button>
   );

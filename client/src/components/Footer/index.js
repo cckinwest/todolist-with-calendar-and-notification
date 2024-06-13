@@ -7,6 +7,7 @@ function Footer() {
       direction="horizontal"
       gap={3}
       className="bg-light d-flex justify-content-around align-items-center p-3"
+      style={{ height: "10vh" }}
     >
       <p className="m-0">Project by Chi Kin</p>
       <p className="m-0">

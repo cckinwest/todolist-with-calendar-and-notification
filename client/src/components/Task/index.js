@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Form, Button, Card, Alert } from "react-bootstrap";
+import { Form, Button, Card, Alert, Stack, Collapse } from "react-bootstrap";
 
 const Task = ({ taskId, title, description, startTime, frequency }) => {
   const [formData, setFormData] = useState({
@@ -12,6 +12,7 @@ const Task = ({ taskId, title, description, startTime, frequency }) => {
   });
 
   const [edit, setEdit] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,16 +56,52 @@ const Task = ({ taskId, title, description, startTime, frequency }) => {
   };
 
   return edit ? (
-    <Form>
-      <Form.Group className="mb-3 mt-3" controlId="EditTitle">
-        <Form.Control
-          type="text"
-          placeholder="Enter the task title"
-          value={formData.title}
-          onChange={handleChange}
-          name="title"
-        />
-      </Form.Group>
+    <Form className="border border-1 rounded-3 bg-light bg-gradient p-2">
+      <Stack direction="horizontal" className="d-flex justify-content-between">
+        <Form.Group
+          style={{ width: "33%", textAlign: "left" }}
+          className="mb-3"
+          controlId="EditTitle"
+        >
+          <Form.Control
+            type="text"
+            placeholder="Enter the task title"
+            value={formData.title}
+            onChange={handleChange}
+            name="title"
+          />
+        </Form.Group>
+
+        <Form.Group
+          style={{ width: "33%", textAlign: "center" }}
+          className="mb-3"
+          controlId="EditStartTime"
+        >
+          <Form.Control
+            type="date"
+            value={formData.startTime.split("T")[0]}
+            onChange={handleChange}
+            name="startTime"
+          />
+        </Form.Group>
+
+        <Form.Group
+          style={{ width: "33%", textAlign: "right" }}
+          className="mb-3"
+          controlId="EditFrequency"
+        >
+          <Form.Select
+            value={formData.frequency}
+            onChange={handleChange}
+            name="frequency"
+          >
+            <option value="none">None</option>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="annually">Annually</option>
+          </Form.Select>
+        </Form.Group>
+      </Stack>
 
       <Form.Group className="mb-3" controlId="EditDescription">
         <Form.Control
@@ -76,48 +113,45 @@ const Task = ({ taskId, title, description, startTime, frequency }) => {
         />
       </Form.Group>
 
-      <Form.Group className="mb-3" controlId="EditStartTime">
-        <Form.Control
-          type="date"
-          value={formData.startTime.split("T")[0]}
-          onChange={handleChange}
-          name="startTime"
-        />
-      </Form.Group>
-
-      <Form.Group className="mb-3" controlId="EditFrequency">
-        <Form.Select
-          value={formData.frequency}
-          onChange={handleChange}
-          name="frequency"
-        >
-          <option value="none">None</option>
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="annually">Annually</option>
-        </Form.Select>
-      </Form.Group>
-
-      <Button variant="light" onClick={handleEdit}>
-        Save
-      </Button>
-      <Button variant="danger" onClick={handleDelete}>
-        Delete
-      </Button>
+      <Stack direction="horizontal" gap={2}>
+        <Button variant="outline-primary" onClick={handleEdit}>
+          Save
+        </Button>
+        <Button variant="outline-danger" onClick={handleDelete}>
+          Delete
+        </Button>
+      </Stack>
     </Form>
   ) : (
     <Card bg="light">
       <Card.Body>
-        <Card.Title>Title: {formData.title}</Card.Title>
-        <Card.Text>Description: {formData.description}</Card.Text>
-        <Card.Text>Start time: {formData.startTime.split("T")[0]}</Card.Text>
-        <Card.Text>Frequency: {formData.frequency}</Card.Text>
-        <Button variant="light" onClick={handleEdit}>
-          Edit
-        </Button>
-        <Button variant="danger" onClick={handleDelete}>
-          Delete
-        </Button>
+        <Card.Text>
+          <Stack
+            direction="horizontal"
+            className="d-flex justify-content-between"
+          >
+            <div style={{ width: "33%", textAlign: "left" }}>
+              <strong>Title: {formData.title}</strong>
+            </div>
+            <div style={{ width: "33%", textAlign: "center" }}>
+              <strong>Start time: {formData.startTime.split("T")[0]}</strong>
+            </div>
+            <div style={{ width: "33%", textAlign: "right" }}>
+              <strong>Frequency: {formData.frequency}</strong>
+            </div>
+          </Stack>
+        </Card.Text>
+        <Card.Text>
+          <small>Description: {formData.description}</small>
+        </Card.Text>
+        <Stack direction="horizontal" gap={2}>
+          <Button variant="outline-secondary" onClick={handleEdit}>
+            Edit
+          </Button>
+          <Button variant="outline-danger" onClick={handleDelete}>
+            Delete
+          </Button>
+        </Stack>
       </Card.Body>
     </Card>
   );

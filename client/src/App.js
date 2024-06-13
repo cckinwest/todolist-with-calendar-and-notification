@@ -1,8 +1,8 @@
-import Dashboard from "./components/Dashboard";
-import LoginForm from "./components/LoginForm";
-import SignupForm from "./components/SignupForm";
+import Dashboard from "./pages/Dashboard";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -12,10 +12,10 @@ function App() {
         <Header />
         <div className="pageContainer">
           <Routes>
-            <Route exact path="/" element={<LoginForm />} />
+            <Route exact path="/" element={<Login />} />
             <Route exact path="/dashboard" element={<Dashboard />} />
-            <Route exact path="/signup" element={<SignupForm />} />
-            <Route exact path="/login" element={<LoginForm />} />
+            <Route exact path="/signup" element={<Signup />} />
+            <Route exact path="/login" element={<Login />} />
           </Routes>
         </div>
         <Footer />

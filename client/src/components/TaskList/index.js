@@ -1,25 +1,23 @@
 import React from "react";
 import Task from "../Task";
 
-import { ListGroup } from "react-bootstrap";
+import { Stack } from "react-bootstrap";
 
 const TaskList = ({ tasks }) => {
   return (
-    <ListGroup variant="flush">
+    <Stack gap={2}>
       {tasks.map((task) => {
         return (
-          <ListGroup.Item key={task._id}>
-            <Task
-              taskId={task._id}
-              title={task.title}
-              description={task.description}
-              startTime={task.startTime}
-              frequency={task.frequency}
-            />
-          </ListGroup.Item>
+          <Task
+            taskId={task._id}
+            title={task.title}
+            description={task.description}
+            startTime={task.startTime}
+            frequency={task.frequency}
+          />
         );
       })}
-    </ListGroup>
+    </Stack>
   );
 };
 

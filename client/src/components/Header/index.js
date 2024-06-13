@@ -18,7 +18,7 @@ const Header = () => {
   };
 
   return (
-    <Navbar expand="lg" className="bg-light">
+    <Navbar style={{ height: "10vh" }} expand="lg" className="bg-light">
       <Container>
         <Navbar.Brand>
           <Image src={icon} roundedCircle style={{ height: "50px" }} />

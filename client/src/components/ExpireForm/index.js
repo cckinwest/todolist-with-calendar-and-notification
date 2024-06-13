@@ -75,7 +75,8 @@ function ExpireForm() {
   return (
     <>
       <Button
-        className="m-3"
+        className="m-2"
+        style={{ width: "auto" }}
         variant={isCritical ? "danger" : "light"}
         onClick={handleShow}
       >
