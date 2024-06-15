@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
-import { useState, useEffect } from "react";
-import { Form, Button, Card, Alert, Stack, Collapse } from "react-bootstrap";
+import { useState } from "react";
+import { Form, Button, Card, Stack } from "react-bootstrap";
 
 const Task = ({ taskId, title, description, startTime, frequency }) => {
   const [formData, setFormData] = useState({
@@ -12,7 +12,6 @@ const Task = ({ taskId, title, description, startTime, frequency }) => {
   });
 
   const [edit, setEdit] = useState(false);
-  const [open, setOpen] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
