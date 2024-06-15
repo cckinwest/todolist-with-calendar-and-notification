@@ -41,11 +41,16 @@ const TaskList = ({ tasks, showAll, dateSelected }) => {
       })}
     </Stack>
   ) : (
-    <Card className="border border-1 rounded-3 bg-light bg-gradient p-2">
-      <Card.Body>
-        <Card.Text>No Tasks on {dateSelected}</Card.Text>
-      </Card.Body>
-    </Card>
+    <div className="d-flex justify-content-cneter">
+      <Card
+        className="border border-1 rounded-3 bg-light bg-gradient p-2"
+        style={{ width: "99vw" }}
+      >
+        <Card.Body>
+          <Card.Text>No Tasks on {dateSelected}</Card.Text>
+        </Card.Body>
+      </Card>
+    </div>
   );
 };
 
