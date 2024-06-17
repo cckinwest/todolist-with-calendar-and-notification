@@ -2,6 +2,7 @@ import React from "react";
 import ExpireForm from "../../components/ExpireForm";
 import TaskList from "../../components/TaskList";
 import TaskForm from "../../components/TaskForm";
+import Calendar from "../../components/Calendar";
 
 import dayjs from "dayjs";
 
@@ -65,6 +66,9 @@ function Dashboard() {
         </Row>
         <Row>
           <TaskForm />
+        </Row>
+        <Row>
+          <Calendar />
         </Row>
       </Container>
     </main>
