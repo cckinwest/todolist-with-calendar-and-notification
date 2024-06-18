@@ -3,6 +3,7 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import CalendarPage from "./pages/CalendarPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Login />} />
             <Route exact path="/dashboard" element={<Dashboard />} />
+            <Route exact path="/calendar" element={<CalendarPage />} />
             <Route exact path="/signup" element={<Signup />} />
             <Route exact path="/login" element={<Login />} />
           </Routes>
