@@ -28,13 +28,13 @@ function Month({ year, month, tasks }) {
     let num = numOfDays(y, m);
     for (var i = 0; i < num; i++) {
       let date = `${y}-${m}-${i + 1}`;
-      arr.push(dayjs(date).format("YYYY-MM-DD"));
+      arr.push({date: dayjs(date).format("YYYY-MM-DD"), status: 'current'});
     }
 
     let firstOfMonth = dayjs(`${y}-${m}-1`).get("d");
 
     for (var i = 1; i < firstOfMonth; i++) {
-      arr.unshift(dayjs(`${y}-${m}-1`).subtract(i, "d").format("YYYY-MM-DD"));
+      arr.unshift({date: dayjs(`${y}-${m}-1`).subtract(i, "d").format("YYYY-MM-DD"), status: 'past'});
     }
 
     return arr;
