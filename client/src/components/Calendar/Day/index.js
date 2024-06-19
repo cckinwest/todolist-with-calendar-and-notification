@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Card, Stack, Badge, Button } from "react-bootstrap";
-import TaskModal from "../TaskModa";
+import TaskModal from "../TaskModal";
 
 function Day({ date, tasks }) {
   const onDate = (task) => {
@@ -19,11 +19,7 @@ function Day({ date, tasks }) {
         </Card.Title>
         <Stack gap={1}>
           {tasks.filter(onDate).map((task) => {
-            return (
-              <Badge pill bg="info">
-                {task.title}
-              </Badge>
-            );
+            return <TaskModal task={task} />;
           })}
         </Stack>
       </Card.Body>
