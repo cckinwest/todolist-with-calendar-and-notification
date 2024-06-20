@@ -1,8 +1,9 @@
 import React from "react";
 import Month from "./Month";
+import ExpireForm from "../ExpireForm";
 import dayjs from "dayjs";
 import axios from "axios";
-import { Stack, Form } from "react-bootstrap";
+import { Stack, Form, Container, Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 
@@ -25,35 +26,44 @@ function Calendar() {
   }, []);
 
   return (
-    <div>
-      <Stack direction="horizontal" gap={3} className="mt-3">
-        <Form.Control
-          type="number"
-          name="year"
-          id="year"
-          min="2000"
-          max="2049"
-          value={year}
-          onChange={(e) => {
-            const y = parseInt(e.target.value);
-            setYear(y);
-          }}
-        />
-        <Form.Control
-          type="number"
-          name="month"
-          id="month"
-          min="1"
-          max="12"
-          value={month}
-          onChange={(e) => {
-            const m = parseInt(e.target.value);
-            setMonth(m);
-          }}
-        />
-      </Stack>
-      <Month year={year} month={month} tasks={tasks} />
-    </div>
+    <Container>
+      <Row className="mt-3">
+        <Col>
+          <ExpireForm />
+        </Col>
+        <Col>
+          <Form.Control
+            type="number"
+            name="year"
+            id="year"
+            min="2000"
+            max="2049"
+            value={year}
+            onChange={(e) => {
+              const y = parseInt(e.target.value);
+              setYear(y);
+            }}
+          />
+        </Col>
+        <Col>
+          <Form.Control
+            type="number"
+            name="month"
+            id="month"
+            min="1"
+            max="12"
+            value={month}
+            onChange={(e) => {
+              const m = parseInt(e.target.value);
+              setMonth(m);
+            }}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Month year={year} month={month} tasks={tasks} />
+      </Row>
+    </Container>
   );
 }
 
