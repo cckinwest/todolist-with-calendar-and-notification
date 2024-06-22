@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, Form, Button, Stack } from "react-bootstrap";
 import { useState } from "react";
 import axios from "axios";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 function TaskModal({ date, task }) {
   const [show, setShow] = useState(false);
@@ -70,7 +71,7 @@ function TaskModal({ date, task }) {
         size="sm"
         className="rounded-pill"
         onClick={handleClick}
-        disabled={date.status === 'past'}
+        disabled={date.status === "past"}
         style={{
           textOverflow: "ellipsis",
           overflow: "hidden",
@@ -83,7 +84,12 @@ function TaskModal({ date, task }) {
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
             {!isEdit ? (
-              <Modal.Title>{formData.title}</Modal.Title>
+              <Modal.Title>
+                <Stack direction="horizontal" gap={3}>
+                  <i className="bi bi-list-task"></i>
+                  {formData.title}
+                </Stack>
+              </Modal.Title>
             ) : (
               <Form.Control
                 type="text"
@@ -95,7 +101,10 @@ function TaskModal({ date, task }) {
           </Modal.Header>
           <Modal.Body>
             {!isEdit ? (
-              <div>{formData.description}</div>
+              <Stack direction="horizontal" gap={3}>
+                <i className="bi bi-fonts"></i>
+                {formData.description}
+              </Stack>
             ) : (
               <Form.Control
                 type="text"
@@ -109,7 +118,10 @@ function TaskModal({ date, task }) {
               className="d-flex justify-content-between mt-2"
             >
               {!isEdit ? (
-                <div>{formData.startTime.split("T")[0]}</div>
+                <Stack direction="horizontal" gap={3}>
+                  <i className="bi bi-calendar"></i>
+                  {formData.startTime.split("T")[0]}
+                </Stack>
               ) : (
                 <Form.Control
                   type="date"
@@ -119,7 +131,10 @@ function TaskModal({ date, task }) {
                 />
               )}
               {!isEdit ? (
-                <div>{formData.frequency}</div>
+                <Stack direction="horizontal" gap={3}>
+                  <i className="bi bi-clock"></i>
+                  {formData.frequency}
+                </Stack>
               ) : (
                 <Form.Select
                   value={formData.frequency}
@@ -137,10 +152,15 @@ function TaskModal({ date, task }) {
           <Modal.Footer>
             <Stack direction="horizontal" gap={2}>
               <Button variant="outline-primary" onClick={handleEdit}>
-                {isEdit ? "Save" : "Edit"}
+                <Stack direction="horizontal" gap={2}>
+                  <i className={isEdit ? "bi bi-floppy" : "bi bi-pencil"}></i>
+                  {isEdit ? "Save" : "Edit"}
+                </Stack>
               </Button>
               <Button variant="outline-danger" onClick={handleDelete}>
-                Delete
+                <Stack direction="horizontal" gap={2}>
+                  <i className="bi bi-trash3"></i>Delete
+                </Stack>
               </Button>
             </Stack>
           </Modal.Footer>

@@ -11,6 +11,7 @@ function AddModal({ date }) {
   const user = jwtDecode(token);
 
   const [show, setShow] = useState(false);
+  const [hoverAdd, setHoverAdd] = useState(false);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -26,6 +27,12 @@ function AddModal({ date }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleAdd = () => {
+    if (date.status === "current") {
+      setShow(true);
+    }
   };
 
   const handleClick = () => {
@@ -51,17 +58,21 @@ function AddModal({ date }) {
 
   return (
     <>
-      <Button
-        size="sm"
-        variant="outline-success"
-        className="rounded-pill"
-        onClick={() => {
-          setShow(true);
+      <i
+        className="bi bi-plus-circle"
+        onClick={handleAdd}
+        onMouseEnter={() => {
+          setHoverAdd(true);
         }}
-        disabled={date.status === "past"}
-      >
-        Add
-      </Button>
+        onMouseLeave={() => {
+          setHoverAdd(false);
+        }}
+        style={{
+          transition: "0.3s",
+          color: hoverAdd && "#198754",
+        }}
+      ></i>
+
       {show && (
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
