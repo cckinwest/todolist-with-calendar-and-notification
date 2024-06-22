@@ -12,7 +12,7 @@ function Day({ date, tasks }) {
   return (
     <Card
       style={{ width: "14%", height: "13vh" }}
-      className={date.status === "past" && "bg-secondary"}
+      className={date.status === "past" && "opacity-25"}
     >
       <Card.Body key={date.date} style={{ overflow: "auto" }}>
         <Card.Title className="d-flex justify-content-between">
@@ -21,7 +21,7 @@ function Day({ date, tasks }) {
         </Card.Title>
         <Stack gap={1}>
           {tasks.filter(onDate).map((task) => {
-            return <TaskModal task={task} />;
+            return <TaskModal date={date} task={task} key={task._id} />;
           })}
         </Stack>
       </Card.Body>

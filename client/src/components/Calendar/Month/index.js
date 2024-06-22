@@ -28,13 +28,16 @@ function Month({ year, month, tasks }) {
     let num = numOfDays(y, m);
     for (var i = 0; i < num; i++) {
       let date = `${y}-${m}-${i + 1}`;
-      arr.push({date: dayjs(date).format("YYYY-MM-DD"), status: 'current'});
+      arr.push({ date: dayjs(date).format("YYYY-MM-DD"), status: "current" });
     }
 
     let firstOfMonth = dayjs(`${y}-${m}-1`).get("d");
 
     for (var i = 1; i < firstOfMonth; i++) {
-      arr.unshift({date: dayjs(`${y}-${m}-1`).subtract(i, "d").format("YYYY-MM-DD"), status: 'past'});
+      arr.unshift({
+        date: dayjs(`${y}-${m}-1`).subtract(i, "d").format("YYYY-MM-DD"),
+        status: "past",
+      });
     }
 
     return arr;
@@ -55,7 +58,7 @@ function Month({ year, month, tasks }) {
       </Stack>
       <Stack direction="horizontal" className="d-flex flex-wrap mt-2">
         {dates.map((date) => {
-          return <Day date={date} tasks={tasks} />;
+          return <Day date={date} tasks={tasks} key={date.date} />;
         })}
       </Stack>
     </div>

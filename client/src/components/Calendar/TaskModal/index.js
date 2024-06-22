@@ -3,7 +3,7 @@ import { Modal, Form, Button, Stack } from "react-bootstrap";
 import { useState } from "react";
 import axios from "axios";
 
-function TaskModal({ task }) {
+function TaskModal({ date, task }) {
   const [show, setShow] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [formData, setFormData] = useState({
@@ -70,6 +70,7 @@ function TaskModal({ task }) {
         size="sm"
         className="rounded-pill"
         onClick={handleClick}
+        disabled={date.status === 'past'}
         style={{
           textOverflow: "ellipsis",
           overflow: "hidden",

@@ -4,6 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
 import { jwtDecode } from "jwt-decode";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 function AddModal({ date }) {
   const token = localStorage.getItem("token");
@@ -57,6 +58,7 @@ function AddModal({ date }) {
         onClick={() => {
           setShow(true);
         }}
+        disabled={date.status === "past"}
       >
         Add
       </Button>
