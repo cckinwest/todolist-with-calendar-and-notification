@@ -7,6 +7,7 @@ function SignupForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [agree, setAgree] = useState(false);
   const [msg, setMsg] = useState("");
   const [isWarning, setIsWarning] = useState(false);
 
@@ -89,6 +90,16 @@ function SignupForm() {
           onChange={(e) => {
             setConfirm(e.target.value);
             setMsg("");
+          }}
+        />
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="SignupNotification">
+        <Form.Check
+          type="switch"
+          label="Subscribe to notification"
+          onChange={(e) => {
+            setAgree(e.target.checked);
           }}
         />
       </Form.Group>

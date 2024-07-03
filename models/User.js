@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const bcrypt = require("bcrypt");
+const subscriptionSchema = require("./Subscription");
 
 const userSchema = Schema({
   username: {
@@ -13,6 +14,20 @@ const userSchema = Schema({
   password: {
     type: String,
     required: true,
+  },
+
+  permission: {
+    type: Boolean,
+    default: () => {
+      return false;
+    },
+  },
+
+  subscription: {
+    type: subscriptionSchema,
+    default: () => {
+      return {};
+    },
   },
 
   todos: [
