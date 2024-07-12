@@ -1,6 +1,11 @@
-self.addEventListener("install", (event) => {
-  console.log("Service Worker installing.");
-  // Add a call to skipWaiting here if you want to trigger
-  // the waiting service worker to become the active service worker immediately
-  // self.skipWaiting();
+self.addEventListener("push", (event) => {
+  console.log("Push received.");
+
+  const { title, text } = event.data.json();
+
+  const options = {
+    body: text,
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
 });

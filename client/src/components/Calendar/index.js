@@ -3,7 +3,7 @@ import Month from "./Month";
 import ExpireForm from "../ExpireForm";
 import dayjs from "dayjs";
 import axios from "axios";
-import { Stack, Form, Container, Row, Col } from "react-bootstrap";
+import { Stack, Form, Container, Row, Col, Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 
@@ -24,6 +24,55 @@ function Calendar() {
         console.log(tasks);
       });
   }, []);
+
+  const subscribe = async () => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.ready.then((swReg) => {
+        console.log(`A service worker is active: ${swReg.active}`);
+        swReg.pushManager
+          .subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: process.env.REACT_APP_VAPID_PUBLIC,
+          })
+          .then((pushSubscription) => {
+            console.log(
+              `The endpoint of the subscription: ${pushSubscription.endpoint}`
+            );
+
+            const userData = {
+              id: user.id,
+              subscription: pushSubscription,
+            };
+
+            axios.put("http://localhost:3001/user/subscribe", userData).then(
+              (res) => {
+                if (res.statusCode === 200) {
+                  console.log("Subscribed successfully!");
+                }
+              },
+              (err) => {
+                console.log(`Error occurred: ${err}`);
+              }
+            );
+          });
+      });
+    }
+  };
+
+  const notification = async () => {
+    axios
+      .get(`http://localhost:3001/user/sendNotification?userId=${user.id}`)
+      .then(
+        (res) => {
+          if (res.statusCode === 202) {
+            console.log("A message is pushed successfully!");
+          }
+        },
+        (err) => {
+          console.log(`Error occurred: ${err}`);
+        }
+      );
+  };
 
   return (
     <Container>
@@ -58,6 +107,16 @@ function Calendar() {
               setMonth(m);
             }}
           />
+        </Col>
+        <Col>
+          <Button variant="outline-primary" onClick={subscribe}>
+            Subscribe
+          </Button>
+        </Col>
+        <Col>
+          <Button variant="outline-secondary" onClick={notification}>
+            Notification
+          </Button>
         </Col>
       </Row>
       <Row>

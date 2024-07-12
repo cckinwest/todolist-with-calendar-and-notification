@@ -6,7 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-
+/*
 if ("Notification" in window) {
   Notification.requestPermission().then((res) => {
     const msg =
@@ -42,7 +42,7 @@ if ("serviceWorker" in navigator) {
   );
 } else {
   console.log("Service worker is not supported!");
-}
+}*/
 
 root.render(
   <React.StrictMode>

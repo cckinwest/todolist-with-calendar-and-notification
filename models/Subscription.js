@@ -1,10 +1,16 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const subscriptionSchema = Schema({
+const subscriptionSchema = new Schema({
   endpoint: {
     type: String,
     required: true,
+  },
+  expirationTime: {
+    type: Date,
+    default: () => {
+      return null;
+    },
   },
   keys: {
     p256dh: {

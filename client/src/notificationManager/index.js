@@ -1,10 +1,8 @@
-class NotificationManager {
-  checkIfNotificationSupported() {
-    return "Notification" in window;
-  }
+/* eslint-disable no-restricted-globals */
 
+class NotificationManager {
   getNotificaionConsent() {
-    if (self.checkIfNotificationSupported()) {
+    if ("Notification" in window) {
       Notification.requestPermission().then(
         (permission) => {
           return permission === "granted";
@@ -20,12 +18,8 @@ class NotificationManager {
     }
   }
 
-  checkIfServiceWorkerSupported() {
-    return "serviceWorker" in navigator;
-  }
-
   registerServiceWorker(path) {
-    if (self.checkIfServiceWorkerSupported()) {
+    if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register(path).then(
         (serviceWorkerRegistration) => {
           console.log(
@@ -65,6 +59,7 @@ class NotificationManager {
           }
         );
     } else {
+      console.log("Service Worker not defined!");
       return null;
     }
   }
