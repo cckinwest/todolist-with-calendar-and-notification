@@ -42,18 +42,52 @@ router.put("/subscribe", async (req, res) => {
 router.get("/sendNotification", async (req, res) => {
   try {
     //const subscriber = await Subscriber.findOne({ userId: req.query.userId });
-    const subscribers = await Subscriber.find().populate("userId");
+    let Today;
+
+    const d = new Date();
+    if (d.getMonth() + 1 < 10) {
+      Today = `${d.getFullYear()}-0${d.getMonth() + 1}-${d.getDate()}`;
+    } else {
+      Today = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+    }
+
+    console.log(Today);
+
+    const subscribers = await Subscriber.find().populate({
+      path: "userId",
+      populate: {
+        path: "todos",
+        models: "Todo",
+      },
+    });
 
     subscribers.forEach((subscriber) => {
       const subscription = subscriber.subscription;
       const username = subscriber.userId.username;
+      const todos = subscriber.userId.todos.filter((todo) => {
+        let d = todo.startTime;
+        let fullDate;
+
+        if (d.getMonth() + 1 < 10) {
+          fullDate = `${d.getFullYear()}-0${d.getMonth() + 1}-${d.getDate()}`;
+        } else {
+          fullDate = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+        }
+
+        return fullDate === Today;
+      });
+      var text = "";
+
+      todos.forEach((task) => {
+        text += `${task.title}\n`;
+      });
 
       webPush
         .sendNotification(
           subscription,
           JSON.stringify({
-            title: "New push notification",
-            text: `Hello ${username} how are you?`,
+            title: `The task of ${username} on ${Today}`,
+            text: text,
           })
         )
         .catch((err) => {

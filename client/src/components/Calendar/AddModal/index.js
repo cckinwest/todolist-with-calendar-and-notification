@@ -5,6 +5,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { jwtDecode } from "jwt-decode";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { postDB, getAllDB, getOneDB } from "../../../database";
 
 function AddModal({ date }) {
   const token = localStorage.getItem("token");
@@ -47,6 +48,7 @@ function AddModal({ date }) {
     axios
       .post("http://localhost:3001/todo/create", taskData)
       .then((res) => {
+        postDB(taskData);
         window.location.reload();
       })
       .catch((err) => {

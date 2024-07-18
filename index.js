@@ -7,7 +7,11 @@ const userRouter = require("./routers/user-router");
 const todoRouter = require("./routers/todo-router");
 const verifyJWT = require("./middleware/middleware");
 
+const schedule = require("node-schedule");
+const axios = require("axios");
+
 var cors = require("cors");
+
 app.use(cors());
 
 require("dotenv").config(); //for using the variable in .env
@@ -31,4 +35,17 @@ app.get("/decode", verifyJWT, (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}.`);
+});
+
+const job = schedule.scheduleJob("0 0 * * *", () => {
+  //console.log("Print this sentence every 2 minutes. Time: ", Date.now());
+  axios.get("http://localhost:3001/user/sendNotification").then(
+    (res) => {
+      //console.log(res);
+      console.log("The notification is pushed successfully.");
+    },
+    (err) => {
+      console.log(`There is an error: ${err}`);
+    }
+  );
 });

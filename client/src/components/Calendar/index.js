@@ -60,18 +60,16 @@ function Calendar() {
   };
 
   const notification = async () => {
-    axios
-      .get(`http://localhost:3001/user/sendNotification?userId=${user.id}`)
-      .then(
-        (res) => {
-          if (res.statusCode === 202) {
-            console.log("A message is pushed successfully!");
-          }
-        },
-        (err) => {
-          console.log(`Error occurred: ${err}`);
+    axios.get(`http://localhost:3001/user/sendNotification`).then(
+      (res) => {
+        if (res.statusCode === 202) {
+          console.log("A message is pushed successfully!");
         }
-      );
+      },
+      (err) => {
+        console.log(`Error occurred: ${err}`);
+      }
+    );
   };
 
   return (
