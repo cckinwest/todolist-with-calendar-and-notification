@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const Todo = require("../models/Todo");
 const User = require("../models/User");
-const verifyJWT = require("../middleware/middleware");
 
 router.get("/", async (req, res) => {
   try {

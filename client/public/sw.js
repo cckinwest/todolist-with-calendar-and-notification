@@ -1,3 +1,11 @@
+self.addEventListener("install", (event) => {
+  console.log("The service worker is installing.");
+});
+
+self.addEventListener("activate", (event) => {
+  console.log("The service worker is activated.");
+});
+
 self.addEventListener("push", (event) => {
   console.log(`Push received.`);
 

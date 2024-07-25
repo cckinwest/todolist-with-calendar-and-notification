@@ -2,7 +2,6 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import { Form, Button, Alert } from "react-bootstrap";
-import NotificationManager from "../../notificationManager";
 
 function SignupForm() {
   const [username, setUsername] = useState("");

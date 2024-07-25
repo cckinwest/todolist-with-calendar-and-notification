@@ -7,6 +7,12 @@ import { Stack, Form, Container, Row, Col, Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 
+import {
+  getNotificationConsent,
+  serviceWorkerRegistration,
+  notificationSubscription,
+} from "../../notificationManagement";
+
 function Calendar() {
   const [year, setYear] = useState(dayjs().get("y"));
   const [month, setMonth] = useState(dayjs().get("M") + 1);
@@ -16,61 +22,62 @@ function Calendar() {
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3001/todo?username=${user.username}`)
-      .then((res) => {
-        setTasks(res.data);
-        console.log(tasks);
-      });
-  }, []);
+  const handlePermissionGranted = async () => {
+    const registration = await serviceWorkerRegistration();
+    const pushSubscription = await notificationSubscription();
 
-  const subscribe = async () => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.ready.then((swReg) => {
-        console.log(`A service worker is active: ${swReg.active}`);
-        swReg.pushManager
-          .subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: process.env.REACT_APP_VAPID_PUBLIC,
-          })
-          .then((pushSubscription) => {
-            console.log(
-              `The endpoint of the subscription: ${pushSubscription.endpoint}`
-            );
+    if (pushSubscription) {
+      console.log(pushSubscription);
 
-            const userData = {
-              id: user.id,
-              subscription: pushSubscription,
-            };
+      console.log(
+        `A pushSubscription obj is got with endpoint: ${pushSubscription.endpoint}`
+      );
 
-            axios.put("http://localhost:3001/user/subscribe", userData).then(
-              (res) => {
-                if (res.statusCode === 200) {
-                  console.log("Subscribed successfully!");
-                }
-              },
-              (err) => {
-                console.log(`Error occurred: ${err}`);
-              }
-            );
-          });
-      });
+      console.log(`User id: ${user.id}`);
+
+      try {
+        const response = await axios.post(
+          `http://localhost:3001/subscription/subscribe`,
+          {
+            id: user.id,
+            subscription: pushSubscription,
+          }
+        );
+
+        console.log(`Status Code: ${response}`);
+        console.log(
+          `Subscribed successfully with endpoint: ${pushSubscription.endpoint}`
+        );
+      } catch (err) {
+        console.error(`There are problems in the subscription: ${err}`);
+      }
+    } else {
+      console.error("No pushSubscription is created.");
     }
   };
 
-  const notification = async () => {
-    axios.get(`http://localhost:3001/user/sendNotification`).then(
-      (res) => {
-        if (res.statusCode === 202) {
-          console.log("A message is pushed successfully!");
-        }
-      },
-      (err) => {
-        console.log(`Error occurred: ${err}`);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        console.log("Hello fetchData!");
+        const res = await axios.get(
+          `http://localhost:3001/todo?username=${user.username}`
+        );
+        setTasks(res.data);
+        //console.log(tasks);
+      } catch (err) {
+        console.error(`Invalid username: ${err}`);
       }
-    );
-  };
+
+      await getNotificationConsent();
+
+      if (Notification.permission === "granted") {
+        handlePermissionGranted();
+      }
+    }
+
+    fetchData();
+  }, []);
 
   return (
     <Container>
@@ -105,16 +112,6 @@ function Calendar() {
               setMonth(m);
             }}
           />
-        </Col>
-        <Col>
-          <Button variant="outline-primary" onClick={subscribe}>
-            Subscribe
-          </Button>
-        </Col>
-        <Col>
-          <Button variant="outline-secondary" onClick={notification}>
-            Notification
-          </Button>
         </Col>
       </Row>
       <Row>

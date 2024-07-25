@@ -5,6 +5,7 @@ const port = 3001;
 const mongoose = require("mongoose");
 const userRouter = require("./routers/user-router");
 const todoRouter = require("./routers/todo-router");
+const subscriptionRouter = require("./routers/subscription-router");
 const verifyJWT = require("./middleware/middleware");
 
 const schedule = require("node-schedule");
@@ -26,6 +27,7 @@ mongoose.connect(process.env.MONGODB_URL).then(() => {
 
 app.use("/user", userRouter);
 app.use("/todo", todoRouter);
+app.use("/subscription", subscriptionRouter);
 
 app.get("/decode", verifyJWT, (req, res) => {
   const { username } = req.user;
@@ -39,7 +41,7 @@ app.listen(port, () => {
 
 const job = schedule.scheduleJob("0 0 * * *", () => {
   //console.log("Print this sentence every 2 minutes. Time: ", Date.now());
-  axios.get("http://localhost:3001/user/sendNotification").then(
+  axios.get("http://localhost:3001/subscription/pushNotification").then(
     (res) => {
       //console.log(res);
       console.log("The notification is pushed successfully.");
