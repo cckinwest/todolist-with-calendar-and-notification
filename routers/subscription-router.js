@@ -120,8 +120,6 @@ router.get("/pushNotification", async (res, req) => {
           console.log(`Error occurred: ${err}`);
         });
     });
-
-    res.status(202).json({ message: "A push message is sent successfully!" });
   } catch (error) {
     console.log(`Error in pushing notification: ${error}`);
   }

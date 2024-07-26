@@ -7,8 +7,12 @@ export const getNotificationConsent = async () => {
     } else {
       console.log(`Notifcation is ${Notification.permission}.`);
     }
+
+    return Notification.permission;
   } else {
     console.error("Notification is not supported!");
+
+    return "not supported";
   }
 };
 

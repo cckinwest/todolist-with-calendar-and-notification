@@ -1,5 +1,6 @@
 import React from "react";
 import Month from "./Month";
+import NotificationStatus from "./NotificationStatus";
 import ExpireForm from "../ExpireForm";
 import dayjs from "dayjs";
 import axios from "axios";
@@ -18,6 +19,7 @@ function Calendar() {
   const [month, setMonth] = useState(dayjs().get("M") + 1);
 
   const [tasks, setTasks] = useState([]);
+  const [status, setStatus] = useState("default");
 
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
@@ -69,7 +71,8 @@ function Calendar() {
         console.error(`Invalid username: ${err}`);
       }
 
-      await getNotificationConsent();
+      const permission = await getNotificationConsent();
+      setStatus(permission);
 
       if (Notification.permission === "granted") {
         handlePermissionGranted();
@@ -81,7 +84,7 @@ function Calendar() {
 
   return (
     <Container>
-      <Row className="mt-3">
+      <Row className="mt-3 d-flex align-items-center justify-content-between">
         <Col>
           <ExpireForm />
         </Col>
@@ -112,6 +115,9 @@ function Calendar() {
               setMonth(m);
             }}
           />
+        </Col>
+        <Col>
+          <NotificationStatus status={status} />
         </Col>
       </Row>
       <Row>
