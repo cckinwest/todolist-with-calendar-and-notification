@@ -47,7 +47,7 @@ function TaskForm() {
       };
 
       axios
-        .post("http://localhost:3001/todo/create", taskData)
+        .post(`http://localhost:3002/todo/create`, taskData)
         .then((res) => {
           window.location.reload();
         })

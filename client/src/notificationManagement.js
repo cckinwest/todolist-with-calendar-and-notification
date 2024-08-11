@@ -28,7 +28,7 @@ export const serviceWorkerRegistration = async () => {
       } else {
         try {
           const registration = await navigator.serviceWorker.register(
-            "./sw.js"
+            "./service-worker.js"
           );
           console.log(
             `Service Worker registered with scope: ${registration.scope}`

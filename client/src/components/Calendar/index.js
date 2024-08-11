@@ -39,7 +39,7 @@ function Calendar() {
 
       try {
         const response = await axios.post(
-          `http://localhost:3001/subscription/subscribe`,
+          `http://localhost:3002/subscription/subscribe`,
           {
             id: user.id,
             subscription: pushSubscription,
@@ -63,7 +63,7 @@ function Calendar() {
       try {
         console.log("Hello fetchData!");
         const res = await axios.get(
-          `http://localhost:3001/todo?username=${user.username}`
+          `http://localhost:3002/todo?username=${user.username}`
         );
         setTasks(res.data);
         //console.log(tasks);

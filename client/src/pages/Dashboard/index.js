@@ -21,7 +21,7 @@ function Dashboard() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/todo?username=${user.username}`)
+      .get(`http://localhost:3002/todo?username=${user.username}`)
       .then((res) => {
         setTasks(res.data);
       });

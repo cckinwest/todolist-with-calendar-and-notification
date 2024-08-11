@@ -22,7 +22,7 @@ function LoginForm() {
       };
 
       axios
-        .post("http://localhost:3001/user/login", userData)
+        .post(`http://localhost:3002/user/login`, userData)
         .then((res) => {
           setMsg(`${username} login successfully!`);
           setIsWarning(false);

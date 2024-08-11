@@ -31,7 +31,7 @@ const Task = ({ taskId, title, description, startTime, frequency }) => {
       };
 
       axios
-        .put("http://localhost:3001/todo/update", taskData)
+        .put(`http://localhost:3002/todo/update`, taskData)
         .then((res) => {
           window.location.reload();
         })
@@ -45,7 +45,7 @@ const Task = ({ taskId, title, description, startTime, frequency }) => {
     const taskData = { taskId: taskId };
 
     axios
-      .put("http://localhost:3001/todo/delete", taskData)
+      .put(`http://localhost:3001/todo/delete`, taskData)
       .then((res) => {
         window.location.reload();
       })

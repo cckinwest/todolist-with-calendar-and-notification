@@ -42,7 +42,7 @@ function TaskModal({ date, task }) {
 
     if (isEdit) {
       axios
-        .put("http://localhost:3001/todo/update", taskData)
+        .put(`http://localhost:3002/todo/update`, taskData)
         .then((res) => {
           window.location.reload();
         })
@@ -55,7 +55,7 @@ function TaskModal({ date, task }) {
   const handleDelete = () => {
     const taskData = { taskId: task._id };
     axios
-      .put("http://localhost:3001/todo/delete", taskData)
+      .put(`http://localhost:3002/todo/delete`, taskData)
       .then((res) => {
         window.location.reload();
       })

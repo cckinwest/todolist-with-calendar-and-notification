@@ -25,7 +25,7 @@ function SignupForm() {
       };
 
       axios
-        .post("http://localhost:3001/user/signup", userData)
+        .post(`http://localhost:3002/user/signup`, userData)
         .then((res) => {
           if (
             res.data.message &&
