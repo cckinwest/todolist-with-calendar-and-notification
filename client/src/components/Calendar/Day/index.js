@@ -11,7 +11,7 @@ function Day({ date, tasks }) {
 
   return (
     <Card
-      style={{ width: "14%", height: "13vh" }}
+      style={{ width: "100%", height: "13vh" }}
       className={date.status === "past" && "opacity-25"}
     >
       <Card.Body key={date.date} style={{ overflow: "auto" }}>

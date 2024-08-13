@@ -36,10 +36,10 @@ app.get("/decode", verifyJWT, (req, res) => {
   console.log(`${username} is logged in!`);
   res.json({ username });
 });
-
+/*
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
-});
+});*/
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}.`);

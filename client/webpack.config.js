@@ -23,12 +23,11 @@ module.exports = {
     }),
     new MiniCssExtractPlugin(),
     /*
-    isProduction &&
-      new InjectManifest({
-        swSrc: "./src/service-worker.js",
-        swDest: "serviceWorker.js",
-        maximumFileSizeToCacheInBytes: 50000000,
-      }),*/
+    new InjectManifest({
+      swSrc: "./src/service-worker.js",
+      swDest: "service-worker.js",
+      maximumFileSizeToCacheInBytes: 50000000,
+    }),*/
   ],
   module: {
     rules: [
@@ -59,7 +58,6 @@ module.exports = {
     static: { directory: path.join(__dirname, "dist") },
     compress: true,
     port: 3001,
-    hot: true,
     open: true,
   },
 };
