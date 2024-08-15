@@ -2,6 +2,7 @@ import React from "react";
 import Month from "./Month";
 import NotificationStatus from "./NotificationStatus";
 import ExpireForm from "../ExpireForm";
+import WeekMenu from "../WeekMenu";
 import dayjs from "dayjs";
 import axios from "axios";
 import { Stack, Form, Container, Row, Col, Button } from "react-bootstrap";
@@ -84,6 +85,7 @@ function Calendar() {
 
   return (
     <Container>
+      <WeekMenu />
       <Row className="mt-3 d-flex align-items-center justify-content-between">
         <Col>
           <ExpireForm />
