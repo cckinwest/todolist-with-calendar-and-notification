@@ -17,7 +17,7 @@ function AddModal({ date }) {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    startTime: date.date,
+    startTime: `${date.date}T00:00`,
     frequency: "none",
   });
 
@@ -71,7 +71,11 @@ function AddModal({ date }) {
         }}
         style={{
           transition: "0.3s",
-          color: hoverAdd && "#198754",
+          color: hoverAdd && "white",
+          backgroundColor: hoverAdd && "#0d6efd",
+          height: "24px",
+          width: "24px",
+          borderRadius: "50%",
         }}
       ></i>
 
@@ -96,7 +100,7 @@ function AddModal({ date }) {
             />
             <Stack>
               <Form.Control
-                type="date"
+                type="datetime-local"
                 value={formData.startTime}
                 onChange={handleChange}
                 name="startTime"

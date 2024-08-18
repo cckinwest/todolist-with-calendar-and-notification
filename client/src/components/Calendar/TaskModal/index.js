@@ -14,6 +14,22 @@ function TaskModal({ date, task }) {
     frequency: task.frequency,
   });
 
+  const toTwoDigits = (num) => {
+    if (num < 10) {
+      return `0${num}`;
+    }
+
+    return `${num}`;
+  };
+
+  const handleString = (str) => {
+    if (str.length > 18) {
+      return `${str.slice(0, 15)}...`;
+    }
+
+    return str;
+  };
+
   const handleClose = () => {
     setShow(false);
     setIsEdit(false);
@@ -76,9 +92,12 @@ function TaskModal({ date, task }) {
           textOverflow: "ellipsis",
           overflow: "hidden",
           whiteSpace: "nowrap",
+          fontSize: "10px",
         }}
       >
-        {formData.title}
+        {`${toTwoDigits(new Date(formData.startTime).getHours())}:${toTwoDigits(
+          new Date(formData.startTime).getMinutes()
+        )} ${handleString(formData.title)}`}
       </Button>
       {show && (
         <Modal show={show} onHide={handleClose}>
@@ -120,12 +139,16 @@ function TaskModal({ date, task }) {
               {!isEdit ? (
                 <Stack direction="horizontal" gap={3}>
                   <i className="bi bi-calendar"></i>
-                  {formData.startTime.split("T")[0]}
+                  {`${formData.startTime.split("T")[0]} ${toTwoDigits(
+                    new Date(formData.startTime).getHours()
+                  )}:${toTwoDigits(new Date(formData.startTime).getMinutes())}`}
                 </Stack>
               ) : (
                 <Form.Control
-                  type="date"
-                  value={formData.startTime.split("T")[0]}
+                  type="datetime-local"
+                  value={`${formData.startTime.split("T")[0]}T${toTwoDigits(
+                    new Date(formData.startTime).getHours()
+                  )}:${toTwoDigits(new Date(formData.startTime).getMinutes())}`}
                   onChange={handleChange}
                   name="startTime"
                 />

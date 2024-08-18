@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import CalendarPage from "./pages/CalendarPage";
+import DailyTasks from "./pages/DailyTasks";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
             <Route exact path="/" element={<Login />} />
             <Route exact path="/dashboard" element={<Dashboard />} />
             <Route exact path="/calendar" element={<CalendarPage />} />
+            <Route exact path="/dailytasks" element={<DailyTasks />} />
             <Route exact path="/signup" element={<Signup />} />
             <Route exact path="/login" element={<Login />} />
           </Routes>

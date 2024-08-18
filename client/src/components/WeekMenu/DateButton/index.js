@@ -9,10 +9,11 @@ function DateButton({ date, setDate }) {
       }}
       variant="outline-primary"
       style={{
-        height: "50px",
-        width: "50px",
+        height: "40px",
+        width: "40px",
         padding: "0",
         borderRadius: "50%",
+        fontSize: "12px",
       }}
     >
       {date}

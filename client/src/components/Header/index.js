@@ -30,6 +30,7 @@ const Header = () => {
             <Nav.Link href="/login">Login</Nav.Link>
             {user && <Nav.Link href="/dashboard">Dashboard</Nav.Link>}
             {user && <Nav.Link href="/calendar">Calendar</Nav.Link>}
+            {user && <Nav.Link href="/dailytasks">Daily</Nav.Link>}
             {user && (
               <Button variant="light" onClick={logout}>
                 Logout
