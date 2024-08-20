@@ -11,6 +11,7 @@ function TaskModal({ date, task }) {
     title: task.title,
     description: task.description,
     startTime: task.startTime,
+    endTime: task.endTime,
     frequency: task.frequency,
   });
 
@@ -53,6 +54,7 @@ function TaskModal({ date, task }) {
       title: formData.title,
       description: formData.description,
       startTime: formData.startTime,
+      endTime: formData.endTime,
       frequency: formData.frequency,
     };
 
@@ -134,7 +136,7 @@ function TaskModal({ date, task }) {
             )}
             <Stack
               direction="horizontal"
-              className="d-flex justify-content-between mt-2"
+              className="d-flex justify-content-between mt-2 mb-2"
             >
               {!isEdit ? (
                 <Stack direction="horizontal" gap={3}>
@@ -155,22 +157,39 @@ function TaskModal({ date, task }) {
               )}
               {!isEdit ? (
                 <Stack direction="horizontal" gap={3}>
-                  <i className="bi bi-clock"></i>
-                  {formData.frequency}
+                  <i className="bi bi-calendar-check"></i>
+                  {`${formData.endTime.split("T")[0]} ${toTwoDigits(
+                    new Date(formData.endTime).getHours()
+                  )}:${toTwoDigits(new Date(formData.endTime).getMinutes())}`}
                 </Stack>
               ) : (
-                <Form.Select
-                  value={formData.frequency}
+                <Form.Control
+                  type="datetime-local"
+                  value={`${formData.endTime.split("T")[0]}T${toTwoDigits(
+                    new Date(formData.endTime).getHours()
+                  )}:${toTwoDigits(new Date(formData.endTime).getMinutes())}`}
                   onChange={handleChange}
-                  name="frequency"
-                >
-                  <option value="none">None</option>
-                  <option value="daily">Daily</option>
-                  <option value="weekly">Weekly</option>
-                  <option value="annually">Annually</option>
-                </Form.Select>
+                  name="endTime"
+                />
               )}
             </Stack>
+            {!isEdit ? (
+              <Stack direction="horizontal" gap={3}>
+                <i className="bi bi-clock"></i>
+                {formData.frequency}
+              </Stack>
+            ) : (
+              <Form.Select
+                value={formData.frequency}
+                onChange={handleChange}
+                name="frequency"
+              >
+                <option value="none">None</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="annually">Annually</option>
+              </Form.Select>
+            )}
           </Modal.Body>
           <Modal.Footer>
             <Stack direction="horizontal" gap={2}>

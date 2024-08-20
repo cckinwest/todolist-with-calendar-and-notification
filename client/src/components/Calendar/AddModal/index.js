@@ -5,7 +5,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { jwtDecode } from "jwt-decode";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { postDB, getAllDB, getOneDB } from "../../../database";
+//import { postDB, getAllDB, getOneDB } from "../../../database";
 
 function AddModal({ date }) {
   const token = localStorage.getItem("token");
@@ -18,6 +18,7 @@ function AddModal({ date }) {
     title: "",
     description: "",
     startTime: `${date.date}T00:00`,
+    endTime: `${date.date}T00:00`,
     frequency: "none",
   });
 
@@ -41,6 +42,7 @@ function AddModal({ date }) {
       title: formData.title,
       description: formData.description,
       startTime: formData.startTime,
+      endTime: formData.endTime,
       frequency: formData.frequency,
       userId: user.id,
     };
@@ -48,7 +50,7 @@ function AddModal({ date }) {
     axios
       .post(`http://localhost:3002/todo/create`, taskData)
       .then((res) => {
-        postDB(taskData);
+        //postDB(taskData);
         window.location.reload();
       })
       .catch((err) => {
@@ -104,6 +106,12 @@ function AddModal({ date }) {
                 value={formData.startTime}
                 onChange={handleChange}
                 name="startTime"
+              />
+              <Form.Control
+                type="datetime-local"
+                value={formData.endTime}
+                onChange={handleChange}
+                name="endTime"
               />
               <Form.Select
                 value={formData.frequency}

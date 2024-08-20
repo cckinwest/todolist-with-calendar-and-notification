@@ -1,13 +1,13 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 
-function DateButton({ date, setDate }) {
+function DateButton({ date, setDay, active }) {
   return (
     <Button
       onClick={() => {
-        setDate(date);
+        setDay(date);
       }}
-      variant="outline-primary"
+      variant={active ? "outline-danger" : "outline-primary"}
       style={{
         height: "40px",
         width: "40px",
@@ -16,7 +16,7 @@ function DateButton({ date, setDate }) {
         fontSize: "12px",
       }}
     >
-      {date}
+      {date.format("DD/MM")}
     </Button>
   );
 }

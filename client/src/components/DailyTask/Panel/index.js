@@ -2,7 +2,7 @@ import React from "react";
 import Hourline from "./Hourline";
 import TaskShade from "../TaskShade";
 
-function Panel() {
+function Panel({ day, tasks }) {
   const arrOfHours = [];
 
   const task = {
@@ -29,7 +29,9 @@ function Panel() {
       {arrOfHours.map((hour) => {
         return <Hourline key={hour} hour={hour} />;
       })}
-      <TaskShade task={task} />
+      {tasks.map((task) => {
+        return <TaskShade task={task} />;
+      })}
     </div>
   );
 }

@@ -6,25 +6,24 @@ import dayjs from "dayjs";
 
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-function WeekMenu() {
+function WeekMenu({ day, setDay }) {
   const week = [];
-  const [start, setStart] = useState(0);
-  const [day, setDay] = useState(dayjs().format("DD/MM"));
 
   const nextWeek = () => {
-    setStart(start + 7);
+    setDay(dayjs(day).add(7, "day"));
   };
 
   const prevWeek = () => {
-    setStart(start - 7);
+    setDay(dayjs(day).add(-7, "day"));
   };
 
-  for (var i = 1; i < 8; i++) {
-    week.push(
-      dayjs()
-        .day(start + i)
-        .format("DD/MM")
-    );
+  for (var i = 0; i < 7; i++) {
+    const d = dayjs(day).get("d");
+    if (d !== 0) {
+      week.push(dayjs(day).add(i - d + 1, "day"));
+    } else {
+      week.push(dayjs(day).add(i - 6, "day"));
+    }
   }
   return (
     <Container style={{ paddingTop: "5px", paddingBottom: "5px" }}>
@@ -37,7 +36,11 @@ function WeekMenu() {
         {week.map((date) => {
           return (
             <Col style={{ textAlign: "center" }}>
-              <DateButton date={date} setDate={setDay} />
+              <DateButton
+                date={date}
+                setDay={setDay}
+                active={date.get("d") === day.get("d")}
+              />
             </Col>
           );
         })}
