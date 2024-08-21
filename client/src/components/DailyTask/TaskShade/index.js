@@ -3,6 +3,8 @@ import dayjs from "dayjs";
 
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
+import "bootstrap-icons/font/bootstrap-icons.css";
+
 function TaskShade({ task }) {
   const { title, description, startTime, endTime } = task;
 
@@ -29,28 +31,33 @@ function TaskShade({ task }) {
       overlay={renderTip}
     >
       <div
+        className="bg-warning bg-gradient"
         style={{
           height: `calc(100% * ${duration}/24)`,
           width: "80%",
           left: "10%",
           position: "absolute",
           top: `calc(100% * ${fraction})`,
-          backgroundColor: "gold",
           opacity: "80%",
           zIndex: "20",
-          padding: `${duration < 3 ? "0" : "5px"}`,
-          borderRadius: `${duration < 3 ? "0" : "5px"}`,
-          display: `${duration < 2 ? "flex" : "block"}`,
-          justifyContent: `${duration < 2 ? "space-between" : "flex-start"}`,
-          fontSize: `${duration > 3 ? "16px" : "12px"}`,
-          margin: "0",
+          padding: `${duration > 3 ? "10px" : duration > 2 ? "5px" : "2px"}`,
+          borderRadius: `${
+            duration > 3 ? "10px" : duration > 2 ? "5px" : "2px"
+          }`,
+          display: "flex",
+          flexDirection: `${duration < 2 ? "row" : "column"}`,
+          justifyContent: `${duration < 2 ? "space-between" : "center"}`,
+          alignItems: "center",
+          fontSize: `${duration > 3 ? "24px" : "16px"}`,
         }}
       >
-        <p>{title}</p>
-        <p>{description}</p>
-        <p>{`${dayjs(startTime).format("hh:mm A")} - ${dayjs(endTime).format(
+        <p style={{ margin: "0" }}>
+          <strong>{title}</strong>
+        </p>
+        <p style={{ margin: "0" }}>{description}</p>
+        <p style={{ margin: "0" }}>{`${dayjs(startTime).format(
           "hh:mm A"
-        )}`}</p>
+        )} - ${dayjs(endTime).format("hh:mm A")}`}</p>
       </div>
     </OverlayTrigger>
   );

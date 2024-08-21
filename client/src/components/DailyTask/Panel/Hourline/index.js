@@ -1,4 +1,5 @@
 import React from "react";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 function Hourline({ hour }) {
   const h = hour;
@@ -12,7 +13,7 @@ function Hourline({ hour }) {
 
   return (
     <div style={style}>
-      <hr style={{ margin: "0", left: "0", borderTop: "1px solid black" }} />
+      <hr style={{ margin: "0", left: "0", borderTop: "1px solid grey" }} />
       <p
         style={{
           margin: "0",
@@ -20,9 +21,10 @@ function Hourline({ hour }) {
           left: `calc(50%)`,
           transform: "translate(-50%, -50%)",
           position: "absolute",
-          padding: "1px",
-          backgroundColor: "lightblue",
+          padding: "5px",
+          color: "grey",
         }}
+        className="bg-light"
       >
         {h < 12 ? `${h}AM` : h > 12 ? `${h - 12}PM` : "12PM"}
       </p>
