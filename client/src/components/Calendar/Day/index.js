@@ -9,13 +9,63 @@ function Day({ date, tasks }) {
     return task.startTime.split("T")[0] === date.date;
   };
 
+  const checkDaily = (task) => {
+    return (
+      task.frequency === "daily" &&
+      new Date(task.startTime).getTime() < new Date(date.date).getTime()
+    );
+  };
+
+  const checkWeekly = (task) => {
+    const start = new Date(task.startTime);
+    const active = new Date(date.date);
+
+    return (
+      task.frequency === "weekly" &&
+      start.getTime() < active.getTime() &&
+      start.getDay() === active.getDay()
+    );
+  };
+
+  const checkMonthly = (task) => {
+    const start = new Date(task.startTime);
+    const active = new Date(date.date);
+
+    return (
+      task.frequency === "monthly" &&
+      start.getTime() < active.getTime() &&
+      start.getDate() === active.getDate()
+    );
+  };
+
+  const checkAnnually = (task) => {
+    const start = new Date(task.startTime);
+    const active = new Date(date.date);
+
+    return (
+      task.frequency === "monthly" &&
+      start.getTime() < active.getTime() &&
+      start.getDate() === active.getDate() &&
+      start.getMonth() === active.getMonth()
+    );
+  };
+
   const fromOldToNew = (task1, task2) => {
     return (
       new Date(task1.startTime).getTime() - new Date(task2.startTime).getTime()
     );
   };
 
-  const arrOfTasks = tasks.filter(onDate).sort(fromOldToNew);
+  const arrOfTasks = tasks
+    .filter(
+      (task) =>
+        onDate(task) ||
+        checkDaily(task) ||
+        checkWeekly(task) ||
+        checkMonthly(task) ||
+        checkAnnually(task)
+    )
+    .sort(fromOldToNew);
 
   return (
     <Card

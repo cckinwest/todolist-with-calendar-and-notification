@@ -36,6 +36,10 @@ function Month({ year, month, tasks }) {
 
     let firstOfMonth = dayjs(`${y}-${m}-1`).get("d");
 
+    if (firstOfMonth === 0) {
+      firstOfMonth = 7;
+    }
+
     for (var i = 1; i < firstOfMonth; i++) {
       arr.unshift({
         date: dayjs(`${y}-${m}-1`).subtract(i, "d").format("YYYY-MM-DD"),
@@ -46,13 +50,11 @@ function Month({ year, month, tasks }) {
     return arr;
   }
 
-  function toTable(arr, numOfCol) {}
-
   const dates = ArrOfDays(year, month);
   const weekdays = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
 
   return (
-    <div>
+    <div style={{ marginBottom: "10px" }}>
       <Container>
         <Row>
           {weekdays.map((weekday) => {

@@ -5,7 +5,7 @@ import { Container } from "react-bootstrap";
 function CalendarPage() {
   return (
     <main>
-      <Container style={{ height: "80vh" }}>
+      <Container>
         <Calendar />
       </Container>
     </main>

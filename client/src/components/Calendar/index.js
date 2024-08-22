@@ -61,7 +61,6 @@ function Calendar() {
   useEffect(() => {
     async function fetchData() {
       try {
-        console.log("Hello fetchData!");
         const res = await axios.get(
           `http://localhost:3002/todo?username=${user.username}`
         );

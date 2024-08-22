@@ -13,13 +13,6 @@ function DailyTask() {
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
 
-  const onDate = (task) => {
-    const startDate = dayjs(task.startTime).format("YYYY-MM-DD");
-    const formattedDay = dayjs(day).format("YYYY-MM-DD");
-
-    return startDate === formattedDay;
-  };
-
   useEffect(() => {
     async function fetchData() {
       try {
@@ -27,8 +20,7 @@ function DailyTask() {
         const res = await axios.get(
           `http://localhost:3002/todo?username=${user.username}`
         );
-        setTasks(res.data.filter(onDate));
-        console.log(res.data.filter(onDate));
+        setTasks(res.data);
       } catch (err) {
         console.error(`Invalid username: ${err}`);
       }
@@ -40,7 +32,7 @@ function DailyTask() {
   return (
     <Container>
       <Row>
-        <WeekMenu day={day} setDay={setDay} />
+        <WeekMenu day={day} setDay={setDay} tasks={tasks} />
       </Row>
       <Row>
         <Panel day={day} tasks={tasks} />

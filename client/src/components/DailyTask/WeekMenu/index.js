@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-function WeekMenu({ day, setDay }) {
+function WeekMenu({ day, setDay, tasks }) {
   const week = [];
 
   const nextWeek = () => {
@@ -15,6 +15,13 @@ function WeekMenu({ day, setDay }) {
 
   const prevWeek = () => {
     setDay(dayjs(day).add(-7, "day"));
+  };
+
+  const onDate = (task, date) => {
+    const startDate = dayjs(task.startTime).format("YYYY-MM-DD");
+    const formattedDate = dayjs(date).format("YYYY-MM-DD");
+
+    return startDate === formattedDate;
   };
 
   for (var i = 0; i < 7; i++) {
@@ -34,12 +41,14 @@ function WeekMenu({ day, setDay }) {
           </Button>
         </Col>
         {week.map((date) => {
+          console.log(tasks.filter((task) => onDate(task, date)));
           return (
             <Col style={{ textAlign: "center" }}>
               <DateButton
                 date={date}
                 setDay={setDay}
                 active={date.get("d") === day.get("d")}
+                occupied={tasks.filter((task) => onDate(task, date)).length}
               />
             </Col>
           );
