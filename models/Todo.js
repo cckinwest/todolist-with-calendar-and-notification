@@ -18,7 +18,9 @@ const todoSchema = new Schema({
   },
   endTime: {
     type: Date,
-    default: Date.now,
+    default: () => {
+      return this.startTime;
+    },
   },
   frequency: {
     type: String,
