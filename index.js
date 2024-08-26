@@ -5,6 +5,7 @@ const port = 3002;
 const mongoose = require("mongoose");
 const userRouter = require("./routers/user-router");
 const todoRouter = require("./routers/todo-router");
+const patternRouter = require("./routers/pattern-router");
 const subscriptionRouter = require("./routers/subscription-router");
 const verifyJWT = require("./middleware/middleware");
 
@@ -29,6 +30,7 @@ mongoose.connect(process.env.MONGODB_URL).then(() => {
 
 app.use("/user", userRouter);
 app.use("/todo", todoRouter);
+app.use("/pattern", patternRouter);
 app.use("/subscription", subscriptionRouter);
 
 app.get("/decode", verifyJWT, (req, res) => {

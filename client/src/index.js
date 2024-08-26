@@ -6,14 +6,6 @@ import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-/*
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/service-worker.js");
-  });
-} else {
-  console.error("Service workers are not supported in this browser.");
-}*/
 
 root.render(<App />);
 

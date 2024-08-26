@@ -50,6 +50,15 @@ function Day({ date, tasks }) {
     );
   };
 
+  const checkExcept = (task) => {
+    //const active = date.date;
+
+    //console.log(active);
+    //console.log(task.except);
+
+    return true;
+  };
+
   const fromOldToNew = (task1, task2) => {
     return (
       new Date(task1.startTime).getTime() - new Date(task2.startTime).getTime()
@@ -59,11 +68,12 @@ function Day({ date, tasks }) {
   const arrOfTasks = tasks
     .filter(
       (task) =>
-        onDate(task) ||
-        checkDaily(task) ||
-        checkWeekly(task) ||
-        checkMonthly(task) ||
-        checkAnnually(task)
+        (onDate(task) ||
+          checkDaily(task) ||
+          checkWeekly(task) ||
+          checkMonthly(task) ||
+          checkAnnually(task)) &&
+        checkExcept(task)
     )
     .sort(fromOldToNew);
 

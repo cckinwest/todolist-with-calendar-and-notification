@@ -22,10 +22,6 @@ const todoSchema = new Schema({
       return this.startTime;
     },
   },
-  frequency: {
-    type: String,
-    enum: ["none", "daily", "weekly", "monthly", "annually"],
-  },
   createdAt: {
     type: Date,
     default: Date.now,

@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, Form, Button, Stack } from "react-bootstrap";
 import { useState } from "react";
 import axios from "axios";
+import dayjs from "dayjs";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 function TaskModal({ date, task }) {
@@ -12,16 +13,7 @@ function TaskModal({ date, task }) {
     description: task.description,
     startTime: task.startTime,
     endTime: task.endTime,
-    frequency: task.frequency,
   });
-
-  const toTwoDigits = (num) => {
-    if (num < 10) {
-      return `0${num}`;
-    }
-
-    return `${num}`;
-  };
 
   const handleString = (str) => {
     if (str.length > 18) {
@@ -55,7 +47,6 @@ function TaskModal({ date, task }) {
       description: formData.description,
       startTime: formData.startTime,
       endTime: formData.endTime,
-      frequency: formData.frequency,
     };
 
     if (isEdit) {
@@ -97,9 +88,9 @@ function TaskModal({ date, task }) {
           fontSize: "10px",
         }}
       >
-        {`${toTwoDigits(new Date(formData.startTime).getHours())}:${toTwoDigits(
-          new Date(formData.startTime).getMinutes()
-        )} ${handleString(formData.title)}`}
+        {`${dayjs(formData.startTime).format("HH:mm")} ${handleString(
+          formData.title
+        )}`}
       </Button>
       {show && (
         <Modal show={show} onHide={handleClose}>
@@ -141,16 +132,14 @@ function TaskModal({ date, task }) {
               {!isEdit ? (
                 <Stack direction="horizontal" gap={3}>
                   <i className="bi bi-calendar"></i>
-                  {`${formData.startTime.split("T")[0]} ${toTwoDigits(
-                    new Date(formData.startTime).getHours()
-                  )}:${toTwoDigits(new Date(formData.startTime).getMinutes())}`}
+                  {`${dayjs(formData.startTime).format("HH:mm")}`}
                 </Stack>
               ) : (
                 <Form.Control
                   type="datetime-local"
-                  value={`${formData.startTime.split("T")[0]}T${toTwoDigits(
-                    new Date(formData.startTime).getHours()
-                  )}:${toTwoDigits(new Date(formData.startTime).getMinutes())}`}
+                  value={`${formData.startTime.split("T")[0]}T${dayjs(
+                    formData.startTime
+                  ).format("HH:mm")}`}
                   onChange={handleChange}
                   name="startTime"
                 />
@@ -158,38 +147,19 @@ function TaskModal({ date, task }) {
               {!isEdit ? (
                 <Stack direction="horizontal" gap={3}>
                   <i className="bi bi-calendar-check"></i>
-                  {`${formData.endTime.split("T")[0]} ${toTwoDigits(
-                    new Date(formData.endTime).getHours()
-                  )}:${toTwoDigits(new Date(formData.endTime).getMinutes())}`}
+                  {`${dayjs(formData.endTime).format("HH:mm")}`}
                 </Stack>
               ) : (
                 <Form.Control
                   type="datetime-local"
-                  value={`${formData.endTime.split("T")[0]}T${toTwoDigits(
-                    new Date(formData.endTime).getHours()
-                  )}:${toTwoDigits(new Date(formData.endTime).getMinutes())}`}
+                  value={`${formData.endTime.split("T")[0]}T${dayjs(
+                    formData.endTime
+                  ).format("HH:mm")}`}
                   onChange={handleChange}
                   name="endTime"
                 />
               )}
             </Stack>
-            {!isEdit ? (
-              <Stack direction="horizontal" gap={3}>
-                <i className="bi bi-clock"></i>
-                {formData.frequency}
-              </Stack>
-            ) : (
-              <Form.Select
-                value={formData.frequency}
-                onChange={handleChange}
-                name="frequency"
-              >
-                <option value="none">None</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-                <option value="annually">Annually</option>
-              </Form.Select>
-            )}
           </Modal.Body>
           <Modal.Footer>
             <Stack direction="horizontal" gap={2}>

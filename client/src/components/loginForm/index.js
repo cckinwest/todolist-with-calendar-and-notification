@@ -27,7 +27,7 @@ function LoginForm() {
           setMsg(`${username} login successfully!`);
           setIsWarning(false);
           localStorage.setItem("token", res.data.token);
-          window.location.assign("/dashboard");
+          window.location.assign("/calendar");
         })
         .catch((err) => {
           setMsg("There are some errors in login!");

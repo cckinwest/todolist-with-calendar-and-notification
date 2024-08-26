@@ -37,7 +37,7 @@ function SignupForm() {
             setMsg(`${username} is registered successfully!`);
             setIsWarning(false);
             localStorage.setItem("token", res.data.token);
-            window.location.assign("/dashboard");
+            window.location.assign("/calendar");
           }
         })
         .catch((err) => {

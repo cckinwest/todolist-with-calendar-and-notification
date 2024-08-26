@@ -26,6 +26,13 @@ const userSchema = Schema({
       ref: "Todo",
     },
   ],
+
+  patterns: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Pattern",
+    },
+  ],
 });
 
 userSchema.pre("save", async function (next) {
