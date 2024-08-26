@@ -5,10 +5,10 @@ import axios from "axios";
 import dayjs from "dayjs";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-import TaskDisplay from "./TaskDisplay";
-import TaskEdit from "./TaskEdit";
+import PatternDisplay from "./PatternDisplay";
+import PatternEdit from "./PatternEdit";
 
-function TaskModal({ date, task }) {
+function PatternModal({ date, task }) {
   const [show, setShow] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
@@ -62,7 +62,7 @@ function TaskModal({ date, task }) {
 
       {show &&
         (isEdit ? (
-          <TaskEdit
+          <PatternEdit
             date={date}
             task={task}
             show={show}
@@ -72,7 +72,7 @@ function TaskModal({ date, task }) {
             handleDelete={handleDelete}
           />
         ) : (
-          <TaskDisplay
+          <PatternDisplay
             task={task}
             show={show}
             handleClose={handleClose}
@@ -85,4 +85,4 @@ function TaskModal({ date, task }) {
   );
 }
 
-export default TaskModal;
+export default PatternModal;
