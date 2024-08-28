@@ -24,6 +24,7 @@ function Day({ date, tasks }) {
     return (
       task.frequency === "weekly" &&
       start.getTime() < active.getTime() &&
+      active.getTime() <= new Date(task.endDate).getTime() &&
       start.getDay() === active.getDay()
     );
   };
@@ -52,18 +53,26 @@ function Day({ date, tasks }) {
   };
 
   const checkExcept = (task) => {
-    //const active = date.date;
+    const active = date.date;
 
-    //console.log(active);
-    //console.log(task.except);
-
-    return true;
+    return task.except ? !task.except.includes(active) : true;
   };
 
   const fromOldToNew = (task1, task2) => {
-    return (
-      new Date(task1.startTime).getTime() - new Date(task2.startTime).getTime()
-    );
+    if (
+      new Date(task1.startTime).getHours() !==
+      new Date(task2.startTime).getHours()
+    ) {
+      return (
+        new Date(task1.startTime).getHours() -
+        new Date(task2.startTime).getHours()
+      );
+    } else {
+      return (
+        new Date(task1.startTime).getMinutes() -
+        new Date(task2.startTime).getMinutes()
+      );
+    }
   };
   /*
   const arrOfTasks = tasks
@@ -78,7 +87,9 @@ function Day({ date, tasks }) {
     )
     .sort(fromOldToNew);*/
 
-  const arrOfTasks = tasks.filter((task) => onDate(task)).sort(fromOldToNew);
+  const arrOfTasks = tasks
+    .filter((task) => (onDate(task) || checkWeekly(task)) && checkExcept(task))
+    .sort(fromOldToNew);
 
   return (
     <Card

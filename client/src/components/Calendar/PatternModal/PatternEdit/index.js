@@ -36,13 +36,13 @@ function PatternEdit({
       startTime: `${date.date}T${formData.startTime}`,
       endTime: `${date.date}T${formData.endTime}`,
       createdBy: task.createdBy,
-      date: date.date
+      date: date.date,
     };
 
     axios
       .put(`http://localhost:3002/pattern/changeAnIndividual`, taskData)
       .then((res) => {
-        window.location.reload();
+        window.location.assign("/calendar");
       })
       .catch((err) => {
         console.log(err);

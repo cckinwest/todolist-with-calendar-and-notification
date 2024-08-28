@@ -40,7 +40,7 @@ function TaskEdit({
     axios
       .put(`http://localhost:3002/todo/update`, taskData)
       .then((res) => {
-        window.location.reload();
+        window.location.assign("/calendar");
       })
       .catch((err) => {
         console.log(err);
