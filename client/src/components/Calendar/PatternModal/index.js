@@ -33,7 +33,7 @@ function PatternModal({ date, task }) {
   const handleDelete = () => {
     const taskData = { taskId: task._id };
     axios
-      .put(`http://localhost:3002/todo/delete`, taskData)
+      .put(`http://localhost:3002/pattern/delete`, taskData)
       .then((res) => {
         window.location.reload();
       })
@@ -45,7 +45,7 @@ function PatternModal({ date, task }) {
   return (
     <>
       <Button
-        variant="outline-primary"
+        variant="outline-danger"
         size="sm"
         className="rounded-pill"
         onClick={handleClick}

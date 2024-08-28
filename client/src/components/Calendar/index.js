@@ -61,10 +61,21 @@ function Calendar() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await axios.get(
+        const resTodo = await axios.get(
           `http://localhost:3002/todo?username=${user.username}`
         );
-        setTasks(res.data);
+
+        const resPattern = await axios.get(
+          `http://localhost:3002/pattern?username=${user.username}`
+        );
+
+        let arrOfTasks = resTodo.data;
+
+        for (var i = 0; i < resPattern.data.length; i++) {
+          arrOfTasks.push(resPattern.data[i]);
+        }
+
+        setTasks(arrOfTasks);
         //console.log(tasks);
       } catch (err) {
         console.error(`Invalid username: ${err}`);

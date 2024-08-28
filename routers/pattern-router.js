@@ -8,7 +8,7 @@ const Pattern = require("../models/Pattern");
 router.get("/", async (req, res) => {
   try {
     const user = await User.findOne({ username: req.query.username }).populate({
-      path: "pattern",
+      path: "patterns",
       select: "-__v",
     });
 
@@ -55,7 +55,7 @@ router.post("/create", async (req, res) => {
 
 router.put("/update", async (req, res) => {
   try {
-    const pattern = await Pattern.findOneAndUpdate(req.body.id, req.body, {
+    const pattern = await Pattern.findByIdAndUpdate(req.body.id, req.body, {
       new: true,
     });
 
@@ -67,11 +67,14 @@ router.put("/update", async (req, res) => {
 
 router.put("/changeAnIndividual", async (req, res) => {
   try {
-    const pattern = await Pattern.updateOne(req.body.patternId, {
-      $addToSet: {
-        except: req.body.date,
-      },
-    });
+    const pattern = await Pattern.updateOne(
+      { _id: req.body.patternId },
+      {
+        $addToSet: {
+          except: req.body.date,
+        },
+      }
+    );
 
     const { title, description, startTime, endTime, createdBy } = req.body;
 
@@ -83,11 +86,14 @@ router.put("/changeAnIndividual", async (req, res) => {
       createdBy: createdBy,
     });
 
-    const user = await User.updateOne(createdBy, {
-      $addToSet: {
-        todos: todo._id,
-      },
-    });
+    const user = await User.updateOne(
+      { _id: createdBy },
+      {
+        $addToSet: {
+          todos: todo._id,
+        },
+      }
+    );
   } catch (err) {
     res.status(500).json({ error: err });
   }

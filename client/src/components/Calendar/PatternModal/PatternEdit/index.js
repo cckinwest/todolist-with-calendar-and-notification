@@ -30,15 +30,17 @@ function PatternEdit({
     setIsEdit(!isEdit);
 
     const taskData = {
-      id: task._id,
+      patternId: task._id,
       title: formData.title,
       description: formData.description,
       startTime: `${date.date}T${formData.startTime}`,
       endTime: `${date.date}T${formData.endTime}`,
+      createdBy: task.createdBy,
+      date: date.date
     };
 
     axios
-      .put(`http://localhost:3002/todo/update`, taskData)
+      .put(`http://localhost:3002/pattern/changeAnIndividual`, taskData)
       .then((res) => {
         window.location.reload();
       })

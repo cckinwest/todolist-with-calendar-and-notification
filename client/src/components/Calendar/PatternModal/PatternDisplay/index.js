@@ -36,14 +36,32 @@ function PatternDisplay({
           className="d-flex justify-content-between mt-2 mb-2"
         >
           <Stack direction="horizontal" gap={3}>
-            <i className="bi bi-calendar"></i>
+            <i className="bi bi-clock"></i>
             {`${dayjs(task.startTime).format("HH:mm")}`}
           </Stack>
 
           <Stack direction="horizontal" gap={3}>
-            <i className="bi bi-calendar-check"></i>
+            <i className="bi bi-clock-fill"></i>
             {`${dayjs(task.endTime).format("HH:mm")}`}
           </Stack>
+        </Stack>
+        <Stack
+          direction="horizontal"
+          className="d-flex justify-content-between mt-2 mb-2"
+        >
+          <Stack direction="horizontal" gap={3}>
+            <i className="bi bi-calendar-event"></i>
+            {`${task.startDate}`}
+          </Stack>
+
+          <Stack direction="horizontal" gap={3}>
+            <i className="bi bi-calendar-event-fill"></i>
+            {`${task.endDate}`}
+          </Stack>
+        </Stack>
+        <Stack direction="horizontal" gap={3}>
+          <i className="bi bi-bell"></i>
+          {task.frequency}
         </Stack>
       </Modal.Body>
       <Modal.Footer>

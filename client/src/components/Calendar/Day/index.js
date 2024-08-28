@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Card, Stack, Badge, Button } from "react-bootstrap";
 import TaskModal from "../TaskModal";
+import PatternModal from "../PatternModal";
 import AddModal from "../AddModal";
 
 function Day({ date, tasks }) {
@@ -64,7 +65,7 @@ function Day({ date, tasks }) {
       new Date(task1.startTime).getTime() - new Date(task2.startTime).getTime()
     );
   };
-
+  /*
   const arrOfTasks = tasks
     .filter(
       (task) =>
@@ -75,7 +76,9 @@ function Day({ date, tasks }) {
           checkAnnually(task)) &&
         checkExcept(task)
     )
-    .sort(fromOldToNew);
+    .sort(fromOldToNew);*/
+
+  const arrOfTasks = tasks.filter((task) => onDate(task)).sort(fromOldToNew);
 
   return (
     <Card
@@ -89,7 +92,11 @@ function Day({ date, tasks }) {
         </Card.Title>
         <Stack gap={1}>
           {arrOfTasks.map((task) => {
-            return <TaskModal date={date} task={task} key={task._id} />;
+            return task.startDate ? (
+              <PatternModal date={date} task={task} key={task._id} />
+            ) : (
+              <TaskModal date={date} task={task} key={task._id} />
+            );
           })}
         </Stack>
       </Card.Body>
