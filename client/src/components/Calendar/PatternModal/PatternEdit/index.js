@@ -42,6 +42,8 @@ function PatternEdit({
     axios
       .put(`http://localhost:3002/pattern/changeAnIndividual`, taskData)
       .then((res) => {
+        console.log(res.data);
+        handleClose();
         window.location.assign("/calendar");
       })
       .catch((err) => {

@@ -16,11 +16,22 @@ function DailyTask() {
   useEffect(() => {
     async function fetchData() {
       try {
-        console.log("Hello fetchData!");
-        const res = await axios.get(
+        //console.log("Hello fetchData!");
+        const resTodo = await axios.get(
           `http://localhost:3002/todo?username=${user.username}`
         );
-        setTasks(res.data);
+
+        const arrOfTasks = resTodo.data;
+
+        const resPattern = await axios.get(
+          `http://localhost:3002/pattern?username=${user.username}`
+        );
+
+        for (var i = 0; i < resPattern.data.length; i++) {
+          arrOfTasks.push(resPattern.data[i]);
+        }
+
+        setTasks(arrOfTasks);
       } catch (err) {
         console.error(`Invalid username: ${err}`);
       }

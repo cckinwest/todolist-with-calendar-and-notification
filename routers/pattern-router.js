@@ -94,6 +94,29 @@ router.put("/changeAnIndividual", async (req, res) => {
         },
       }
     );
+
+    res.status(200).json({ pattern: pattern, todo: todo, user: user });
+  } catch (err) {
+    res.status(500).json({ error: err });
+  }
+});
+
+router.put("/deleteAnIndividual", async (req, res) => {
+  try {
+    console.log(req.body);
+
+    await Pattern.updateOne(
+      { _id: req.body.patternId },
+      {
+        $addToSet: {
+          except: req.body.date,
+        },
+      }
+    );
+
+    res.status(204).json({
+      message: `the task on ${req.body.date} of the pattern is deleted successfully!`,
+    });
   } catch (err) {
     res.status(500).json({ error: err });
   }

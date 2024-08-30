@@ -31,11 +31,12 @@ function PatternModal({ date, task }) {
   };
 
   const handleDelete = () => {
-    const taskData = { taskId: task._id };
+    const taskData = { patternId: task._id, date: date.date };
     axios
-      .put(`http://localhost:3002/pattern/delete`, taskData)
+      .put(`http://localhost:3002/pattern/deleteAnIndividual`, taskData)
       .then((res) => {
-        window.location.reload();
+        handleClose();
+        window.location.assign("/calendar");
       })
       .catch((err) => {
         console.log(err);

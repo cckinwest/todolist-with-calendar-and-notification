@@ -35,7 +35,8 @@ function TaskModal({ date, task }) {
     axios
       .put(`http://localhost:3002/todo/delete`, taskData)
       .then((res) => {
-        window.location.reload();
+        handleClose();
+        window.location.assign("/calendar");
       })
       .catch((err) => {
         console.log(err);

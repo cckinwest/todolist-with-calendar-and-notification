@@ -24,6 +24,24 @@ function WeekMenu({ day, setDay, tasks }) {
     return startDate === formattedDate;
   };
 
+  const checkWeekly = (task, date) => {
+    const active = new Date(date);
+    console.log(active);
+
+    return (
+      task.frequency === "weekly" &&
+      new Date(task.startDate).getTime() <= active.getTime() &&
+      active.getTime() <= new Date(task.endDate).getTime() &&
+      new Date(task.startDate).getDay() === active.getDay()
+    );
+  };
+
+  const checkExcept = (task, date) => {
+    const active = dayjs(date).format("YYYY-MM-DD");
+
+    return task.except ? !task.except.includes(active) : true;
+  };
+
   for (var i = 0; i < 7; i++) {
     const d = dayjs(day).get("d");
     if (d !== 0) {
@@ -41,14 +59,26 @@ function WeekMenu({ day, setDay, tasks }) {
           </Button>
         </Col>
         {week.map((date) => {
-          console.log(tasks.filter((task) => onDate(task, date)));
+          console.log(
+            tasks.filter(
+              (task) =>
+                (onDate(task, date) || checkWeekly(task, date)) &&
+                checkExcept(task, date)
+            )
+          );
           return (
             <Col style={{ textAlign: "center" }}>
               <DateButton
                 date={date}
                 setDay={setDay}
                 active={date.get("d") === day.get("d")}
-                occupied={tasks.filter((task) => onDate(task, date)).length}
+                occupied={
+                  tasks.filter(
+                    (task) =>
+                      (onDate(task, date) || checkWeekly(task, date)) &&
+                      checkExcept(task, date)
+                  ).length
+                }
               />
             </Col>
           );

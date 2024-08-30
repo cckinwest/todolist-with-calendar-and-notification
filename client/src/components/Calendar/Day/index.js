@@ -18,14 +18,13 @@ function Day({ date, tasks }) {
   };
 
   const checkWeekly = (task) => {
-    const start = new Date(task.startTime);
     const active = new Date(date.date);
 
     return (
       task.frequency === "weekly" &&
-      start.getTime() < active.getTime() &&
+      new Date(task.startDate).getTime() <= active.getTime() &&
       active.getTime() <= new Date(task.endDate).getTime() &&
-      start.getDay() === active.getDay()
+      new Date(task.startDate).getDay() === active.getDay()
     );
   };
 
