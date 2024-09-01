@@ -19,11 +19,20 @@ function PatternEdit({
     description: task.description,
     startTime: dayjs(task.startTime).format("HH:mm"),
     endTime: dayjs(task.endTime).format("HH:mm"),
+    startDate: task.startDate,
+    endDate: task.endDate,
+    frequency: task.frequency,
   });
+
+  const [editPattern, setEditPattern] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleEditMode = () => {
+    setEditPattern(!editPattern);
   };
 
   const handleEdit = () => {
@@ -36,6 +45,9 @@ function PatternEdit({
       startTime: `${date.date}T${formData.startTime}`,
       endTime: `${date.date}T${formData.endTime}`,
       createdBy: task.createdBy,
+      startDate: formData.startDate,
+      endDate: formData.endDate,
+      frequency: formData.frequency,
       date: date.date,
     };
 
@@ -68,6 +80,26 @@ function PatternEdit({
           onChange={handleChange}
           name="description"
         />
+        {editPattern && (
+          <Stack
+            direction="horizontal"
+            className="d-flex justify-content-between mt-2 mb-2"
+          >
+            <Form.Control
+              type="date"
+              value={formData.startDate}
+              onChange={handleChange}
+              name="startTime"
+            />
+
+            <Form.Control
+              type="date"
+              value={formData.endDate}
+              onChange={handleChange}
+              name="endTime"
+            />
+          </Stack>
+        )}
         <Stack
           direction="horizontal"
           className="d-flex justify-content-between mt-2 mb-2"
@@ -86,9 +118,24 @@ function PatternEdit({
             name="endTime"
           />
         </Stack>
+        {editPattern && (
+          <Form.Select
+            value={formData.frequency}
+            onChange={handleChange}
+            name="frequency"
+          >
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+            <option value="annually">Annually</option>
+          </Form.Select>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Stack direction="horizontal" gap={2}>
+          <Button variant="outline-info" onClick={handleEditMode}>
+            {editPattern ? "Whole Pattern" : "Individual Only"}
+          </Button>
           <Button variant="outline-primary" onClick={handleEdit}>
             <Stack direction="horizontal" gap={2}>
               <i className="bi bi-floppy"></i>

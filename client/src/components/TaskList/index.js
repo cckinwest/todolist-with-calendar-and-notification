@@ -19,7 +19,7 @@ const TaskList = ({ tasks, showAll, dateSelected }) => {
             title={task.title}
             description={task.description}
             startTime={task.startTime}
-            frequency={task.frequency}
+            endTime={task.endTime}
             key={task._id}
           />
         );
@@ -34,7 +34,7 @@ const TaskList = ({ tasks, showAll, dateSelected }) => {
             title={task.title}
             description={task.description}
             startTime={task.startTime}
-            frequency={task.frequency}
+            endTime={task.endTime}
             key={task._id}
           />
         );

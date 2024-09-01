@@ -2,13 +2,14 @@ import React from "react";
 import axios from "axios";
 import { useState } from "react";
 import { Form, Button, Card, Stack } from "react-bootstrap";
+import dayjs from "dayjs";
 
-const Task = ({ taskId, title, description, startTime, frequency }) => {
+const Task = ({ taskId, title, description, startTime, endTime }) => {
   const [formData, setFormData] = useState({
     title: title,
     description: description,
     startTime: startTime,
-    frequency: frequency,
+    endTime: endTime,
   });
 
   const [edit, setEdit] = useState(false);
@@ -27,7 +28,7 @@ const Task = ({ taskId, title, description, startTime, frequency }) => {
         title: formData.title,
         description: formData.description,
         startTime: formData.startTime,
-        frequency: formData.frequency,
+        endTime: formData.endTime,
       };
 
       axios
@@ -77,28 +78,24 @@ const Task = ({ taskId, title, description, startTime, frequency }) => {
           controlId="EditStartTime"
         >
           <Form.Control
-            type="date"
-            value={formData.startTime.split("T")[0]}
+            type="datetime-local"
+            value={formData.startTime}
             onChange={handleChange}
             name="startTime"
           />
         </Form.Group>
 
         <Form.Group
-          style={{ width: "33%", textAlign: "right" }}
+          style={{ width: "33%", textAlign: "center" }}
           className="mb-3"
-          controlId="EditFrequency"
+          controlId="EditEndTime"
         >
-          <Form.Select
-            value={formData.frequency}
+          <Form.Control
+            type="datetime-local"
+            value={formData.endTime}
             onChange={handleChange}
-            name="frequency"
-          >
-            <option value="none">None</option>
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-            <option value="annually">Annually</option>
-          </Form.Select>
+            name="endTime"
+          />
         </Form.Group>
       </Stack>
 
@@ -125,24 +122,21 @@ const Task = ({ taskId, title, description, startTime, frequency }) => {
     <Card bg="light">
       <Card.Body>
         <Card.Text>
-          <Stack
-            direction="horizontal"
-            className="d-flex justify-content-between"
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
           >
-            <div style={{ width: "33%", textAlign: "left" }}>
-              <strong>Title: {formData.title}</strong>
-            </div>
-            <div style={{ width: "33%", textAlign: "center" }}>
-              <strong>Start time: {formData.startTime.split("T")[0]}</strong>
-            </div>
-            <div style={{ width: "33%", textAlign: "right" }}>
-              <strong>Frequency: {formData.frequency}</strong>
-            </div>
-          </Stack>
+            <p>
+              {`${formData.title} ${dayjs(formData.startTime).format(
+                "YYYY-MM-DD HH:mm"
+              )} to ${dayjs(formData.endTime).format("HH:mm")}`}
+            </p>
+            <p>{formData.description}</p>
+          </div>
         </Card.Text>
-        <Card.Text>
-          <small>Description: {formData.description}</small>
-        </Card.Text>
+
         <Stack direction="horizontal" gap={2}>
           <Button variant="outline-secondary" onClick={handleEdit}>
             Edit
