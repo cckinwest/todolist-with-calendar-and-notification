@@ -55,9 +55,13 @@ router.post("/create", async (req, res) => {
 
 router.put("/update", async (req, res) => {
   try {
-    const pattern = await Pattern.findByIdAndUpdate(req.body.id, req.body, {
-      new: true,
-    });
+    const pattern = await Pattern.findByIdAndUpdate(
+      req.body.patternId,
+      req.body,
+      {
+        new: true,
+      }
+    );
 
     res.status(200).json(pattern);
   } catch (err) {
@@ -124,7 +128,7 @@ router.put("/deleteAnIndividual", async (req, res) => {
 
 router.put("/delete", async (req, res) => {
   try {
-    const patternId = req.body.patternkId;
+    const patternId = req.body.patternId;
     const pattern = await Pattern.findById(patternId);
     const userId = pattern.createdBy;
 
@@ -138,7 +142,7 @@ router.put("/delete", async (req, res) => {
     res
       .status(204)
       .json({ message: `pattern ${patternId} is deleted successfully!` });
-  } catch (error) {
+  } catch (err) {
     res.status(500).json({ error: err });
   }
 });

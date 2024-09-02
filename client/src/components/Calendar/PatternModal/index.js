@@ -35,8 +35,7 @@ function PatternModal({ date, task }) {
     axios
       .put(`http://localhost:3002/pattern/deleteAnIndividual`, taskData)
       .then((res) => {
-        handleClose();
-        window.location.assign("/calendar");
+        window.location.reload("");
       })
       .catch((err) => {
         console.log(err);

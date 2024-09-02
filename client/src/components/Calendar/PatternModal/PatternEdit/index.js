@@ -52,11 +52,26 @@ function PatternEdit({
     };
 
     axios
-      .put(`http://localhost:3002/pattern/changeAnIndividual`, taskData)
+      .put(
+        editPattern
+          ? `http://localhost:3002/pattern/update`
+          : `http://localhost:3002/pattern/changeAnIndividual`,
+        taskData
+      )
       .then((res) => {
-        console.log(res.data);
-        handleClose();
-        window.location.assign("/calendar");
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleDeletePattern = () => {
+    const taskData = { patternId: task._id };
+    axios
+      .put(`http://localhost:3002/pattern/delete`, taskData)
+      .then((res) => {
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
@@ -89,14 +104,14 @@ function PatternEdit({
               type="date"
               value={formData.startDate}
               onChange={handleChange}
-              name="startTime"
+              name="startDate"
             />
 
             <Form.Control
               type="date"
               value={formData.endDate}
               onChange={handleChange}
-              name="endTime"
+              name="endDate"
             />
           </Stack>
         )}
@@ -142,7 +157,10 @@ function PatternEdit({
               Save
             </Stack>
           </Button>
-          <Button variant="outline-danger" onClick={handleDelete}>
+          <Button
+            variant="outline-danger"
+            onClick={editPattern ? handleDeletePattern : handleDelete}
+          >
             <Stack direction="horizontal" gap={2}>
               <i className="bi bi-trash3"></i>Delete
             </Stack>
