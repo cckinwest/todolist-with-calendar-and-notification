@@ -20,21 +20,23 @@ function Dashboard() {
   const user = jwtDecode(token);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3002/todo?username=${user.username}`)
-      .then((res) => {
-        setTasks(res.data);
-      });
+    const fetchData = async () => {
+      const todos = await axios.get(
+        `http://localhost:3002/todo?username=${user.username}`
+      );
+      const patterns = await axios.get(
+        `http://localhost:3002/pattern?username=${user.username}`
+      );
+
+      setTasks([...todos.data, ...patterns.data]);
+    };
+
+    fetchData();
   }, []);
 
   return (
     <main>
-      <Container
-        style={{
-          height: "80vh",
-        }}
-        fluid
-      >
+      <Container fluid>
         <Row className="d-flex align-items-center justify-content-center">
           <Col className="d-flex justify-content-start">
             <ExpireForm />

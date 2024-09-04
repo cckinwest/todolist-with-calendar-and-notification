@@ -5,71 +5,56 @@ import axios from "axios";
 import dayjs from "dayjs";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-function PatternEdit({
-  date,
-  task,
-  show,
-  handleClose,
-  isEdit,
-  setIsEdit,
-  handleDelete,
-}) {
+function EditForm({ task, isEdit, setIsEdit }) {
+  const isPattern = task.startDate ? true : false;
+
   const [formData, setFormData] = useState({
     title: task.title,
     description: task.description,
     startTime: dayjs(task.startTime).format("HH:mm"),
     endTime: dayjs(task.endTime).format("HH:mm"),
-    startDate: task.startDate,
-    endDate: task.endDate,
-    frequency: task.frequency,
+    startDate: isPattern
+      ? task.startDate
+      : dayjs(task.startTime).format("YYYY-MM-DD"),
+    endDate: isPattern
+      ? task.endDate
+      : dayjs(task.startTime).format("YYYY-MM-DD"),
+    frequency: isPattern ? task.frequency : "",
   });
 
-  const [editPattern, setEditPattern] = useState(false);
+  const [show, setShow] = useState(isEdit);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleEditMode = () => {
-    setEditPattern(!editPattern);
+  const handleClose = () => {
+    setShow(false);
+    setIsEdit(false);
   };
 
   const handleEdit = () => {
     setIsEdit(!isEdit);
 
     const taskData = {
-      patternId: task._id,
+      id: task._id,
       title: formData.title,
       description: formData.description,
-      startTime: `${date.date}T${formData.startTime}`,
-      endTime: `${date.date}T${formData.endTime}`,
-      createdBy: task.createdBy,
+      startTime: `${formData.startDate}T${formData.startTime}`,
+      endTime: `${formData.startDate}T${formData.endTime}`,
       startDate: formData.startDate,
       endDate: formData.endDate,
       frequency: formData.frequency,
-      date: date.date,
     };
 
     axios
       .put(
-        editPattern
+        isPattern
           ? `http://localhost:3002/pattern/update`
-          : `http://localhost:3002/pattern/changeAnIndividual`,
+          : `http://localhost:3002/todo/update`,
         taskData
       )
-      .then((res) => {
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const handleDeletePattern = () => {
-    const taskData = { patternId: task._id };
-    axios
-      .put(`http://localhost:3002/pattern/delete`, taskData)
       .then((res) => {
         window.location.reload();
       })
@@ -95,25 +80,19 @@ function PatternEdit({
           onChange={handleChange}
           name="description"
         />
-        {editPattern && (
-          <Stack
-            direction="horizontal"
-            className="d-flex justify-content-between mt-2 mb-2"
-          >
-            <Form.Control
-              type="date"
-              value={formData.startDate}
-              onChange={handleChange}
-              name="startDate"
-            />
-
-            <Form.Control
-              type="date"
-              value={formData.endDate}
-              onChange={handleChange}
-              name="endDate"
-            />
-          </Stack>
+        <Form.Control
+          type="date"
+          value={formData.startDate}
+          onChange={handleChange}
+          name="startDate"
+        />
+        {isPattern && (
+          <Form.Control
+            type="date"
+            value={formData.endDate}
+            onChange={handleChange}
+            name="endDate"
+          />
         )}
         <Stack
           direction="horizontal"
@@ -133,7 +112,7 @@ function PatternEdit({
             name="endTime"
           />
         </Stack>
-        {editPattern && (
+        {isPattern && (
           <Form.Select
             value={formData.frequency}
             onChange={handleChange}
@@ -148,21 +127,10 @@ function PatternEdit({
       </Modal.Body>
       <Modal.Footer>
         <Stack direction="horizontal" gap={2}>
-          <Button variant="outline-info" onClick={handleEditMode}>
-            {editPattern ? "Change individual" : "Change pattern"}
-          </Button>
           <Button variant="outline-primary" onClick={handleEdit}>
             <Stack direction="horizontal" gap={2}>
               <i className="bi bi-floppy"></i>
               Save
-            </Stack>
-          </Button>
-          <Button
-            variant="outline-danger"
-            onClick={editPattern ? handleDeletePattern : handleDelete}
-          >
-            <Stack direction="horizontal" gap={2}>
-              <i className="bi bi-trash3"></i>Delete
             </Stack>
           </Button>
         </Stack>
@@ -171,4 +139,4 @@ function PatternEdit({
   );
 }
 
-export default PatternEdit;
+export default EditForm;

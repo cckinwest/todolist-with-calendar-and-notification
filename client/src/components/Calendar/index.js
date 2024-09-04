@@ -69,14 +69,7 @@ function Calendar() {
           `http://localhost:3002/pattern?username=${user.username}`
         );
 
-        let arrOfTasks = resTodo.data;
-
-        for (var i = 0; i < resPattern.data.length; i++) {
-          arrOfTasks.push(resPattern.data[i]);
-        }
-
-        setTasks(arrOfTasks);
-        //console.log(tasks);
+        setTasks([...resTodo.data, ...resPattern.data]);
       } catch (err) {
         console.error(`Invalid username: ${err}`);
       }
