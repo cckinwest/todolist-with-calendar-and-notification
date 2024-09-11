@@ -1,39 +1,3 @@
-/* eslint-disable no-restricted-globals */
-/*
-import { registerRoute, Route } from "workbox-routing";
-import { CacheFirst, StaleWhileRevalidate } from "workbox-strategies";
-import { precacheAndRoute } from "workbox-precaching";
-import { CacheableResponsePlugin } from "workbox-cacheable-response";
-import { ExpirationPlugin } from "workbox-expiration";
-
-precacheAndRoute(self.__WB_MANIFEST);
-
-const staticRoute = new Route(
-  ({ request }) => {
-    return request.destination === "image";
-  },
-  new CacheFirst({
-    cacheName: "staticCache",
-    plugins: [
-      new CacheableResponsePlugin({ statuses: [0, 200] }),
-      new ExpirationPlugin({ maxEntries: 60, maxAgeSeconds: 24 * 60 * 60 }),
-    ],
-  })
-);
-
-const dynamicRoute = new Route(
-  ({ request }) => {
-    return request.destination === "style" || request.destination === "script";
-  },
-  new StaleWhileRevalidate({
-    cacheName: "dynamicCache",
-    plugins: [new CacheableResponsePlugin({ statuses: [0, 200] })],
-  })
-);
-
-registerRoute(staticRoute);
-registerRoute(dynamicRoute);*/
-
 self.addEventListener("install", (event) => {
   console.log("The service worker is installing.");
 });
@@ -49,7 +13,41 @@ self.addEventListener("push", (event) => {
 
   const options = {
     body: text,
+    actions: [
+      {
+        action: "know-action",
+        title: "I get it!",
+      },
+      {
+        action: "continue-action",
+        title: "Pls notify again.",
+      },
+    ],
   };
 
   event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener("notificationclick", (event) => {
+  if (!event.action) {
+    console.log(`On notification click: ${event.notification.title}`);
+    return;
+  }
+
+  switch (event.action) {
+    case "know-action":
+      console.log(`Ok so don't need to notify you again!`);
+      break;
+    case "continue-action":
+      console.log(`Ok will notify you again!`);
+      break;
+  }
+
+  event.waitUntil(
+    clients.matchAll({ type: "window" }).then((clientList) => {
+      clientList.forEach((client) => {
+        console.log(client.url);
+      });
+    })
+  );
 });

@@ -1,7 +1,6 @@
 import React from "react";
 import Month from "./Month";
-import NotificationStatus from "./NotificationStatus";
-import ExpireForm from "../ExpireForm";
+import MonthMenu from "./MonthMenu";
 import dayjs from "dayjs";
 import axios from "axios";
 import { Stack, Form, Container, Row, Col, Button } from "react-bootstrap";
@@ -16,7 +15,7 @@ import {
 
 function Calendar() {
   const [year, setYear] = useState(dayjs().get("y"));
-  const [month, setMonth] = useState(dayjs().get("M") + 1);
+  const [month, setMonth] = useState(dayjs().get("M"));
 
   const [tasks, setTasks] = useState([]);
   const [status, setStatus] = useState("default");
@@ -25,7 +24,9 @@ function Calendar() {
   const user = jwtDecode(token);
 
   const handlePermissionGranted = async () => {
-    const registration = await serviceWorkerRegistration();
+    //const registration = await serviceWorkerRegistration();
+    console.log("Hello!");
+    await serviceWorkerRegistration();
     const pushSubscription = await notificationSubscription();
 
     if (pushSubscription) {
@@ -88,40 +89,12 @@ function Calendar() {
   return (
     <Container>
       <Row className="mt-3 d-flex align-items-center justify-content-between">
-        <Col>
-          <ExpireForm />
-        </Col>
-        <Col>
-          <Form.Control
-            type="number"
-            name="year"
-            id="year"
-            min="2000"
-            max="2049"
-            value={year}
-            onChange={(e) => {
-              const y = parseInt(e.target.value);
-              setYear(y);
-            }}
-          />
-        </Col>
-        <Col>
-          <Form.Control
-            type="number"
-            name="month"
-            id="month"
-            min="1"
-            max="12"
-            value={month}
-            onChange={(e) => {
-              const m = parseInt(e.target.value);
-              setMonth(m);
-            }}
-          />
-        </Col>
-        <Col>
-          <NotificationStatus status={status} />
-        </Col>
+        <MonthMenu
+          year={year}
+          setYear={setYear}
+          month={month}
+          setMonth={setMonth}
+        />
       </Row>
       <Row>
         <Month year={year} month={month} tasks={tasks} />

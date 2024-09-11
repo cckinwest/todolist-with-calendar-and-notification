@@ -71,16 +71,24 @@ router.put("/update", async (req, res) => {
 
 router.put("/changeAnIndividual", async (req, res) => {
   try {
+    const {
+      title,
+      description,
+      startTime,
+      endTime,
+      createdBy,
+      patternId,
+      date,
+    } = req.body;
+
     const pattern = await Pattern.updateOne(
-      { _id: req.body.patternId },
+      { _id: patternId },
       {
         $addToSet: {
-          except: req.body.date,
+          except: date,
         },
       }
     );
-
-    const { title, description, startTime, endTime, createdBy } = req.body;
 
     const todo = await Todo.create({
       title: title,

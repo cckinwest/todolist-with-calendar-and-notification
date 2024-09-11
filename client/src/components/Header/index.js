@@ -1,6 +1,7 @@
 import React from "react";
 import { jwtDecode } from "jwt-decode";
 import icon from "../../assets/todolistIcon.jpg";
+import ExpireForm from "../ExpireForm";
 
 import { Container, Nav, Navbar, Button, Image } from "react-bootstrap";
 
@@ -38,6 +39,7 @@ const Header = () => {
             )}
           </Nav>
         </Navbar.Collapse>
+        {user && <ExpireForm />}
       </Container>
     </Navbar>
   );

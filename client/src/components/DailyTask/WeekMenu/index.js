@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { useMediaQuery } from "react-responsive";
 import { Row, Col, Container, Button } from "react-bootstrap";
 import DateButton from "./DateButton";
 import dayjs from "dayjs";
@@ -7,6 +8,7 @@ import dayjs from "dayjs";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 function WeekMenu({ day, setDay, tasks }) {
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 1200px)" });
   const week = [];
 
   const nextWeek = () => {
@@ -54,7 +56,14 @@ function WeekMenu({ day, setDay, tasks }) {
     <Container style={{ paddingTop: "5px", paddingBottom: "5px" }}>
       <Row className="d-flex justify-content-center align-items-center">
         <Col style={{ textAlign: "center" }}>
-          <Button onClick={prevWeek}>
+          <Button
+            onClick={prevWeek}
+            style={
+              isSmallScreen
+                ? { padding: "4px 8px 4px 8px" }
+                : { padding: "6px 12px 6px 12px" }
+            }
+          >
             <i className="bi bi-arrow-left" />
           </Button>
         </Col>
@@ -84,7 +93,14 @@ function WeekMenu({ day, setDay, tasks }) {
           );
         })}
         <Col style={{ textAlign: "center" }}>
-          <Button onClick={nextWeek}>
+          <Button
+            onClick={nextWeek}
+            style={
+              isSmallScreen
+                ? { padding: "4px 8px 4px 8px" }
+                : { padding: "6px 12px 6px 12px" }
+            }
+          >
             <i className="bi bi-arrow-right" />
           </Button>
         </Col>

@@ -37,36 +37,8 @@ function Dashboard() {
   return (
     <main>
       <Container fluid>
-        <Row className="d-flex align-items-center justify-content-center">
-          <Col className="d-flex justify-content-start">
-            <ExpireForm />
-          </Col>
-          <Col>
-            <Form.Control
-              type="date"
-              value={startDate}
-              onChange={(e) => {
-                setStartDate(e.target.value);
-                setShowAll(false);
-              }}
-            />
-          </Col>
-          <Col className="d-flex justify-content-end">
-            <Button
-              variant="outline-success"
-              onClick={() => {
-                setShowAll(true);
-              }}
-            >
-              Show All Task
-            </Button>
-          </Col>
-        </Row>
         <Row>
-          <TaskList tasks={tasks} showAll={showAll} dateSelected={startDate} />
-        </Row>
-        <Row>
-          <TaskForm />
+          <TaskList tasks={tasks} />
         </Row>
       </Container>
     </main>

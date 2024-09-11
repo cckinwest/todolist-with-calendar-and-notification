@@ -86,26 +86,49 @@ router.get("/pushNotification", async (res, req) => {
   try {
     const today = getFullDate(new Date());
 
-    const subscribers = await Subscriber.find().populate({
-      path: "userId",
-      populate: {
-        path: "todos",
-        models: "Todo",
-      },
-    });
+    const subscribers = await Subscriber.find()
+      .populate({
+        path: "userId",
+        populate: {
+          path: "todos",
+          models: "Todo",
+        },
+      })
+      .populate({
+        path: "userId",
+        populate: {
+          path: "patterns",
+          models: "Pattern",
+        },
+      });
 
     subscribers.forEach((subscriber) => {
       const username = subscriber.userId.username;
       const subscription = subscriber.subscription;
+
       const todos = subscriber.userId.todos.filter((todo) => {
         const startTime = getFullDate(todo.startTime);
         return startTime === today;
       });
 
+      const patterns = subscriber.userId.patterns.filter((pattern) => {
+        const todayTime = new Date().getTime();
+        const startDate = new Date(pattern.startDate).getTime();
+        const endDate = new Date(pattern.endDate).getTime();
+        const today = new Date().getDay();
+        const startDay = new Date(pattern.startDate).getDay();
+
+        return (
+          todayTime > startDate && todayTime < endDate && today === startDay
+        );
+      });
+
+      arrOfTasks = [...todos, ...patterns];
+
       var text = "";
 
-      todos.forEach((task) => {
-        text += `${task.title}\n`;
+      arrOfTasks.forEach((task, index) => {
+        text += `${index + 1}. ${task.title}\n`;
       });
 
       webPush

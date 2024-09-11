@@ -1,24 +1,22 @@
 import React from "react";
 import Task from "./Task";
-import Pattern from "./Pattern";
 
 import { Stack, Card } from "react-bootstrap";
 
-const TaskList = ({ tasks, showAll, dateSelected }) => {
-  function onDate(taskInput) {
-    return taskInput.startTime.split("T")[0] === dateSelected;
-  }
-
+const TaskList = ({ tasks }) => {
   function onDateSelected(task, date) {
-    return task.startTime.split("T")[0] === date;
-  }
+    const isPattern = task.startDate ? true : false;
 
-  const tasksLength = tasks.filter(onDate).length;
+    return isPattern
+      ? task.startDate === date
+      : task.startTime.split("T")[0] === date;
+  }
 
   const arrOfDates = [];
 
   tasks.forEach((task) => {
-    let date = task.startTime.split("T")[0];
+    const isPattern = task.startDate ? true : false;
+    let date = isPattern ? task.startDate : task.startTime.split("T")[0];
     if (!arrOfDates.includes(date)) {
       arrOfDates.push(date);
     }
@@ -30,7 +28,7 @@ const TaskList = ({ tasks, showAll, dateSelected }) => {
 
   console.log(arrOfDates);
 
-  return showAll ? (
+  return (
     <Stack gap={2}>
       {arrOfDates.map((date) => {
         return (
@@ -39,34 +37,13 @@ const TaskList = ({ tasks, showAll, dateSelected }) => {
 
             {tasks
               .filter((task) => onDateSelected(task, date))
-              .map((task) =>
-                task.startDate ? (
-                  <Pattern task={task} key={task._id} />
-                ) : (
-                  <Task task={task} key={task._id} />
-                )
-              )}
+              .map((task) => (
+                <Task task={task} key={task._id} />
+              ))}
           </>
         );
       })}
     </Stack>
-  ) : tasksLength > 0 ? (
-    <Stack gap={2}>
-      {tasks.filter(onDate).map((task) => {
-        return <Task task={task} key={task._id} />;
-      })}
-    </Stack>
-  ) : (
-    <div className="d-flex justify-content-cneter">
-      <Card
-        className="border border-1 rounded-3 bg-light bg-gradient p-2"
-        style={{ width: "99vw" }}
-      >
-        <Card.Body>
-          <Card.Text>No Tasks on {dateSelected}</Card.Text>
-        </Card.Body>
-      </Card>
-    </div>
   );
 };
 

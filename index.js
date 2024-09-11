@@ -47,7 +47,7 @@ app.listen(port, () => {
   console.log(`Server is listening on port ${port}.`);
 });
 
-const job = schedule.scheduleJob("0 0 * * *", () => {
+const job = schedule.scheduleJob("0 * * * *", () => {
   //console.log("Print this sentence every 2 minutes. Time: ", Date.now());
   axios.get("http://localhost:3002/subscription/pushNotification").then(
     (res) => {

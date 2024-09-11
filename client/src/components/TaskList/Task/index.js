@@ -6,13 +6,18 @@ import dayjs from "dayjs";
 import EditForm from "../EditForm";
 
 const Task = ({ task }) => {
+  const isPattern = task.startDate ? true : false;
+
   const [edit, setEdit] = useState(false);
 
   const handleDelete = () => {
-    const taskData = { taskId: task._id };
-
     axios
-      .put(`http://localhost:3001/todo/delete`, taskData)
+      .put(
+        isPattern
+          ? `http://localhost:3002/pattern/delete`
+          : `http://localhost:3002/todo/delete`,
+        isPattern ? { patternId: task._id } : { taskId: task._id }
+      )
       .then((res) => {
         window.location.reload();
       })
@@ -24,7 +29,7 @@ const Task = ({ task }) => {
   return (
     <>
       {edit && <EditForm task={task} isEdit={edit} setIsEdit={setEdit} />}
-      <Card bg="primary" text="white">
+      <Card bg={isPattern ? "danger" : "primary"} text="white">
         <Card.Header
           style={{
             display: "flex",
@@ -70,6 +75,11 @@ const Task = ({ task }) => {
         </Card.Header>
         <Card.Body>
           <Card.Text style={{ marginBottom: 0 }}>{task.description}</Card.Text>
+          {isPattern && (
+            <Card.Text>{`${dayjs(task.startDate).format(
+              "YYYY-MM-DD"
+            )} to ${dayjs(task.endDate).format("YYYY-MM-DD")}`}</Card.Text>
+          )}
         </Card.Body>
       </Card>
     </>

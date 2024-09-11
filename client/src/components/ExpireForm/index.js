@@ -5,18 +5,16 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
 function ExpireForm() {
-  const [remain, setRemain] = useState(0);
+  const token = localStorage.getItem("token");
+  const user = jwtDecode(token);
+
+  const [remain, setRemain] = useState(
+    Math.round(user.exp - Date.now() / 1000)
+  );
   const [show, setShow] = useState(false);
   const [password, setPassword] = useState("");
   const [warning, setWarning] = useState("");
   const [isCritical, setIsCritical] = useState(false);
-
-  const token = localStorage.getItem("token");
-  let user;
-
-  if (token) {
-    user = jwtDecode(token);
-  }
 
   useEffect(() => {
     let timer = setTimeout(() => {

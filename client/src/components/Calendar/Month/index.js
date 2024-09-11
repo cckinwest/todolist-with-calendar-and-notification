@@ -20,21 +20,21 @@ function Month({ year, month, tasks }) {
     const numberOfDaysLeap = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
     if (isLeap(y)) {
-      return numberOfDaysLeap[m - 1];
+      return numberOfDaysLeap[m];
     }
 
-    return numberOfDays[m - 1];
+    return numberOfDays[m];
   }
 
   function ArrOfDays(y, m) {
     let arr = [];
     let num = numOfDays(y, m);
     for (var i = 0; i < num; i++) {
-      let date = `${y}-${m}-${i + 1}`;
+      let date = `${y}-${m + 1}-${i + 1}`;
       arr.push({ date: dayjs(date).format("YYYY-MM-DD"), status: "current" });
     }
 
-    let firstOfMonth = dayjs(`${y}-${m}-1`).get("d");
+    let firstOfMonth = dayjs(`${y}-${m + 1}-1`).get("d");
 
     if (firstOfMonth === 0) {
       firstOfMonth = 7;
@@ -42,7 +42,9 @@ function Month({ year, month, tasks }) {
 
     for (var i = 1; i < firstOfMonth; i++) {
       arr.unshift({
-        date: dayjs(`${y}-${m}-1`).subtract(i, "d").format("YYYY-MM-DD"),
+        date: dayjs(`${y}-${m + 1}-1`)
+          .subtract(i, "d")
+          .format("YYYY-MM-DD"),
         status: "past",
       });
     }
