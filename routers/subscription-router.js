@@ -4,6 +4,7 @@ const Todo = require("../models/Todo");
 const User = require("../models/User");
 const Subscriber = require("../models/Subscriber");
 const webPush = require("web-push");
+const dayjs = require("dayjs");
 
 webPush.setVapidDetails(
   `mailto:${process.env.EMAIL}`,
@@ -125,23 +126,25 @@ router.get("/pushNotification", async (res, req) => {
 
       arrOfTasks = [...todos, ...patterns];
 
-      var text = "";
-
-      arrOfTasks.forEach((task, index) => {
-        text += `${index + 1}. ${task.title}\n`;
-      });
-
-      webPush
-        .sendNotification(
-          subscription,
-          JSON.stringify({
-            title: `The task of ${username} on ${today}`,
-            text: text,
-          })
-        )
-        .catch((err) => {
-          console.log(`Error occurred: ${err}`);
+      if (arrOfTasks.length) {
+        arrOfTasks.forEach((task) => {
+          if (task.notification) {
+            webPush
+              .sendNotification(
+                subscription,
+                JSON.stringify({
+                  title: `The task of ${username} at ${dayjs(
+                    task.startTime
+                  ).format("HH:mm")} on ${today}`,
+                  text: task.title,
+                })
+              )
+              .catch((err) => {
+                console.log(`Error occurred: ${err}`);
+              });
+          }
         });
+      }
     });
   } catch (error) {
     console.log(`Error in pushing notification: ${error}`);

@@ -21,6 +21,7 @@ function EditForm({ task, isEdit, setIsEdit }) {
       ? task.endDate
       : dayjs(task.startTime).format("YYYY-MM-DD"),
     frequency: isPattern ? task.frequency : "",
+    notification: task.notification,
   });
 
   const [show, setShow] = useState(isEdit);
@@ -53,6 +54,7 @@ function EditForm({ task, isEdit, setIsEdit }) {
       endDate: formData.endDate,
       frequency: formData.frequency,
       date: formData.startDate,
+      notification: formData.notification,
       createdBy: task.createdBy,
     };
 
@@ -176,6 +178,18 @@ function EditForm({ task, isEdit, setIsEdit }) {
             </Form.Select>
           </Form.Group>
         )}
+
+        <Form.Group className="mb-2">
+          <Form.Label>Notification?</Form.Label>
+          <Form.Select
+            value={formData.notification}
+            onChange={handleChange}
+            name="notification"
+          >
+            <option value={true}>True</option>
+            <option value={false}>False</option>
+          </Form.Select>
+        </Form.Group>
       </Modal.Body>
       <Modal.Footer>
         <Stack direction="horizontal" gap={2}>

@@ -18,13 +18,15 @@ router.get("/", async (req, res) => {
 
 router.post("/create", async (req, res) => {
   try {
-    const { title, description, startTime, endTime, userId } = req.body;
+    const { title, description, startTime, endTime, notification, userId } =
+      req.body;
 
     const todo = await Todo.create({
       title: title,
       description: description,
       startTime: startTime,
       endTime: endTime,
+      notification: notification,
       createdBy: userId,
     });
 

@@ -1,20 +1,16 @@
 import React from "react";
-import ExpireForm from "../../components/ExpireForm";
 import TaskList from "../../components/TaskList";
 import TaskForm from "../../components/TaskForm";
-
-import dayjs from "dayjs";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Container, Row, Button } from "react-bootstrap";
 
 function Dashboard() {
   const [tasks, setTasks] = useState([]);
-  const [startDate, setStartDate] = useState(dayjs().format("YYYY-MM-DD"));
-  const [showAll, setShowAll] = useState(true);
+  const [show, setShow] = useState(false);
 
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
@@ -37,6 +33,17 @@ function Dashboard() {
   return (
     <main>
       <Container fluid>
+        <Row style={{ padding: "12px" }}>
+          <Button
+            variant="outline-info"
+            onClick={() => {
+              setShow(true);
+            }}
+          >
+            Add
+          </Button>
+          {show && <TaskForm show={show} setShow={setShow} />}
+        </Row>
         <Row>
           <TaskList tasks={tasks} />
         </Row>

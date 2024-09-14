@@ -36,6 +36,12 @@ const patternSchema = new Schema({
     type: String,
     enum: ["daily", "weekly", "monthly", "annually"],
   },
+  notification: {
+    type: Boolean,
+    default: () => {
+      return true;
+    },
+  },
   except: [
     {
       type: String,

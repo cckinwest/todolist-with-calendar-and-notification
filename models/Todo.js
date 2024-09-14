@@ -22,6 +22,12 @@ const todoSchema = new Schema({
       return this.startTime;
     },
   },
+  notification: {
+    type: Boolean,
+    default: () => {
+      return true;
+    },
+  },
   createdAt: {
     type: Date,
     default: Date.now,

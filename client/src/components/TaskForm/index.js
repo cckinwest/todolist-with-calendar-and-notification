@@ -1,156 +1,176 @@
 import React from "react";
+import { Modal, Form, Button, Stack } from "react-bootstrap";
 import { useState } from "react";
 import axios from "axios";
+import dayjs from "dayjs";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import { jwtDecode } from "jwt-decode";
 
-import { Form, Button, Alert, CloseButton, Stack } from "react-bootstrap";
-
-function TaskForm() {
+function TaskForm({ show, setShow, date }) {
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
+
+  const [pattern, setPattern] = useState(false);
 
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    startTime: "",
-    frequency: "none",
+    startTime: dayjs().format("HH:mm"),
+    endTime: dayjs().format("HH:mm"),
+    startDate: date ? date : dayjs().format("YYYY-MM-DD"),
+    endDate: dayjs().format("YYYY-MM-DD"),
+    frequency: "daily",
+    notification: true,
   });
-
-  const [msg, setMsg] = useState("");
-  const [isWarning, setIsWarning] = useState(false);
-  const [showForm, setShowForm] = useState(false);
-
-  const handleClick = () => {
-    setShowForm(true);
-  };
-
-  const handleClose = () => {
-    setShowForm(false);
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
-    setMsg("");
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (formData.title) {
-      const taskData = {
-        title: formData.title,
-        description: formData.description,
-        startTime: formData.startTime,
-        frequency: formData.frequency,
-        userId: user.id,
-      };
-
-      axios
-        .post(`http://localhost:3002/todo/create`, taskData)
-        .then((res) => {
-          window.location.reload();
-        })
-        .catch((err) => {
-          setMsg("There are errors in adding the task!");
-          setIsWarning(true);
-        });
-
-      setShowForm(false);
-    } else {
-      setMsg("You must fill in the title of the task!");
-      setIsWarning(true);
-    }
-
-    setFormData({
-      title: "",
-      description: "",
-      startTime: "",
-      frequency: "none",
-    });
+  const handleClose = () => {
+    setShow(false);
   };
 
-  return showForm ? (
-    <Form
-      style={{ width: "99vw" }}
-      className="border border-1 rounded-3 bg-light bg-gradient p-3 m-2"
-      onSubmit={handleSubmit}
-    >
-      {msg && <Alert variant={isWarning ? "danger" : "light"}>{msg}</Alert>}
-      <Stack direction="horizontal" className="d-flex justify-content-between">
-        <Form.Group
-          style={{ width: "33%", textAlign: "left" }}
-          className="mb-3"
-          controlId="TaskTitle"
-        >
+  const handleAdd = () => {
+    const taskData = {
+      title: formData.title,
+      description: formData.description,
+      startTime: `${formData.startDate}T${formData.startTime}`,
+      endTime: `${formData.startDate}T${formData.endTime}`,
+      startDate: formData.startDate,
+      endDate: formData.endDate,
+      frequency: formData.frequency,
+      notification: formData.notification,
+      userId: user.id,
+    };
+
+    axios
+      .post(
+        pattern
+          ? `http://localhost:3002/pattern/create`
+          : `http://localhost:3002/todo/create`,
+        taskData
+      )
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  return (
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>{pattern ? "Add Pattern" : "Add Task"}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form.Group className="mb-2">
+          <Form.Label>Title</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Enter the task title"
             value={formData.title}
             onChange={handleChange}
             name="title"
+            placeholder="Enter the title"
           />
         </Form.Group>
-
-        <Form.Group
-          style={{ width: "33%", textAlign: "center" }}
-          className="mb-3"
-          controlId="TaskStartTime"
-        >
+        <Form.Group className="mb-2">
+          <Form.Label>Description</Form.Label>
+          <Form.Control
+            type="text"
+            value={formData.description}
+            onChange={handleChange}
+            name="description"
+            placeholder="Enter the description"
+          />
+        </Form.Group>
+        <Form.Group className="mb-2">
+          <Form.Label>{pattern ? "StartDate" : "Date"}</Form.Label>
           <Form.Control
             type="date"
-            value={formData.startTime.split("T")[0]}
+            value={formData.startDate}
+            onChange={handleChange}
+            name="startDate"
+          />
+        </Form.Group>
+        {pattern && (
+          <Form.Group className="mb-2">
+            <Form.Label>EndDate</Form.Label>
+            <Form.Control
+              type="date"
+              value={formData.endDate}
+              onChange={handleChange}
+              name="endDate"
+            />
+          </Form.Group>
+        )}
+        <Form.Group className="mb-2">
+          <Form.Label>StartTime</Form.Label>
+          <Form.Control
+            type="time"
+            value={formData.startTime}
             onChange={handleChange}
             name="startTime"
           />
         </Form.Group>
-
-        <Form.Group
-          style={{ width: "33%", textAlign: "right" }}
-          className="mb-3"
-          controlId="TaskFrequency"
-        >
-          <Form.Select
-            value={formData.frequency}
+        <Form.Group className="mb-2">
+          <Form.Label>EndTime</Form.Label>
+          <Form.Control
+            type="time"
+            value={formData.endTime}
             onChange={handleChange}
-            name="frequency"
+            name="endTime"
+          />
+        </Form.Group>
+        {pattern && (
+          <Form.Group className="mb-2">
+            <Form.Label>Frequency</Form.Label>
+            <Form.Select
+              value={formData.frequency}
+              onChange={handleChange}
+              name="frequency"
+            >
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="annually">Annually</option>
+            </Form.Select>
+          </Form.Group>
+        )}
+
+        <Form.Group className="mb-2">
+          <Form.Label>Notification?</Form.Label>
+          <Form.Select
+            value={formData.notification}
+            onChange={handleChange}
+            name="notification"
           >
-            <option value="none">None</option>
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-            <option value="annually">Annually</option>
+            <option value={true}>True</option>
+            <option value={false}>False</option>
           </Form.Select>
         </Form.Group>
-      </Stack>
-
-      <Form.Group className="mb-3" controlId="TaskDescription">
-        <Form.Control
-          type="text"
-          placeholder="Enter the task description"
-          value={formData.description}
-          onChange={handleChange}
-          name="description"
-        />
-      </Form.Group>
-
-      <Stack direction="horizontal" gap={2}>
-        <Button variant="outline-primary" onClick={handleSubmit}>
-          Submit
-        </Button>
-        <Button variant="outline-danger" onClick={handleClose}>
-          Close
-        </Button>
-      </Stack>
-    </Form>
-  ) : (
-    <Button
-      className="m-2"
-      variant="outline-primary"
-      onClick={handleClick}
-      style={{ width: "99vw" }}
-    >
-      Add Task
-    </Button>
+      </Modal.Body>
+      <Modal.Footer>
+        <Stack direction="horizontal" gap={2}>
+          <Button
+            variant="outline-info"
+            onClick={() => {
+              setPattern(!pattern);
+            }}
+          >
+            {pattern ? "Task" : "Pattern"}
+          </Button>
+          <Button variant="outline-primary" onClick={handleAdd}>
+            <Stack direction="horizontal" gap={2}>
+              <i className="bi bi-plus-square"></i>
+              Add
+            </Stack>
+          </Button>
+        </Stack>
+      </Modal.Footer>
+    </Modal>
   );
 }
 

@@ -2,8 +2,9 @@ import React from "react";
 import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import TaskForm from "./TaskForm";
-import PatternForm from "./PatternForm";
+//import TaskForm from "./TaskForm";
+//import PatternForm from "./PatternForm";
+import TaskForm from "../../TaskForm";
 
 function AddModal({ date }) {
   const token = localStorage.getItem("token");
@@ -11,20 +12,6 @@ function AddModal({ date }) {
 
   const [show, setShow] = useState(false);
   const [hoverAdd, setHoverAdd] = useState(false);
-
-  const [taskType, setTaskType] = useState("Todo");
-
-  const handleClose = () => {
-    setShow(false);
-  };
-
-  const handleChangeType = () => {
-    if (taskType === "Todo") {
-      setTaskType("Pattern");
-    } else {
-      setTaskType("Todo");
-    }
-  };
 
   const handleAdd = () => {
     if (date.status === "current") {
@@ -53,28 +40,7 @@ function AddModal({ date }) {
         }}
       ></i>
 
-      {show &&
-        (taskType === "Todo" ? (
-          <TaskForm
-            date={date}
-            show={show}
-            setShow={setShow}
-            handleClose={handleClose}
-            handleChangeType={handleChangeType}
-            taskType={taskType}
-            userId={user.id}
-          />
-        ) : (
-          <PatternForm
-            date={date}
-            show={show}
-            setShow={setShow}
-            handleClose={handleClose}
-            handleChangeType={handleChangeType}
-            taskType={taskType}
-            userId={user.id}
-          />
-        ))}
+      {show && <TaskForm show={show} setShow={setShow} date={date.date} />}
     </>
   );
 }

@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { Form, Button, Card, Stack } from "react-bootstrap";
 import dayjs from "dayjs";
-import EditForm from "../EditForm";
+import EditForm from "../../EditForm";
 
 const Task = ({ task }) => {
   const isPattern = task.startDate ? true : false;

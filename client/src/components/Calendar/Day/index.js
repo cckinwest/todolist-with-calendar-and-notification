@@ -2,7 +2,6 @@ import React from "react";
 import { useState } from "react";
 import { Card, Stack, Badge, Button } from "react-bootstrap";
 import TaskModal from "../TaskModal";
-import PatternModal from "../PatternModal";
 import AddModal from "../AddModal";
 
 function Day({ date, tasks }) {
@@ -100,15 +99,26 @@ function Day({ date, tasks }) {
           {date.date.split("-")[2]}/{date.date.split("-")[1]}
           <AddModal date={date} />
         </Card.Title>
-        <Stack gap={1}>
-          {arrOfTasks.map((task) => {
-            return task.startDate ? (
-              <PatternModal date={date} task={task} key={task._id} />
-            ) : (
-              <TaskModal date={date} task={task} key={task._id} />
-            );
-          })}
-        </Stack>
+        {arrOfTasks.length <= 2 ? (
+          <Stack gap={1}>
+            {arrOfTasks.map((task) => {
+              return <TaskModal date={date} task={task} key={task._id} />;
+            })}
+          </Stack>
+        ) : (
+          <Stack direction="horizontal" className="d-flex flex-wrap" gap={1}>
+            {arrOfTasks.map((task) => {
+              return (
+                <TaskModal
+                  date={date}
+                  task={task}
+                  showTitle={false}
+                  key={task._id}
+                />
+              );
+            })}
+          </Stack>
+        )}
       </Card.Body>
     </Card>
   );

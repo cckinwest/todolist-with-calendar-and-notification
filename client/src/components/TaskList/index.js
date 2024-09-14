@@ -2,6 +2,7 @@ import React from "react";
 import Task from "./Task";
 
 import { Stack, Card } from "react-bootstrap";
+import { Fragment } from "react";
 
 const TaskList = ({ tasks }) => {
   function onDateSelected(task, date) {
@@ -32,7 +33,7 @@ const TaskList = ({ tasks }) => {
     <Stack gap={2}>
       {arrOfDates.map((date) => {
         return (
-          <>
+          <Fragment key={date}>
             <h4 style={{ marginTop: "10px", marginBottom: 0 }}>{date}</h4>
 
             {tasks
@@ -40,7 +41,7 @@ const TaskList = ({ tasks }) => {
               .map((task) => (
                 <Task task={task} key={task._id} />
               ))}
-          </>
+          </Fragment>
         );
       })}
     </Stack>

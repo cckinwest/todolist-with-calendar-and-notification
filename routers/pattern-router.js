@@ -28,6 +28,7 @@ router.post("/create", async (req, res) => {
       startDate,
       endDate,
       frequency,
+      notification,
       userId,
     } = req.body;
 
@@ -39,6 +40,7 @@ router.post("/create", async (req, res) => {
       startDate: startDate,
       endDate: endDate,
       frequency: frequency,
+      notification: notification,
       createdBy: userId,
     });
 
@@ -77,6 +79,7 @@ router.put("/changeAnIndividual", async (req, res) => {
       startTime,
       endTime,
       createdBy,
+      notification,
       patternId,
       date,
     } = req.body;
@@ -96,6 +99,7 @@ router.put("/changeAnIndividual", async (req, res) => {
       startTime: startTime,
       endTime: endTime,
       createdBy: createdBy,
+      notification: notification,
     });
 
     const user = await User.updateOne(
