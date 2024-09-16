@@ -137,6 +137,8 @@ router.get("/pushNotification", async (res, req) => {
                     task.startTime
                   ).format("HH:mm")} on ${today}`,
                   text: task.title,
+                  id: task._id,
+                  startDate: task.startDate ? task.startDate : "",
                 })
               )
               .catch((err) => {

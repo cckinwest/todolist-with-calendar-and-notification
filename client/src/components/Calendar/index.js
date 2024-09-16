@@ -6,6 +6,7 @@ import axios from "axios";
 import { Stack, Form, Container, Row, Col, Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+import Notification from "../Notification";
 
 import {
   getNotificationConsent,
@@ -88,6 +89,7 @@ function Calendar() {
 
   return (
     <Container>
+      <Notification tasks={tasks} />
       <Row className="mt-3 d-flex align-items-center justify-content-between">
         <MonthMenu
           year={year}

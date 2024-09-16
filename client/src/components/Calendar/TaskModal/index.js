@@ -34,13 +34,21 @@ function TaskModal({ date, task, showTitle = true }) {
           overflow: "hidden",
           whiteSpace: "nowrap",
           fontSize: "10px",
+          display: "flex",
+          justifyContent: "space-between",
+          padding: showTitle ? "4px 8px 4px 8px" : "2px 4px 2px 4px",
         }}
       >
-        {showTitle
-          ? `${dayjs(task.startTime).format("HH:mm")} ${handleString(
-              task.title
-            )}`
-          : dayjs(task.startTime).format("HH:mm")}
+        <span>
+          {showTitle
+            ? `${dayjs(task.startTime).format("HH:mm")} ${handleString(
+                task.title
+              )}`
+            : dayjs(task.startTime).format("HH:mm")}
+        </span>
+        <i
+          className={task.notification ? "bi bi-bell-fill" : "bi bi-bell-slash"}
+        ></i>
       </Button>
 
       {show && <TaskDisplay task={task} show={show} setShow={setShow} />}

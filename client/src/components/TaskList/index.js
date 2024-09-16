@@ -4,6 +4,8 @@ import Task from "./Task";
 import { Stack, Card } from "react-bootstrap";
 import { Fragment } from "react";
 
+import Notification from "../Notification";
+
 const TaskList = ({ tasks }) => {
   function onDateSelected(task, date) {
     const isPattern = task.startDate ? true : false;

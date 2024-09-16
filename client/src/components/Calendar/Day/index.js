@@ -1,10 +1,13 @@
 import React from "react";
 import { useState } from "react";
-import { Card, Stack, Badge, Button } from "react-bootstrap";
+import { Card, Stack, Container, Row, Col } from "react-bootstrap";
 import TaskModal from "../TaskModal";
 import AddModal from "../AddModal";
+import { useMediaQuery } from "react-responsive";
 
 function Day({ date, tasks }) {
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 1200px)" });
+
   const onDate = (task) => {
     return task.startTime.split("T")[0] === date.date;
   };
@@ -91,7 +94,11 @@ function Day({ date, tasks }) {
 
   return (
     <Card
-      style={{ width: "100%", height: "13vh" }}
+      style={{
+        width: "100%",
+        height: isSmallScreen ? "auto" : "13vh",
+        minHeight: "13vh",
+      }}
       className={date.status === "past" && "opacity-25"}
     >
       <Card.Body key={date.date} style={{ overflow: "hidden" }}>
@@ -99,25 +106,36 @@ function Day({ date, tasks }) {
           {date.date.split("-")[2]}/{date.date.split("-")[1]}
           <AddModal date={date} />
         </Card.Title>
-        {arrOfTasks.length <= 2 ? (
-          <Stack gap={1}>
-            {arrOfTasks.map((task) => {
-              return <TaskModal date={date} task={task} key={task._id} />;
-            })}
-          </Stack>
-        ) : (
-          <Stack direction="horizontal" className="d-flex flex-wrap" gap={1}>
+        {isSmallScreen || arrOfTasks.length <= 2 ? (
+          <Container>
             {arrOfTasks.map((task) => {
               return (
-                <TaskModal
-                  date={date}
-                  task={task}
-                  showTitle={false}
-                  key={task._id}
-                />
+                <Row className="mb-1">
+                  <TaskModal date={date} task={task} key={task._id} />
+                </Row>
               );
             })}
-          </Stack>
+          </Container>
+        ) : (
+          <Container>
+            <Row style={{ textAlign: "left" }}>
+              {arrOfTasks.map((task) => {
+                return (
+                  <Col
+                    className="mb-1"
+                    style={{ padding: "0", width: "calc(100%/3)" }}
+                  >
+                    <TaskModal
+                      date={date}
+                      task={task}
+                      showTitle={false}
+                      key={task._id}
+                    />
+                  </Col>
+                );
+              })}
+            </Row>
+          </Container>
         )}
       </Card.Body>
     </Card>
