@@ -23,16 +23,67 @@ function TaskForm({ show, setShow, date }) {
     notification: true,
   });
 
+  const [warning, setWarning] = useState({
+    title: "",
+    startTime: "",
+    endTime: "",
+  });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
+    if (name === "title" && value) {
+      setWarning((prevWarning) => ({ ...prevWarning, [name]: "" }));
+    }
+
+    if (name === "startTime" || name === "endTime") {
+      setWarning((prevWarning) => ({
+        ...prevWarning,
+        startTime: "",
+        endTime: "",
+      }));
+    }
   };
 
   const handleClose = () => {
     setShow(false);
   };
 
-  const handleAdd = () => {
+  const handleCheck = async (start, end) => {
+    var pass = true;
+
+    const todos = await axios.get(
+      `http://localhost:3002/todo/?username=${user.username}`
+    );
+
+    const patterns = await axios.get(
+      `http://localhost:3002/todo/?username=${user.username}`
+    );
+
+    const startT = new Date(start).getTime();
+    const endT = new Date(end).getTime();
+
+    todos.data.forEach((todo) => {
+      const startTime = new Date(todo.startTime).getTime();
+      const endTime = new Date(todo.endTime).getTime();
+
+      if (
+        (startT >= startTime && startT <= endTime) ||
+        (endT >= startTime && endT <= endTime) ||
+        (startT <= startTime && endT >= endTime)
+      ) {
+        console.log(todo.title);
+        console.log("The time is occupied by some event!");
+        pass = false;
+      }
+    });
+
+    console.log("No task occupy the time!");
+
+    return pass;
+  };
+
+  const handleAdd = async () => {
     const taskData = {
       title: formData.title,
       description: formData.description,
@@ -44,6 +95,40 @@ function TaskForm({ show, setShow, date }) {
       notification: formData.notification,
       userId: user.id,
     };
+
+    if (!taskData.title) {
+      setWarning((prevWarning) => {
+        return { ...prevWarning, title: "Title cannot be left empty!!" };
+      });
+      return;
+    }
+
+    if (
+      new Date(taskData.startTime).getTime() >=
+      new Date(taskData.endTime).getTime()
+    ) {
+      setWarning((prevWarning) => {
+        return {
+          ...prevWarning,
+          startTime: "StartTime cannot be after endTime",
+          endTime: "StartTime cannot be after endTime",
+        };
+      });
+
+      return;
+    }
+
+    if (!(await handleCheck(taskData.startTime, taskData.endTime))) {
+      setWarning((prevWarning) => {
+        return {
+          ...prevWarning,
+          startTime: "The period is occupied by some event!!",
+          endTime: "The period is occupied by some event!!",
+        };
+      });
+
+      return;
+    }
 
     axios
       .post(
@@ -75,6 +160,9 @@ function TaskForm({ show, setShow, date }) {
             name="title"
             placeholder="Enter the title"
           />
+          <Form.Text className="text-danger" style={{ fontFamily: "Verdana" }}>
+            {warning.title}
+          </Form.Text>
         </Form.Group>
         <Form.Group className="mb-2">
           <Form.Label>Description</Form.Label>
@@ -114,6 +202,9 @@ function TaskForm({ show, setShow, date }) {
             onChange={handleChange}
             name="startTime"
           />
+          <Form.Text className="text-danger" style={{ fontFamily: "Verdana" }}>
+            {warning.startTime}
+          </Form.Text>
         </Form.Group>
         <Form.Group className="mb-2">
           <Form.Label>EndTime</Form.Label>
@@ -123,6 +214,9 @@ function TaskForm({ show, setShow, date }) {
             onChange={handleChange}
             name="endTime"
           />
+          <Form.Text className="text-danger" style={{ fontFamily: "Verdana" }}>
+            {warning.endTime}
+          </Form.Text>
         </Form.Group>
         {pattern && (
           <Form.Group className="mb-2">
@@ -162,7 +256,12 @@ function TaskForm({ show, setShow, date }) {
           >
             {pattern ? "Task" : "Pattern"}
           </Button>
-          <Button variant="outline-primary" onClick={handleAdd}>
+          <Button
+            variant="outline-primary"
+            onClick={async () => {
+              await handleAdd();
+            }}
+          >
             <Stack direction="horizontal" gap={2}>
               <i className="bi bi-plus-square"></i>
               Add
