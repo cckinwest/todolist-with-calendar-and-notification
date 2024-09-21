@@ -6,7 +6,9 @@ import AddModal from "../AddModal";
 import { useMediaQuery } from "react-responsive";
 
 function Day({ date, tasks }) {
-  const isSmallScreen = useMediaQuery({ query: "(max-width: 1200px)" });
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 600px)" });
+  const isMediumScreen = useMediaQuery({ query: "(max-width: 1024px)" });
+  const isLargeScreen = useMediaQuery({ query: "(max-width: 1440px)" });
 
   const onDate = (task) => {
     return task.startTime.split("T")[0] === date.date;

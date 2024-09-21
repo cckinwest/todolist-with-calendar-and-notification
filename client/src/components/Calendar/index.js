@@ -71,6 +71,7 @@ function Calendar() {
           `http://localhost:3002/pattern?username=${user.username}`
         );
 
+        console.log([...resTodo.data, ...resPattern.data]);
         setTasks([...resTodo.data, ...resPattern.data]);
       } catch (err) {
         console.error(`Invalid username: ${err}`);

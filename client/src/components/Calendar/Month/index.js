@@ -5,7 +5,9 @@ import { Stack, Container, Row, Col } from "react-bootstrap";
 import dayjs from "dayjs";
 
 function Month({ year, month, tasks }) {
-  const isSmallScreen = useMediaQuery({ query: "(max-width: 1200px)" });
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 600px)" });
+  const isMediumScreen = useMediaQuery({ query: "(max-width: 1024px)" });
+  const isLargeScreen = useMediaQuery({ query: "(max-width: 1440px)" });
 
   function isLeap(y) {
     if (y % 4 === 0 && y % 100 !== 0) {
@@ -59,15 +61,16 @@ function Month({ year, month, tasks }) {
     <div style={{ marginBottom: "10px" }}>
       <Container>
         <Row>
-          {weekdays.map((weekday) => {
-            return (
-              !isSmallScreen && (
-                <Col style={{ textAlign: "center" }} key={weekday}>
-                  {weekday}
-                </Col>
-              )
-            );
-          })}
+          {!isLargeScreen &&
+            weekdays.map((weekday) => {
+              return (
+                !isSmallScreen && (
+                  <Col style={{ textAlign: "center" }} key={weekday}>
+                    {weekday}
+                  </Col>
+                )
+              );
+            })}
         </Row>
         <Row>
           {dates.map((date) => {
@@ -76,7 +79,15 @@ function Month({ year, month, tasks }) {
                 key={date.date}
                 style={{
                   textAlign: "center",
-                  flex: `0 0 ${isSmallScreen ? "100%" : "calc(100%/7)"}`,
+                  flex: `0 0 ${
+                    isLargeScreen
+                      ? isMediumScreen
+                        ? isSmallScreen
+                          ? "100%"
+                          : "calc(100%/3)"
+                        : "calc(100%/5)"
+                      : "calc(100%/7)"
+                  }`,
                   padding: "0",
                 }}
               >

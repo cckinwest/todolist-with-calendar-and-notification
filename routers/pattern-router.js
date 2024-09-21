@@ -57,8 +57,8 @@ router.post("/create", async (req, res) => {
 
 router.put("/update", async (req, res) => {
   try {
-    const pattern = await Pattern.findByIdAndUpdate(
-      req.body.patternId,
+    const pattern = await Pattern.findOneAndUpdate(
+      { _id: req.body.patternId },
       req.body,
       {
         new: true,

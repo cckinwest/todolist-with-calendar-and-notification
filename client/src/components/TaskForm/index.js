@@ -49,6 +49,21 @@ function TaskForm({ show, setShow, date }) {
     setShow(false);
   };
 
+  const checkPatterns = (start, end, patterns) => {
+    var pass = true;
+
+    patterns.forEach((pattern) => {
+      if (pattern.frequency === "weekly") {
+        if (
+          new Date(start).getDay() === new Date(pattern.startDate).getDay() &&
+          new Date(start).getTime() >= new Date(pattern.startDate).getTime() &&
+          new Date(start).getTime() <= new Date(pattern.endDate).getTime()
+        ) {
+        }
+      }
+    });
+  };
+
   const handleCheck = async (start, end) => {
     var pass = true;
 
