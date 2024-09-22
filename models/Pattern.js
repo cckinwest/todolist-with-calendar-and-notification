@@ -63,14 +63,43 @@ const patternSchema = new Schema({
 patternSchema.virtual("dates").get(function () {
   const dates = [];
   var date = this.startDate;
-  console.log(date);
+
+  if (this.frequency === "daily") {
+    while (new Date(date).getTime() <= new Date(this.endDate).getTime()) {
+      if (!this.except.includes(date)) {
+        dates.push(date);
+      }
+
+      date = dayjs(date).add(1, "day").format("YYYY-MM-DD");
+    }
+  }
 
   if (this.frequency === "weekly") {
     while (new Date(date).getTime() <= new Date(this.endDate).getTime()) {
-      dates.push(date);
+      if (!this.except.includes(date)) {
+        dates.push(date);
+      }
+
       date = dayjs(date).add(7, "day").format("YYYY-MM-DD");
-      console.log(date);
     }
+  }
+
+  if (this.frequency === "monthly") {
+    const y = dayjs(this.startDate).year();
+    const m = dayjs(this.startDate).month() + 1;
+    const d = dayjs(this.startDate).date();
+
+    const last = (year, month) => {
+      if (month >= 10) {
+        return dayjs(`${year}-${month}-01`)
+          .subtract(1, "day")
+          .format("YYYY-MM-DD");
+      } else {
+        return dayjs(`${year}-0${month}-01`)
+          .subtract(1, "day")
+          .format("YYYY-MM-DD");
+      }
+    };
   }
 
   return dates;

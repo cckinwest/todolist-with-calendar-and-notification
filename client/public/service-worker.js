@@ -69,6 +69,21 @@ self.addEventListener("notificationclick", (event) => {
               throw new Error("There were errors in network.");
             }
 
+            clients
+              .matchAll({ type: "window", includeUncontrolled: true })
+              .then(function (clients) {
+                const targetUrl = "http://localhost:3001/calendar";
+                clients.forEach((client) => {
+                  console.log(client.url);
+                  if (client.url === targetUrl && "focus" in client) {
+                    client.focus();
+                    return client
+                      .navigate(targetUrl)
+                      .then(() => client.reload());
+                  }
+                });
+              });
+
             return res.json();
           })
           .then((data) => {

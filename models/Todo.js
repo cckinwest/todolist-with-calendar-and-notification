@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 //import the Schema function from mongoose
 const { Schema } = mongoose;
+const dayjs = require("dayjs");
 
 //first define the Schema
 const todoSchema = new Schema({
@@ -37,6 +38,15 @@ const todoSchema = new Schema({
     ref: "User",
   },
 });
+
+todoSchema.virtual("dates").get(function () {
+  const dates = [];
+  dates.push(dayjs(this.startTime).format("YYYY-MM-DD"));
+  return dates;
+});
+
+todoSchema.set("toJSON", { virtuals: true });
+todoSchema.set("toObject", { virtuals: true });
 
 //name the model defined as Todo
 const Todo = mongoose.model("Todo", todoSchema);

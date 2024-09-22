@@ -12,10 +12,25 @@ function Single({ task, responsed, setResponsed }) {
   const endTime = dayjs(task.endTime).format("HH:mm");
 
   const handleNotNotify = async () => {
-    await axios.put(`http://localhost:3002/todo/update`, {
-      id: task._id,
+    const isPattern = task.frequency ? true : false;
+
+    console.log({
+      ...task,
       notification: false,
+      date: dayjs().format("YYYY-MM-DD"),
     });
+
+    await axios.put(
+      isPattern
+        ? `http://localhost:3002/pattern/changeAnIndividual`
+        : `http://localhost:3002/todo/update`,
+      {
+        ...task,
+        notification: false,
+        date: dayjs().format("YYYY-MM-DD"),
+        patternId: task._id,
+      }
+    );
 
     setShow(false);
     setResponsed([...responsed, task._id]);
@@ -53,12 +68,15 @@ function Notification({ tasks }) {
   const [responsed, setResponsed] = useState([]);
 
   const arrOfTasks = tasks.filter((task) => {
+    const today = dayjs().format("YYYY-MM-DD");
+    const dates = task.dates;
+    const time = dayjs(task.startTime).format("HH:mm");
+
     return (
       task.notification &&
-      dayjs(task.startTime).format("YYYY-MM-DD") ===
-        dayjs().format("YYYY-MM-DD") &&
-      new Date(task.startTime).getTime() - new Date().getTime() < 3600000 &&
-      new Date(task.startTime).getTime() > new Date().getTime()
+      dates.includes(today) &&
+      new Date(`${today}T${time}`).getTime() - new Date().getTime() < 3600000 &&
+      new Date(`${today}T${time}`).getTime() > new Date().getTime()
     );
   });
 
@@ -69,7 +87,7 @@ function Notification({ tasks }) {
 
   setInterval(() => {
     setShow(true);
-  }, 60000);
+  }, 300000);
 
   if (responsed.length === arrOfTasks.length && arrOfTasks.length > 0) {
     window.location.reload();

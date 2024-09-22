@@ -3,63 +3,15 @@ import { useState } from "react";
 import { Card, Stack, Container, Row, Col } from "react-bootstrap";
 import TaskModal from "../TaskModal";
 import AddModal from "../AddModal";
+import ViewButton from "../ViewButton";
 import { useMediaQuery } from "react-responsive";
+import dayjs from "dayjs";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 function Day({ date, tasks }) {
   const isSmallScreen = useMediaQuery({ query: "(max-width: 600px)" });
   const isMediumScreen = useMediaQuery({ query: "(max-width: 1024px)" });
   const isLargeScreen = useMediaQuery({ query: "(max-width: 1440px)" });
-
-  const onDate = (task) => {
-    return task.startTime.split("T")[0] === date.date;
-  };
-
-  const checkDaily = (task) => {
-    return (
-      task.frequency === "daily" &&
-      new Date(task.startTime).getTime() < new Date(date.date).getTime()
-    );
-  };
-
-  const checkWeekly = (task) => {
-    const active = new Date(date.date);
-
-    return (
-      task.frequency === "weekly" &&
-      new Date(task.startDate).getTime() <= active.getTime() &&
-      active.getTime() <= new Date(task.endDate).getTime() &&
-      new Date(task.startDate).getDay() === active.getDay()
-    );
-  };
-
-  const checkMonthly = (task) => {
-    const start = new Date(task.startTime);
-    const active = new Date(date.date);
-
-    return (
-      task.frequency === "monthly" &&
-      start.getTime() < active.getTime() &&
-      start.getDate() === active.getDate()
-    );
-  };
-
-  const checkAnnually = (task) => {
-    const start = new Date(task.startTime);
-    const active = new Date(date.date);
-
-    return (
-      task.frequency === "monthly" &&
-      start.getTime() < active.getTime() &&
-      start.getDate() === active.getDate() &&
-      start.getMonth() === active.getMonth()
-    );
-  };
-
-  const checkExcept = (task) => {
-    const active = date.date;
-
-    return task.except ? !task.except.includes(active) : true;
-  };
 
   const fromOldToNew = (task1, task2) => {
     if (
@@ -77,21 +29,9 @@ function Day({ date, tasks }) {
       );
     }
   };
-  /*
-  const arrOfTasks = tasks
-    .filter(
-      (task) =>
-        (onDate(task) ||
-          checkDaily(task) ||
-          checkWeekly(task) ||
-          checkMonthly(task) ||
-          checkAnnually(task)) &&
-        checkExcept(task)
-    )
-    .sort(fromOldToNew);*/
 
   const arrOfTasks = tasks
-    .filter((task) => (onDate(task) || checkWeekly(task)) && checkExcept(task))
+    .filter((task) => task.dates.includes(date.date))
     .sort(fromOldToNew);
 
   return (
@@ -105,15 +45,18 @@ function Day({ date, tasks }) {
     >
       <Card.Body key={date.date} style={{ overflow: "hidden" }}>
         <Card.Title className="d-flex justify-content-between">
-          {date.date.split("-")[2]}/{date.date.split("-")[1]}
-          <AddModal date={date} />
+          {dayjs(date.date).format("DD/MM")}
+          <Stack direction="horizontal">
+            <ViewButton date={date} tasks={tasks} />
+            <AddModal date={date} />
+          </Stack>
         </Card.Title>
         {isSmallScreen || arrOfTasks.length <= 2 ? (
           <Container>
             {arrOfTasks.map((task) => {
               return (
-                <Row className="mb-1">
-                  <TaskModal date={date} task={task} key={task._id} />
+                <Row className="mb-1" key={task._id}>
+                  <TaskModal date={date} task={task} />
                 </Row>
               );
             })}
@@ -126,13 +69,9 @@ function Day({ date, tasks }) {
                   <Col
                     className="mb-1"
                     style={{ padding: "0", width: "calc(100%/3)" }}
+                    key={task._id}
                   >
-                    <TaskModal
-                      date={date}
-                      task={task}
-                      showTitle={false}
-                      key={task._id}
-                    />
+                    <TaskModal date={date} task={task} showTitle={false} />
                   </Col>
                 );
               })}

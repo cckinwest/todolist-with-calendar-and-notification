@@ -71,17 +71,17 @@ function Calendar() {
           `http://localhost:3002/pattern?username=${user.username}`
         );
 
-        console.log([...resTodo.data, ...resPattern.data]);
         setTasks([...resTodo.data, ...resPattern.data]);
       } catch (err) {
         console.error(`Invalid username: ${err}`);
       }
 
       const permission = await getNotificationConsent();
-      setStatus(permission);
+      console.log(permission);
 
-      if (Notification.permission === "granted") {
-        handlePermissionGranted();
+      if (permission === "granted") {
+        console.log("Hello");
+        await handlePermissionGranted();
       }
     }
 

@@ -22,7 +22,7 @@ function AddModal({ date }) {
   return (
     <>
       <i
-        className="bi bi-plus-circle"
+        className={hoverAdd ? "bi bi-plus-circle-fill" : "bi bi-plus-circle"}
         onClick={handleAdd}
         onMouseEnter={() => {
           setHoverAdd(true);
@@ -30,14 +30,7 @@ function AddModal({ date }) {
         onMouseLeave={() => {
           setHoverAdd(false);
         }}
-        style={{
-          transition: "0.3s",
-          color: hoverAdd && "white",
-          backgroundColor: hoverAdd && "#0d6efd",
-          height: "24px",
-          width: "24px",
-          borderRadius: "50%",
-        }}
+        style={{ marginLeft: "2px" }}
       ></i>
 
       {show && <TaskForm show={show} setShow={setShow} date={date.date} />}

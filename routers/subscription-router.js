@@ -12,18 +12,6 @@ webPush.setVapidDetails(
   process.env.VAPID_PRIVATE
 );
 
-const getFullDate = (dateObj) => {
-  const year = dateObj.getFullYear();
-  const month = dateObj.getMonth() + 1;
-  const date = dateObj.getDate();
-
-  if (month < 10) {
-    return `${year}-0${month}-${date}`;
-  } else {
-    return `${year}-${month}-${date}`;
-  }
-};
-
 router.post("/subscribe", async (req, res) => {
   try {
     const { id, subscription } = req.body;
@@ -85,7 +73,7 @@ router.post("/subscribe", async (req, res) => {
 
 router.get("/pushNotification", async (res, req) => {
   try {
-    const today = getFullDate(new Date());
+    const today = dayjs().format("YYYY-MM-DD");
 
     const subscribers = await Subscriber.find()
       .populate({
@@ -108,20 +96,11 @@ router.get("/pushNotification", async (res, req) => {
       const subscription = subscriber.subscription;
 
       const todos = subscriber.userId.todos.filter((todo) => {
-        const startTime = getFullDate(todo.startTime);
-        return startTime === today;
+        return todo.dates.includes(today);
       });
 
       const patterns = subscriber.userId.patterns.filter((pattern) => {
-        const todayTime = new Date().getTime();
-        const startDate = new Date(pattern.startDate).getTime();
-        const endDate = new Date(pattern.endDate).getTime();
-        const today = new Date().getDay();
-        const startDay = new Date(pattern.startDate).getDay();
-
-        return (
-          todayTime > startDate && todayTime < endDate && today === startDay
-        );
+        return pattern.dates.includes(today);
       });
 
       arrOfTasks = [...todos, ...patterns];
