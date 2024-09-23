@@ -9,6 +9,8 @@ import axios from "axios";
 function TaskDisplay({ task, show, setShow }) {
   const isPattern = task.startDate ? true : false;
 
+  const apiEndpoint = process.env.REACT_APP_URL;
+
   const [isEdit, setIsEdit] = useState(false);
 
   const handleClose = () => {
@@ -24,8 +26,8 @@ function TaskDisplay({ task, show, setShow }) {
     axios
       .put(
         isPattern
-          ? `http://localhost:3002/pattern/delete`
-          : `http://localhost:3002/todo/delete`,
+          ? `${apiEndpoint}/pattern/delete`
+          : `${apiEndpoint}/todo/delete`,
         taskData
       )
       .then((res) => {

@@ -34,7 +34,7 @@ function TaskShade({ task }) {
     >
       <div
         className={
-          isPattern ? "bg-danger bg-gradient" : "bg-warning bg-gradient"
+          isPattern ? "bg-danger bg-gradient" : "bg-primary bg-gradient"
         }
         style={{
           height: `calc(100% * ${duration}/24)`,
@@ -43,7 +43,7 @@ function TaskShade({ task }) {
           position: "absolute",
           top: `calc(100% * ${fraction})`,
           opacity: "75%",
-          color: `${isPattern ? "white" : "black"}`,
+          color: "white",
           zIndex: "20",
           padding: `${duration > 3 ? "10px" : duration > 2 ? "5px" : "2px"}`,
           borderRadius: `${
@@ -61,7 +61,7 @@ function TaskShade({ task }) {
         <p style={{ margin: "0" }}>
           <strong>{title}</strong>
         </p>
-        <p style={{ margin: "0" }}>{description}</p>
+        <p style={{ margin: "0", textAlign: "center" }}>{description}</p>
       </div>
     </OverlayTrigger>
   );

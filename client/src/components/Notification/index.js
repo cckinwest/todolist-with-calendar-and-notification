@@ -6,6 +6,8 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 function Single({ task, responsed, setResponsed }) {
+  const apiEndpoint = process.env.REACT_APP_URL;
+
   const [show, setShow] = useState(true);
 
   const startTime = dayjs(task.startTime).format("HH:mm");
@@ -22,8 +24,8 @@ function Single({ task, responsed, setResponsed }) {
 
     await axios.put(
       isPattern
-        ? `http://localhost:3002/pattern/changeAnIndividual`
-        : `http://localhost:3002/todo/update`,
+        ? `${apiEndpoint}/pattern/changeAnIndividual`
+        : `${apiEndpoint}/todo/update`,
       {
         ...task,
         notification: false,
@@ -87,7 +89,7 @@ function Notification({ tasks }) {
 
   setInterval(() => {
     setShow(true);
-  }, 300000);
+  }, 3000);
 
   if (responsed.length === arrOfTasks.length && arrOfTasks.length > 0) {
     window.location.reload();

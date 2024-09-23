@@ -8,6 +8,8 @@ function ExpireForm() {
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
 
+  const apiEndpoint = process.env.REACT_APP_URL;
+
   const [remain, setRemain] = useState(
     Math.round(user.exp - Date.now() / 1000)
   );
@@ -56,7 +58,7 @@ function ExpireForm() {
       };
 
       axios
-        .post(`http://localhost:3002/user/login`, userData)
+        .post(`${apiEndpoint}/user/login`, userData)
         .then((res) => {
           setShow(false);
           localStorage.setItem("token", res.data.token);

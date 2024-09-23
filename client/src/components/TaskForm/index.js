@@ -12,6 +12,8 @@ function TaskForm({ show, setShow, date }) {
 
   const [pattern, setPattern] = useState(false);
 
+  const apiEndpoint = process.env.REACT_APP_URL;
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -68,11 +70,11 @@ function TaskForm({ show, setShow, date }) {
     var pass = true;
 
     const todos = await axios.get(
-      `http://localhost:3002/todo/?username=${user.username}`
+      `${apiEndpoint}/todo/?username=${user.username}`
     );
 
     const patterns = await axios.get(
-      `http://localhost:3002/todo/?username=${user.username}`
+      `${apiEndpoint}/todo/?username=${user.username}`
     );
 
     const startT = new Date(start).getTime();
@@ -148,8 +150,8 @@ function TaskForm({ show, setShow, date }) {
     axios
       .post(
         pattern
-          ? `http://localhost:3002/pattern/create`
-          : `http://localhost:3002/todo/create`,
+          ? `${apiEndpoint}/pattern/create`
+          : `${apiEndpoint}/todo/create`,
         taskData
       )
       .then((res) => {

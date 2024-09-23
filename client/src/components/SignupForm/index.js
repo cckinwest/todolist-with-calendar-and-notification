@@ -10,6 +10,8 @@ function SignupForm() {
   const [msg, setMsg] = useState("");
   const [isWarning, setIsWarning] = useState(false);
 
+  const apiEndpoint = process.env.REACT_APP_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!username || !password || !confirm) {
@@ -25,7 +27,7 @@ function SignupForm() {
       };
 
       axios
-        .post(`http://localhost:3002/user/signup`, userData)
+        .post(`${apiEndpoint}/user/signup`, userData)
         .then((res) => {
           if (
             res.data.message &&

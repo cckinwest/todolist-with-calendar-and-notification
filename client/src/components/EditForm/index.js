@@ -9,6 +9,8 @@ function EditForm({ task, isEdit, setIsEdit }) {
   const [isIndividual, setIsIndividual] = useState(false);
   const isPattern = task.startDate ? true : false;
 
+  const apiEndpoint = process.env.REACT_APP_URL;
+
   const [formData, setFormData] = useState({
     title: task.title,
     description: task.description,
@@ -62,9 +64,9 @@ function EditForm({ task, isEdit, setIsEdit }) {
       .put(
         isPattern
           ? isIndividual
-            ? `http://localhost:3002/pattern/changeAnIndividual`
-            : `http://localhost:3002/pattern/update`
-          : `http://localhost:3002/todo/update`,
+            ? `${apiEndpoint}/pattern/changeAnIndividual`
+            : `${apiEndpoint}/pattern/update`
+          : `${apiEndpoint}/todo/update`,
         taskData
       )
       .then((res) => {
@@ -82,9 +84,9 @@ function EditForm({ task, isEdit, setIsEdit }) {
       .put(
         isPattern
           ? isIndividual
-            ? `http://localhost:3002/pattern/deleteAnIndividual`
-            : `http://localhost:3002/pattern/delete`
-          : `http://localhost:3002/todo/delete`,
+            ? `${apiEndpoint}/pattern/deleteAnIndividual`
+            : `${apiEndpoint}/pattern/delete`
+          : `${apiEndpoint}/todo/delete`,
         isPattern ? { patternId: task._id } : { taskId: task._id }
       )
       .then((res) => window.location.reload())

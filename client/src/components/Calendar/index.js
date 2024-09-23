@@ -24,6 +24,8 @@ function Calendar() {
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
 
+  const apiEndpoint = process.env.REACT_APP_URL;
+
   const handlePermissionGranted = async () => {
     //const registration = await serviceWorkerRegistration();
     console.log("Hello!");
@@ -41,7 +43,7 @@ function Calendar() {
 
       try {
         const response = await axios.post(
-          `http://localhost:3002/subscription/subscribe`,
+          `${apiEndpoint}/subscription/subscribe`,
           {
             id: user.id,
             subscription: pushSubscription,
@@ -64,11 +66,11 @@ function Calendar() {
     async function fetchData() {
       try {
         const resTodo = await axios.get(
-          `http://localhost:3002/todo?username=${user.username}`
+          `${apiEndpoint}/todo?username=${user.username}`
         );
 
         const resPattern = await axios.get(
-          `http://localhost:3002/pattern?username=${user.username}`
+          `${apiEndpoint}/pattern?username=${user.username}`
         );
 
         setTasks([...resTodo.data, ...resPattern.data]);

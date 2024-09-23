@@ -9,13 +9,14 @@ const Task = ({ task }) => {
   const isPattern = task.startDate ? true : false;
 
   const [edit, setEdit] = useState(false);
+  const apiEndpoint = process.env.REACT_APP_URL;
 
   const handleDelete = () => {
     axios
       .put(
         isPattern
-          ? `http://localhost:3002/pattern/delete`
-          : `http://localhost:3002/todo/delete`,
+          ? `${apiEndpoint}/pattern/delete`
+          : `${apiEndpoint}/todo/delete`,
         isPattern ? { patternId: task._id } : { taskId: task._id }
       )
       .then((res) => {

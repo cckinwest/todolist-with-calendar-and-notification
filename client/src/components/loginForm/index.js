@@ -9,6 +9,8 @@ function LoginForm() {
   const [msg, setMsg] = useState("");
   const [isWarning, setIsWarning] = useState(false);
 
+  const apiEndpoint = process.env.REACT_APP_URL;
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -22,7 +24,7 @@ function LoginForm() {
       };
 
       axios
-        .post(`http://localhost:3002/user/login`, userData)
+        .post(`${apiEndpoint}/user/login`, userData)
         .then((res) => {
           setMsg(`${username} login successfully!`);
           setIsWarning(false);
