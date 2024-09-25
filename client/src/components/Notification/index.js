@@ -89,7 +89,7 @@ function Notification({ tasks }) {
 
   setInterval(() => {
     setShow(true);
-  }, 3000);
+  }, 300000);
 
   if (responsed.length === arrOfTasks.length && arrOfTasks.length > 0) {
     window.location.reload();
