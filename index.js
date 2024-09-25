@@ -36,7 +36,7 @@ const connectDB = async () => {
 
 connectDB();
 
-app.use(express.static(path.join(__dirname, "client", "public")));
+app.use(express.static(path.join(__dirname, "client", "build")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -52,6 +52,10 @@ app.use("/user", userRouter);
 app.use("/todo", todoRouter);
 app.use("/pattern", patternRouter);
 app.use("/subscription", subscriptionRouter);
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/build", "index.html"));
+});
 
 app.get("/decode", verifyJWT, (req, res) => {
   const { username } = req.user;
