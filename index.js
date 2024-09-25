@@ -19,6 +19,8 @@ require("dotenv").config();
 
 const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
 
+console.log("API Base URL:", process.env.REACT_APP_URL);
+
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI, {
