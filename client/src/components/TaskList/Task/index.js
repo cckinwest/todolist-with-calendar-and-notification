@@ -9,7 +9,7 @@ const Task = ({ task }) => {
   const isPattern = task.startDate ? true : false;
 
   const [edit, setEdit] = useState(false);
-  const apiEndpoint = process.env.REACT_APP_URL;
+  const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
 
   const handleDelete = () => {
     axios

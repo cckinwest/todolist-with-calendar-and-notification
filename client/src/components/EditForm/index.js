@@ -9,7 +9,7 @@ function EditForm({ task, isEdit, setIsEdit }) {
   const [isIndividual, setIsIndividual] = useState(false);
   const isPattern = task.startDate ? true : false;
 
-  const apiEndpoint = process.env.REACT_APP_URL;
+  const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
 
   const [formData, setFormData] = useState({
     title: task.title,

@@ -9,7 +9,7 @@ import axios from "axios";
 function TaskDisplay({ task, show, setShow }) {
   const isPattern = task.startDate ? true : false;
 
-  const apiEndpoint = process.env.REACT_APP_URL;
+  const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
 
   const [isEdit, setIsEdit] = useState(false);
 

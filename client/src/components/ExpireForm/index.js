@@ -8,7 +8,7 @@ function ExpireForm() {
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
 
-  const apiEndpoint = process.env.REACT_APP_URL;
+  const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
 
   const [remain, setRemain] = useState(
     Math.round(user.exp - Date.now() / 1000)

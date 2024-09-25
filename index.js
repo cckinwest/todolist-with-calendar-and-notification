@@ -15,21 +15,38 @@ const path = require("path");
 
 var cors = require("cors");
 
+require("dotenv").config();
+
+const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
+
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
+    console.log("MongoDB connection Success!");
+  } catch (err) {
+    console.log(err);
+    console.log("MongoDB connection failed!");
+    process.exit(1);
+  }
+};
+
+connectDB();
+
 app.use(express.static(path.join(__dirname, "client", "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(cors());
 
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
-
 const port = process.env.PORT || 3002;
-
+/*
 mongoose.connect(process.env.MONGODB_URL).then(() => {
   console.log("MongoDB is connected!");
-});
+});*/
 
 app.use("/user", userRouter);
 app.use("/todo", todoRouter);
@@ -47,7 +64,7 @@ app.listen(port, () => {
 });
 
 const job = schedule.scheduleJob("0 * * * *", () => {
-  axios.get("http://localhost:3002/subscription/pushNotification").then(
+  axios.get(`${apiEndpoint}/subscription/pushNotification`).then(
     (res) => {
       console.log("The notification is pushed successfully.");
     },

@@ -9,7 +9,7 @@ function LoginForm() {
   const [msg, setMsg] = useState("");
   const [isWarning, setIsWarning] = useState(false);
 
-  const apiEndpoint = process.env.REACT_APP_URL;
+  const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
 
   const handleSubmit = (e) => {
     e.preventDefault();

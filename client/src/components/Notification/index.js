@@ -6,7 +6,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 function Single({ task, responsed, setResponsed }) {
-  const apiEndpoint = process.env.REACT_APP_URL;
+  const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
 
   const [show, setShow] = useState(true);
 

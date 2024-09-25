@@ -24,7 +24,7 @@ function Calendar() {
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
 
-  const apiEndpoint = process.env.REACT_APP_URL;
+  const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
 
   const handlePermissionGranted = async () => {
     //const registration = await serviceWorkerRegistration();

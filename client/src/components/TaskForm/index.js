@@ -12,7 +12,7 @@ function TaskForm({ show, setShow, date }) {
 
   const [pattern, setPattern] = useState(false);
 
-  const apiEndpoint = process.env.REACT_APP_URL;
+  const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
 
   const [formData, setFormData] = useState({
     title: "",
