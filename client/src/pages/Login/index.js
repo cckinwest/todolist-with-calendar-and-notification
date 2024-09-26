@@ -16,7 +16,7 @@ function Login() {
       >
         <Row
           className="border border-1 rounded-3 bg-light bg-gradient"
-          style={{ width: "80%", padding: "20px" }}
+          style={{ width: "90%", padding: "20px" }}
         >
           <Col>
             <LoginForm />
