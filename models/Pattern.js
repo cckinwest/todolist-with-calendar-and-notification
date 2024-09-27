@@ -12,19 +12,15 @@ const patternSchema = new Schema({
     type: String,
   },
   startTime: {
-    type: Date,
-    default: Date.now,
+    type: String,
   },
   endTime: {
-    type: Date,
-    default: () => {
-      return this.startTime;
-    },
+    type: String,
   },
   startDate: {
     type: String,
     default: () => {
-      return this.startTime.toJSON().split("T")[0];
+      return this.startTime.split("T")[0];
     },
   },
   endDate: {

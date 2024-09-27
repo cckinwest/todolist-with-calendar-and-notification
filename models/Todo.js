@@ -14,14 +14,10 @@ const todoSchema = new Schema({
     type: String,
   },
   startTime: {
-    type: Date,
-    default: Date.now,
+    type: String
   },
   endTime: {
-    type: Date,
-    default: () => {
-      return this.startTime;
-    },
+    type: String
   },
   notification: {
     type: Boolean,
