@@ -18,13 +18,16 @@ function ExpireForm() {
   const [warning, setWarning] = useState("");
   const [isCritical, setIsCritical] = useState(false);
 
+  const popUpTime = [300, 270, 240, 210, 180, 120, 90, 60, 30];
+
   useEffect(() => {
     let timer = setTimeout(() => {
       if (token && Date.now() / 1000 < user.exp) {
         const timeLeft = Math.round(user.exp - Date.now() / 1000);
         setRemain(timeLeft);
 
-        if (timeLeft < 120) {
+        if (popUpTime.includes(timeLeft)) {
+          setShow(true);
           setIsCritical(true);
         }
       } else {
@@ -40,10 +43,6 @@ function ExpireForm() {
   const handleChange = (e) => {
     setWarning("");
     setPassword(e.target.value);
-  };
-
-  const handleShow = () => {
-    setShow(true);
   };
 
   const handleClose = () => {
@@ -74,14 +73,6 @@ function ExpireForm() {
 
   return (
     <>
-      <Button
-        className="m-2"
-        style={{ width: "auto" }}
-        variant={isCritical ? "danger" : "light"}
-        onClick={handleShow}
-      >
-        Click to renew token ({remain} s)
-      </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Notification</Modal.Title>
@@ -90,6 +81,7 @@ function ExpireForm() {
           {warning && <Alert variant="danger">{warning}</Alert>}
           <Form>
             <Form.Group className="mb-3" controlId="ExpirePassword">
+              <Form.Label>Time Left: {remain} seconds</Form.Label>
               <Form.Control
                 type="password"
                 name="password"
