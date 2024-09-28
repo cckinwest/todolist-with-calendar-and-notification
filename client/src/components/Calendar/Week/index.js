@@ -1,19 +1,11 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import Day from "../Day";
 import { Container, Row, Button } from "react-bootstrap";
 
-function Week({ tasks, children }) {
-  const [week, setWeek] = useState([
-    "2024-09-23",
-    "2024-09-24",
-    "2024-09-25",
-    "2024-09-26",
-    "2024-09-27",
-    "2024-09-28",
-    "2024-09-29",
-  ]);
+function Week({ weekArr, tasks, children }) {
+  const [week, setWeek] = useState(weekArr);
 
   const nextWeek = () => {
     setWeek(

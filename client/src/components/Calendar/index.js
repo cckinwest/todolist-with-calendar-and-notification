@@ -32,6 +32,16 @@ function Calendar() {
 
   const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
 
+  const thisWeek = () => {
+    const weekArr = [];
+
+    for (let i = 1; i < 8; i++) {
+      weekArr.push(dayjs().day(i).format("YYYY-MM-DD"));
+    }
+
+    return weekArr;
+  };
+
   const handlePermissionGranted = async () => {
     //const registration = await serviceWorkerRegistration();
     console.log("Hello!");
@@ -97,7 +107,7 @@ function Calendar() {
   }, []);
 
   return isSmallScreen ? (
-    <Week tasks={tasks}>
+    <Week weekArr={thisWeek()} tasks={tasks}>
       <Notification tasks={tasks} />
     </Week>
   ) : (
