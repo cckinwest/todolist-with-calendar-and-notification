@@ -31,7 +31,7 @@ function Day({ date, tasks }) {
   };
 
   const arrOfTasks = tasks
-    .filter((task) => task.dates.includes(date.date))
+    .filter((task) => task.dates.includes(date))
     .sort(fromOldToNew);
 
   return (
@@ -41,11 +41,11 @@ function Day({ date, tasks }) {
         height: isSmallScreen ? "auto" : "13vh",
         minHeight: "13vh",
       }}
-      className={date.status === "past" && "opacity-25"}
+      className={date === dayjs().format("YYYY-MM-DD") && "text-bg-warning"}
     >
-      <Card.Body key={date.date} style={{ overflow: "hidden" }}>
+      <Card.Body key={date} style={{ overflow: "hidden" }}>
         <Card.Title className="d-flex justify-content-between">
-          {dayjs(date.date).format("DD/MM")}
+          {dayjs(date).format("DD/MM")}
           <Stack direction="horizontal">
             <ViewButton date={date} tasks={tasks} />
             <AddModal date={date} />

@@ -50,11 +50,11 @@ function TaskShade({ task }) {
             duration > 3 ? "10px" : duration > 2 ? "5px" : "2px"
           }`,
           display: "flex",
-          flexDirection: `${duration < 1 ? "row" : "column"}`,
-          justifyContent: `${duration < 1 ? "space-between" : "center"}`,
+          flexDirection: `${duration < 0.5 ? "row" : "column"}`,
+          justifyContent: `${duration < 0.5 ? "space-between" : "center"}`,
           alignItems: "center",
           fontSize: `${
-            duration > 1.5 ? "15px" : duration > 0.5 ? "10px" : "8px"
+            duration > 1.5 ? "15px" : duration > 0.25 ? "10px" : "8px"
           }`,
         }}
       >

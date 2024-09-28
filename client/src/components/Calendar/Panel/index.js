@@ -15,7 +15,7 @@ function Panel({ day, tasks }) {
   return (
     <div
       style={{
-        height: "120vh",
+        height: "192vh",
         position: "relative",
         padding: "0",
         marginBottom: "10px",

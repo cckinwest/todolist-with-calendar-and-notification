@@ -33,7 +33,7 @@ function Month({ year, month, tasks }) {
     let num = numOfDays(y, m);
     for (var i = 0; i < num; i++) {
       let date = `${y}-${m + 1}-${i + 1}`;
-      arr.push({ date: dayjs(date).format("YYYY-MM-DD"), status: "current" });
+      arr.push(dayjs(date).format("YYYY-MM-DD"));
     }
 
     let firstOfMonth = dayjs(`${y}-${m + 1}-1`).get("d");
@@ -43,12 +43,11 @@ function Month({ year, month, tasks }) {
     }
 
     for (var i = 1; i < firstOfMonth; i++) {
-      arr.unshift({
-        date: dayjs(`${y}-${m + 1}-1`)
+      arr.unshift(
+        dayjs(`${y}-${m + 1}-1`)
           .subtract(i, "d")
-          .format("YYYY-MM-DD"),
-        status: "past",
-      });
+          .format("YYYY-MM-DD")
+      );
     }
 
     return arr;
@@ -91,7 +90,7 @@ function Month({ year, month, tasks }) {
                   padding: "0",
                 }}
               >
-                <Day date={date} tasks={tasks} key={date.date} />
+                <Day date={date} tasks={tasks} key={date} />
               </Col>
             );
           })}

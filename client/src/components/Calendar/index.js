@@ -1,12 +1,14 @@
 import React from "react";
 import Month from "./Month";
 import MonthMenu from "./MonthMenu";
+import Week from "./Week";
 import dayjs from "dayjs";
 import axios from "axios";
 import { Stack, Form, Container, Row, Col, Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import Notification from "../Notification";
+import { useMediaQuery } from "react-responsive";
 
 import {
   getNotificationConsent,
@@ -23,6 +25,10 @@ function Calendar() {
 
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
+
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 600px)" });
+  const isMediumScreen = useMediaQuery({ query: "(max-width: 1024px)" });
+  const isLargeScreen = useMediaQuery({ query: "(max-width: 1440px)" });
 
   const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
 
@@ -90,7 +96,11 @@ function Calendar() {
     fetchData();
   }, []);
 
-  return (
+  return isSmallScreen ? (
+    <Week tasks={tasks}>
+      <Notification tasks={tasks} />
+    </Week>
+  ) : (
     <Container>
       <Notification tasks={tasks} />
       <Row className="mt-3 d-flex align-items-center justify-content-between">

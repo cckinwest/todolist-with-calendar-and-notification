@@ -14,9 +14,7 @@ function AddModal({ date }) {
   const [hoverAdd, setHoverAdd] = useState(false);
 
   const handleAdd = () => {
-    if (date.status === "current") {
-      setShow(true);
-    }
+    setShow(true);
   };
 
   return (
@@ -33,7 +31,7 @@ function AddModal({ date }) {
         style={{ marginLeft: "2px" }}
       ></i>
 
-      {show && <TaskForm show={show} setShow={setShow} date={date.date} />}
+      {show && <TaskForm show={show} setShow={setShow} date={date} />}
     </>
   );
 }

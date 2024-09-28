@@ -28,7 +28,6 @@ function TaskModal({ date, task, showTitle = true }) {
         size="sm"
         className="rounded-pill"
         onClick={handleClick}
-        disabled={date.status === "past"}
         style={{
           textOverflow: "ellipsis",
           overflow: "hidden",

@@ -37,10 +37,10 @@ function ViewButton({ date, tasks }) {
       ></i>
       <Offcanvas show={view} onHide={handleClose} placement="start">
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Tasks on {date.date}</Offcanvas.Title>
+          <Offcanvas.Title>Tasks on {date}</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <Panel day={dayjs(date.date)} tasks={tasks} />
+          <Panel day={dayjs(date)} tasks={tasks} />
         </Offcanvas.Body>
       </Offcanvas>
     </>
