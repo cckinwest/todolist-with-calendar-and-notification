@@ -20,8 +20,6 @@ const TaskList = ({ tasks }) => {
   tasks.forEach((task) => {
     const isPattern = task.startDate ? true : false;
 
-    isPattern ? console.log(task.startDate) : console.log(task.startTime);
-
     let date = isPattern ? task.startDate : task.startTime.split("T")[0];
     if (!arrOfDates.includes(date)) {
       arrOfDates.push(date);

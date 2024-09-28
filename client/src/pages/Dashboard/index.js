@@ -17,13 +17,15 @@ function Dashboard() {
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
 
+  const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
+
   useEffect(() => {
     const fetchData = async () => {
       const todos = await axios.get(
-        `http://localhost:3002/todo?username=${user.username}`
+        `${apiEndpoint}/todo?username=${user.username}`
       );
       const patterns = await axios.get(
-        `http://localhost:3002/pattern?username=${user.username}`
+        `${apiEndpoint}/pattern?username=${user.username}`
       );
 
       setTasks([...todos.data, ...patterns.data]);
