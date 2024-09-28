@@ -27,7 +27,7 @@ function Week({ weekArr, tasks, children }) {
     <Container>
       <Row>
         <Container
-          className="d-flex justify-content-between align-items-center mb-2"
+          className="d-flex justify-content-between align-items-center mb-2 mt-2"
           fluid
         >
           <Button
@@ -41,9 +41,9 @@ function Week({ weekArr, tasks, children }) {
           >
             <i className="bi bi-arrow-left" />
           </Button>
-          <h1>{`Week (${dayjs(week[0]).format("DD/MM")}-${dayjs(week[6]).format(
+          <h3>{`Week (${dayjs(week[0]).format("DD/MM")}-${dayjs(week[6]).format(
             "DD/MM"
-          )})`}</h1>
+          )})`}</h3>
           <Button
             onClick={nextWeek}
             style={{
