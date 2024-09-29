@@ -35,8 +35,14 @@ function Calendar() {
   const thisWeek = () => {
     const weekArr = [];
 
-    for (let i = 1; i < 8; i++) {
-      weekArr.push(dayjs().day(i).format("YYYY-MM-DD"));
+    if (dayjs().day() != 0) {
+      for (let i = 1; i < 8; i++) {
+        weekArr.push(dayjs().day(i).format("YYYY-MM-DD"));
+      }
+    } else {
+      for (let i = 1; i < 8; i++) {
+        weekArr.push(dayjs().day(i).subtract(7, "day").format("YYYY-MM-DD"));
+      }
     }
 
     return weekArr;

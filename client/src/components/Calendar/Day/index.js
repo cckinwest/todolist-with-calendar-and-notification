@@ -38,7 +38,7 @@ function Day({ date, tasks }) {
     <Card
       style={{
         width: "100%",
-        height: isSmallScreen ? "auto" : "13vh",
+        height: isSmallScreen ? "auto" : "120px",
         minHeight: "13vh",
       }}
       className={date === dayjs().format("YYYY-MM-DD") && "text-bg-warning"}
