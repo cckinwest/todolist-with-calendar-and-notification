@@ -38,14 +38,16 @@ function Day({ date, tasks }) {
     <Card
       style={{
         width: "100%",
-        height: isSmallScreen ? "auto" : "120px",
+        height: isSmallScreen ? "auto" : "150px",
         minHeight: "13vh",
       }}
       className={date === dayjs().format("YYYY-MM-DD") && "text-bg-warning"}
     >
       <Card.Body key={date} style={{ overflow: "hidden" }}>
-        <Card.Title className="d-flex justify-content-between">
-          {dayjs(date).format("DD/MM")}
+        <Card.Title className="d-flex justify-content-between align-items-center">
+          <span style={{ fontSize: isMediumScreen ? "14px" : "16px" }}>
+            {dayjs(date).format("DD/MM (ddd)")}
+          </span>
           <Stack direction="horizontal">
             <ViewButton date={date} tasks={tasks} />
             <AddModal date={date} />
@@ -66,11 +68,7 @@ function Day({ date, tasks }) {
             <Row style={{ textAlign: "left" }}>
               {arrOfTasks.map((task) => {
                 return (
-                  <Col
-                    className="mb-1"
-                    style={{ padding: "0", width: "calc(100%/3)" }}
-                    key={task._id}
-                  >
+                  <Col className="mb-1" style={{ padding: "0" }} key={task._id}>
                     <TaskModal date={date} task={task} showTitle={false} />
                   </Col>
                 );

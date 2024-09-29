@@ -11,7 +11,7 @@ function TaskModal({ date, task, showTitle = true }) {
 
   const handleString = (str) => {
     if (str.length > 18) {
-      return `${str.slice(0, 15)}...`;
+      return `${str.slice(0, 12)}...`;
     }
 
     return str;
