@@ -8,6 +8,8 @@ const urlsToCache = [
   "/static/css/styles.css",
 ];
 
+const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
+
 self.addEventListener("install", (event) => {
   console.log("The service worker is installing.");
 
@@ -83,7 +85,7 @@ self.addEventListener("push", (event) => {
 self.addEventListener("notificationclick", (event) => {
   const isPattern = event.notification.data.length > 0;
 
-  var endpoint = "http://localhost:3002/todo/update";
+  var endpoint = `${apiEndpoint}/todo/update`;
 
   var data = {
     id: event.notification.tag,
@@ -91,7 +93,7 @@ self.addEventListener("notificationclick", (event) => {
   };
 
   if (isPattern) {
-    endpoint = "http://localhost:3002/pattern/update";
+    endpoint = `${apiEndpoint}/pattern/update`;
     data = {
       patternId: event.notification.tag,
       notification: false,
@@ -121,7 +123,7 @@ self.addEventListener("notificationclick", (event) => {
             clients
               .matchAll({ type: "window", includeUncontrolled: true })
               .then(function (clients) {
-                const targetUrl = "http://localhost:3001/calendar";
+                const targetUrl = `${apiEndpoint}/calendar`;
                 clients.forEach((client) => {
                   console.log(client.url);
                   if (client.url === targetUrl && "focus" in client) {
