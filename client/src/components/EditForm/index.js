@@ -175,8 +175,6 @@ function EditForm({ task, isEdit, setIsEdit }) {
             >
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>
-              <option value="monthly">Monthly</option>
-              <option value="annually">Annually</option>
             </Form.Select>
           </Form.Group>
         )}

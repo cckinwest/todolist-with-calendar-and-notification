@@ -80,24 +80,6 @@ patternSchema.virtual("dates").get(function () {
     }
   }
 
-  if (this.frequency === "monthly") {
-    const y = dayjs(this.startDate).year();
-    const m = dayjs(this.startDate).month() + 1;
-    const d = dayjs(this.startDate).date();
-
-    const last = (year, month) => {
-      if (month >= 10) {
-        return dayjs(`${year}-${month}-01`)
-          .subtract(1, "day")
-          .format("YYYY-MM-DD");
-      } else {
-        return dayjs(`${year}-0${month}-01`)
-          .subtract(1, "day")
-          .format("YYYY-MM-DD");
-      }
-    };
-  }
-
   return dates;
 });
 

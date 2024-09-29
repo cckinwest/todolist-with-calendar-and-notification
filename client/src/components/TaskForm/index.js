@@ -73,21 +73,17 @@ function TaskForm({ show, setShow, date }) {
       `${apiEndpoint}/todo/?username=${user.username}`
     );
 
-    const patterns = await axios.get(
-      `${apiEndpoint}/todo/?username=${user.username}`
-    );
-
-    const startT = new Date(start).getTime();
-    const endT = new Date(end).getTime();
+    const startms = new Date(start).getTime();
+    const endms = new Date(end).getTime();
 
     todos.data.forEach((todo) => {
       const startTime = new Date(todo.startTime).getTime();
       const endTime = new Date(todo.endTime).getTime();
 
       if (
-        (startT >= startTime && startT <= endTime) ||
-        (endT >= startTime && endT <= endTime) ||
-        (startT <= startTime && endT >= endTime)
+        (startms >= startTime && startms <= endTime) ||
+        (endms >= startTime && endms <= endTime) ||
+        (startms <= startTime && endms >= endTime)
       ) {
         console.log(todo.title);
         console.log("The time is occupied by some event!");
@@ -135,7 +131,10 @@ function TaskForm({ show, setShow, date }) {
       return;
     }
 
-    if (!(await handleCheck(taskData.startTime, taskData.endTime))) {
+    if (
+      !pattern &&
+      !(await handleCheck(taskData.startTime, taskData.endTime))
+    ) {
       setWarning((prevWarning) => {
         return {
           ...prevWarning,
@@ -245,8 +244,6 @@ function TaskForm({ show, setShow, date }) {
             >
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>
-              <option value="monthly">Monthly</option>
-              <option value="annually">Annually</option>
             </Form.Select>
           </Form.Group>
         )}
