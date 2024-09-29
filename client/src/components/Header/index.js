@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import icon from "../../assets/todolistIcon.jpg";
 import ExpireForm from "../ExpireForm";
 import Notification from "../Notification";
+import InstallButton from "../InstallButton";
 
 import {
   Container,
@@ -34,6 +35,7 @@ const Header = () => {
             <Image src={icon} roundedCircle style={{ height: "50px" }} />
           </Nav.Link>
         </Navbar.Brand>
+        <InstallButton />
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
