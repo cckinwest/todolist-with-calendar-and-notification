@@ -1,11 +1,25 @@
-const CACHE_NAME = "v1";
+const CACHE_NAME = "v2";
 
 const urlsToCache = [
   "/",
+  "/asset-manifest.json",
   "/index.html",
+  "/favicon.ico",
+  "/logo192.png",
+  "/logo512.png",
+  "/robots.txt",
+  "/service-worker.js",
   "/manifest.json",
-  "/static/js/main.js",
-  "/static/css/styles.css",
+  "/static/js/845.542b102c.chunk.js",
+  "/static/js/845.542b102c.chunk.js.map",
+  "/static/js/main.21659e50.js",
+  "/static/js/main.21659e50.js.LICENSE.txt",
+  "/static/js/main.21659e50.js.map",
+  "/static/css/main.46b98132.css",
+  "/static/css/main.46b98132.css.map",
+  "/static/media/bootstrap-icons.39795c0b4513de014cf8.woff",
+  "/static/media/bootstrap-icons.b7bcc075b395c14ce8c2.woff2",
+  "/static/media/todolistIcon.42dd5c93e2a8aaf3032a.jpg",
 ];
 
 const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
@@ -43,13 +57,9 @@ self.addEventListener("activate", (event) => {
       caches.keys().then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
-            return Promise.all(
-              cacheNames.map((cacheName) => {
-                if (!cacheWhitelist.includes(cacheName)) {
-                  return caches.delete(cacheName);
-                }
-              })
-            );
+            if (!cacheWhitelist.includes(cacheName)) {
+              return caches.delete(cacheName);
+            }
           })
         );
       })
