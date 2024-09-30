@@ -1,4 +1,4 @@
-const CACHE_NAME = "v2";
+const CACHE_NAME = "v3";
 
 const urlsToCache = [
   "/",
@@ -36,35 +36,35 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      if (response) {
-        return response;
-      }
-
-      return fetch(event.request);
-    })
-  );
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      caches.match("/index.html").then((response) => {
+        return response || fetch(event.request);
+      })
+    );
+  } else {
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        return response || fetch(event.request);
+      })
+    );
+  }
 });
 
 self.addEventListener("activate", (event) => {
-  console.log("The service worker is activated.");
+  const cacheWhitelist = [CACHE_NAME];
 
-  (event) => {
-    const cacheWhitelist = [CACHE_NAME];
-
-    event.waitUntil(
-      caches.keys().then((cacheNames) => {
-        return Promise.all(
-          cacheNames.map((cacheName) => {
-            if (!cacheWhitelist.includes(cacheName)) {
-              return caches.delete(cacheName);
-            }
-          })
-        );
-      })
-    );
-  };
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (!cacheWhitelist.includes(cacheName)) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
 });
 
 self.addEventListener("push", (event) => {
