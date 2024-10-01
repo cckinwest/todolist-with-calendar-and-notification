@@ -1,4 +1,4 @@
-const CACHE_NAME = "v4";
+const CACHE_NAME = "v6";
 
 const urlsToCache = [
   "/",
@@ -59,6 +59,7 @@ self.addEventListener("activate", (event) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (!cacheWhitelist.includes(cacheName)) {
+            console.log(`Deleting cache ${cacheName}`);
             return caches.delete(cacheName);
           }
         })
