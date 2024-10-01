@@ -31,7 +31,7 @@ function App() {
             <Route exact path="/calendar" element={<CalendarPage />} />
             <Route exact path="/signup" element={<Signup />} />
             <Route exact path="/login" element={<Login />} />
-            <Route path="*" element={<h1>Pages Not Found!</h1>} />
+            <Route path="*" element={<Login />} />
           </Routes>
         </div>
         <Footer />
