@@ -1,4 +1,4 @@
-const CACHE_NAME = "v3";
+const CACHE_NAME = "v4";
 
 const urlsToCache = [
   "/",
@@ -12,9 +12,9 @@ const urlsToCache = [
   "/manifest.json",
   "/static/js/845.542b102c.chunk.js",
   "/static/js/845.542b102c.chunk.js.map",
-  "/static/js/main.21659e50.js",
-  "/static/js/main.21659e50.js.LICENSE.txt",
-  "/static/js/main.21659e50.js.map",
+  "/static/js/main.5466e54e.js",
+  "/static/js/main.5466e54e.js.LICENSE.txt",
+  "/static/js/main.5466e54e.js.map",
   "/static/css/main.46b98132.css",
   "/static/css/main.46b98132.css.map",
   "/static/media/bootstrap-icons.39795c0b4513de014cf8.woff",

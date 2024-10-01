@@ -16,11 +16,7 @@ import {
 
 const Header = () => {
   const token = localStorage.getItem("token");
-  let user;
-
-  if (token) {
-    user = jwtDecode(token);
-  }
+  let user = token ? jwtDecode(token) : null;
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -31,7 +27,7 @@ const Header = () => {
     <Navbar expand="lg" className="bg-light">
       <Container>
         <Navbar.Brand>
-          <Nav.Link href={user ? "/dashboard" : "/signup"}>
+          <Nav.Link href={user ? "/calendar" : "/login"}>
             <Image src={icon} roundedCircle style={{ height: "50px" }} />
           </Nav.Link>
         </Navbar.Brand>
