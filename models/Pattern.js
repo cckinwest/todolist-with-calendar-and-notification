@@ -31,7 +31,7 @@ const patternSchema = new Schema({
   },
   frequency: {
     type: String,
-    enum: ["daily", "weekly", "monthly", "annually"],
+    enum: ["daily", "weekly"],
   },
   notification: {
     type: Boolean,
@@ -39,13 +39,21 @@ const patternSchema = new Schema({
       return true;
     },
   },
-
+  notificationTime: {
+    type: String,
+    enum: ["1h", "30min"],
+    default: () => {
+      return "1h";
+    },
+  },
+  alarmTime: {
+    type: String,
+  },
   except: [
     {
       type: String,
     },
   ],
-
   createdAt: {
     type: Date,
     default: Date.now,
@@ -81,6 +89,30 @@ patternSchema.virtual("dates").get(function () {
   }
 
   return dates;
+});
+
+patternSchema.virtual("notificationStart").get(function () {
+  const time = dayjs(this.startTime).format("HH:mm");
+
+  if (this.notification) {
+    const start = this.dates.map((date) => {
+      if (this.notificationTime === "1h") {
+        return dayjs(`${date}T${time}`)
+          .subtract(1, "hour")
+          .format("YYYY-MM-DDTHH:mm");
+      }
+
+      if (this.notificationTime === "30min") {
+        return dayjs(`${date}T${time}`)
+          .subtract(30, "minute")
+          .format("YYYY-MM-DDTHH:mm");
+      }
+    });
+
+    return start;
+  }
+
+  return [];
 });
 
 patternSchema.pre("save", function (next) {

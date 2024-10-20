@@ -23,7 +23,7 @@ const urlsToCache = [
 ];
 
 const apiEndpoint =
-  "https://schedule-calendar-notification-2df5a697a30a.herokuapp.com/";
+  "https://schedule-calendar-notification-2df5a697a30a.herokuapp.com";
 
 self.addEventListener("install", (event) => {
   console.log("The service worker is installing.");
@@ -105,7 +105,7 @@ self.addEventListener("notificationclick", (event) => {
   };
 
   if (isPattern) {
-    endpoint = `${apiEndpoint}/pattern/update`;
+    endpoint = `${apiEndpoint}/pattern/changeAnIndividual`;
     data = {
       patternId: event.notification.tag,
       notification: false,
@@ -114,6 +114,7 @@ self.addEventListener("notificationclick", (event) => {
 
   if (!event.action) {
     console.log(`On notification click: ${event.notification.title}`);
+
     return;
   }
 
@@ -135,7 +136,8 @@ self.addEventListener("notificationclick", (event) => {
             clients
               .matchAll({ type: "window", includeUncontrolled: true })
               .then(function (clients) {
-                const targetUrl = `${apiEndpoint}/calendar`;
+                const targetUrl = `${apiEndpoint}/dashboard/${event.notification.tag}`;
+                console.log(targetUrl);
                 clients.forEach((client) => {
                   console.log(client.url);
                   if (client.url === targetUrl && "focus" in client) {
@@ -145,6 +147,10 @@ self.addEventListener("notificationclick", (event) => {
                       .then(() => client.reload());
                   }
                 });
+
+                if (clients.openWindow) {
+                  return clients.openWindow(targetUrl);
+                }
               });
 
             return res.json();

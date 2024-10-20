@@ -13,6 +13,8 @@ const axios = require("axios");
 
 const path = require("path");
 
+const dayjs = require("dayjs");
+
 var cors = require("cors");
 
 require("dotenv").config();
@@ -67,6 +69,45 @@ app.get("/decode", verifyJWT, (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}.`);
+});
+
+const updateAlarmTime = async (task) => {
+  if (task.notification) {
+    const today = dayjs().format("YYYY-MM-DD");
+
+    const isPattern = task.frequency ? true : false;
+
+    if (task.dates.includes(today)) {
+      const ind = task.dates.indexOf(today);
+
+      await axios.put(
+        isPattern
+          ? `${apiEndpoint}/pattern/update`
+          : `${apiEndpoint}/todo/update`,
+        {
+          ...task,
+          alarmTime: task.notificationStart[ind],
+          patternId: task._id,
+        }
+      );
+    }
+  }
+};
+
+const updateJob = async () => {
+  const todos = await axios.get(`${apiEndpoint}/todo/all`);
+  const patterns = await axios.get(`${apiEndpoint}/pattern/all`);
+
+  const tasks = [...todos.data, ...patterns.data];
+
+  tasks.forEach((task) => {
+    updateAlarmTime(task);
+  });
+};
+
+const updateAlarm = schedule.scheduleJob("0 * * * *", () => {
+  console.log("Update Task started");
+  updateJob();
 });
 
 const job = schedule.scheduleJob("0 * * * *", () => {

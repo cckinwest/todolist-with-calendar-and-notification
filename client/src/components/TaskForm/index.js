@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Form, Button, Stack } from "react-bootstrap";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -11,6 +11,7 @@ function TaskForm({ show, setShow, date }) {
   const user = jwtDecode(token);
 
   const [pattern, setPattern] = useState(false);
+  const [acceptNotification, setAcceptNotification] = useState(true);
 
   const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
 
@@ -23,6 +24,7 @@ function TaskForm({ show, setShow, date }) {
     endDate: dayjs().format("YYYY-MM-DD"),
     frequency: "daily",
     notification: true,
+    notificationTime: "1h",
   });
 
   const [warning, setWarning] = useState({
@@ -45,25 +47,15 @@ function TaskForm({ show, setShow, date }) {
         endTime: "",
       }));
     }
+
+    name === "notification" &&
+      (value === "true"
+        ? setAcceptNotification(true)
+        : setAcceptNotification(false));
   };
 
   const handleClose = () => {
     setShow(false);
-  };
-
-  const checkPatterns = (start, end, patterns) => {
-    var pass = true;
-
-    patterns.forEach((pattern) => {
-      if (pattern.frequency === "weekly") {
-        if (
-          new Date(start).getDay() === new Date(pattern.startDate).getDay() &&
-          new Date(start).getTime() >= new Date(pattern.startDate).getTime() &&
-          new Date(start).getTime() <= new Date(pattern.endDate).getTime()
-        ) {
-        }
-      }
-    });
   };
 
   const handleCheck = async (start, end) => {
@@ -97,6 +89,17 @@ function TaskForm({ show, setShow, date }) {
   };
 
   const handleAdd = async () => {
+    const alarmTime =
+      formData.notificationTime === "1h"
+        ? dayjs(`${formData.startDate}T${formData.startTime}`)
+            .subtract(1, "hour")
+            .format("YYYY-MM-DDTHH:mm")
+        : formData.notificationTime === "30min"
+        ? dayjs(`${formData.startDate}T${formData.startTime}`)
+            .subtract(30, "minute")
+            .format("YYYY-MM-DDTHH:mm")
+        : "";
+
     const taskData = {
       title: formData.title,
       description: formData.description,
@@ -106,6 +109,8 @@ function TaskForm({ show, setShow, date }) {
       endDate: formData.endDate,
       frequency: formData.frequency,
       notification: formData.notification,
+      notificationTime: formData.notificationTime,
+      alarmTime: alarmTime,
       userId: user.id,
     };
 
@@ -259,6 +264,19 @@ function TaskForm({ show, setShow, date }) {
             <option value={false}>False</option>
           </Form.Select>
         </Form.Group>
+        {acceptNotification && (
+          <Form.Group className="mb-2">
+            <Form.Label>When to notify?</Form.Label>
+            <Form.Select
+              value={formData.notificationTime}
+              onChange={handleChange}
+              name="notificationTime"
+            >
+              <option value="1h">1 hour before</option>
+              <option value="30min">30 min before</option>
+            </Form.Select>
+          </Form.Group>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Stack direction="horizontal" gap={2}>

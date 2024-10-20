@@ -6,7 +6,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import EditForm from "../../../EditForm";
 import axios from "axios";
 
-function TaskDisplay({ task, show, setShow }) {
+function TaskDisplay({ date, task, show, setShow }) {
   const isPattern = task.startDate ? true : false;
 
   const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
@@ -39,7 +39,7 @@ function TaskDisplay({ task, show, setShow }) {
   };
 
   return isEdit ? (
-    <EditForm task={task} isEdit={isEdit} setIsEdit={setIsEdit} />
+    <EditForm date={date} task={task} isEdit={isEdit} setIsEdit={setIsEdit} />
   ) : (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>

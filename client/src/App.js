@@ -1,4 +1,4 @@
-import Dashboard from "./pages/Dashboard";
+import DashboardPage from "./pages/DashboardPage";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Signup from "./pages/Signup";
@@ -27,10 +27,11 @@ function App() {
               path="/"
               element={<Navigate to={user ? "/calendar" : "/login"} />}
             />
-            <Route exact path="/dashboard" element={<Dashboard />} />
-            <Route exact path="/calendar" element={<CalendarPage />} />
-            <Route exact path="/signup" element={<Signup />} />
-            <Route exact path="/login" element={<Login />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/dashboard/:taskId" element={<DashboardPage />} />
+            <Route path="/calendar" element={<CalendarPage />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
             <Route path="*" element={<Login />} />
           </Routes>
         </div>

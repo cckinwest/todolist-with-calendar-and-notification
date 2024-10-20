@@ -1,12 +1,16 @@
 import React from "react";
 import { Modal, Form, Button, Stack } from "react-bootstrap";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-function EditForm({ task, isEdit, setIsEdit }) {
+function EditForm({ date, task, isEdit, setIsEdit }) {
   const [isIndividual, setIsIndividual] = useState(false);
+  const [acceptNotification, setAcceptNotification] = useState(
+    task.notification
+  );
+
   const isPattern = task.startDate ? true : false;
 
   const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
@@ -24,13 +28,28 @@ function EditForm({ task, isEdit, setIsEdit }) {
       : dayjs(task.startTime).format("YYYY-MM-DD"),
     frequency: isPattern ? task.frequency : "",
     notification: task.notification,
+    notificationTime: task.notificationTime,
   });
+
+  useEffect(() => {
+    setFormData((prevData) => ({
+      ...prevData,
+      startDate: isIndividual
+        ? date
+        : dayjs(task.startTime).format("YYYY-MM-DD"),
+    }));
+  }, [isIndividual]);
 
   const [show, setShow] = useState(isEdit);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
+
+    name === "notification" &&
+      (value === "true"
+        ? setAcceptNotification(true)
+        : setAcceptNotification(false));
   };
 
   const handleClose = () => {
@@ -45,6 +64,17 @@ function EditForm({ task, isEdit, setIsEdit }) {
   const handleEdit = () => {
     setIsEdit(!isEdit);
 
+    const alarmTime =
+      formData.notificationTime === "1h"
+        ? dayjs(`${formData.startDate}T${formData.startTime}`)
+            .subtract(1, "hour")
+            .format("YYYY-MM-DDTHH:mm")
+        : formData.notificationTime === "30min"
+        ? dayjs(`${formData.startDate}T${formData.startTime}`)
+            .subtract(30, "minute")
+            .format("YYYY-MM-DDTHH:mm")
+        : "";
+
     const taskData = {
       id: task._id,
       patternId: task._id,
@@ -57,6 +87,8 @@ function EditForm({ task, isEdit, setIsEdit }) {
       frequency: formData.frequency,
       date: formData.startDate,
       notification: formData.notification,
+      notificationTime: formData.notificationTime,
+      alarmTime: alarmTime,
       createdBy: task.createdBy,
     };
 
@@ -190,6 +222,19 @@ function EditForm({ task, isEdit, setIsEdit }) {
             <option value={false}>False</option>
           </Form.Select>
         </Form.Group>
+        {acceptNotification && (
+          <Form.Group className="mb-2">
+            <Form.Label>When to notify?</Form.Label>
+            <Form.Select
+              value={formData.notificationTime}
+              onChange={handleChange}
+              name="notificationTime"
+            >
+              <option value="1h">1 hour before</option>
+              <option value="30min">30 min before</option>
+            </Form.Select>
+          </Form.Group>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Stack direction="horizontal" gap={2}>

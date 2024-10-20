@@ -18,6 +18,16 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/all", async (req, res) => {
+  try {
+    const patterns = await Pattern.find();
+
+    res.status(200).json(patterns);
+  } catch (err) {
+    res.status(500).json({ error: err });
+  }
+});
+
 router.post("/create", async (req, res) => {
   try {
     const {
@@ -29,6 +39,8 @@ router.post("/create", async (req, res) => {
       endDate,
       frequency,
       notification,
+      notificationTime,
+      alarmTime,
       userId,
     } = req.body;
 
@@ -41,6 +53,8 @@ router.post("/create", async (req, res) => {
       endDate: endDate,
       frequency: frequency,
       notification: notification,
+      notificationTime: notificationTime,
+      alarmTime: alarmTime,
       createdBy: userId,
     });
 
@@ -80,6 +94,8 @@ router.put("/changeAnIndividual", async (req, res) => {
       endTime,
       createdBy,
       notification,
+      notificationTime,
+      alarmTime,
       patternId,
       date,
     } = req.body;
@@ -99,7 +115,9 @@ router.put("/changeAnIndividual", async (req, res) => {
       startTime: startTime,
       endTime: endTime,
       createdBy: createdBy,
+      alarmTime: alarmTime,
       notification: notification,
+      notificationTime: notificationTime,
     });
 
     const user = await User.updateOne(

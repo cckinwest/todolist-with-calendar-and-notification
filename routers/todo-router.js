@@ -16,10 +16,28 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/all", async (req, res) => {
+  try {
+    const todos = await Todo.find();
+
+    res.status(200).json(todos);
+  } catch (err) {
+    console.log({ error: err });
+  }
+});
+
 router.post("/create", async (req, res) => {
   try {
-    const { title, description, startTime, endTime, notification, userId } =
-      req.body;
+    const {
+      title,
+      description,
+      startTime,
+      endTime,
+      notification,
+      notificationTime,
+      alarmTime,
+      userId,
+    } = req.body;
 
     const todo = await Todo.create({
       title: title,
@@ -27,6 +45,8 @@ router.post("/create", async (req, res) => {
       startTime: startTime,
       endTime: endTime,
       notification: notification,
+      notificationTime: notificationTime,
+      alarmTime: alarmTime,
       createdBy: userId,
     });
 
@@ -44,6 +64,8 @@ router.post("/create", async (req, res) => {
 
 router.put("/update", async (req, res) => {
   try {
+    console.log(req.body);
+
     const todo = await Todo.findByIdAndUpdate(req.body.id, req.body, {
       new: true,
     });

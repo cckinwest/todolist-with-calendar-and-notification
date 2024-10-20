@@ -14,16 +14,26 @@ const todoSchema = new Schema({
     type: String,
   },
   startTime: {
-    type: String
+    type: String,
   },
   endTime: {
-    type: String
+    type: String,
   },
   notification: {
     type: Boolean,
     default: () => {
       return true;
     },
+  },
+  notificationTime: {
+    type: String,
+    enum: ["1h", "30min"],
+    default: () => {
+      return "1h";
+    },
+  },
+  alarmTime: {
+    type: String,
   },
   createdAt: {
     type: Date,
@@ -39,6 +49,26 @@ todoSchema.virtual("dates").get(function () {
   const dates = [];
   dates.push(dayjs(this.startTime).format("YYYY-MM-DD"));
   return dates;
+});
+
+todoSchema.virtual("notificationStart").get(function () {
+  const start = [];
+
+  if (this.notification) {
+    if (this.notificationTime === "1h") {
+      start.push(
+        dayjs(this.startTime).subtract(1, "hour").format("YYYY-MM-DDTHH:mm")
+      );
+    }
+
+    if (this.notificationTime === "30min") {
+      start.push(
+        dayjs(this.startTime).subtract(30, "minute").format("YYYY-MM-DDTHH:mm")
+      );
+    }
+  }
+
+  return start;
 });
 
 todoSchema.set("toJSON", { virtuals: true });

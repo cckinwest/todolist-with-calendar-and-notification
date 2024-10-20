@@ -3,21 +3,24 @@ import axios from "axios";
 import { useState } from "react";
 import { Form, Button, Card, Stack } from "react-bootstrap";
 import dayjs from "dayjs";
-import EditForm from "../../EditForm";
+import EditForm from "../../../EditForm";
 
-const Task = ({ task }) => {
-  const isPattern = task.startDate ? true : false;
+const Task = ({ task, date }) => {
+  const isPattern = task.frequency ? true : false;
 
   const [edit, setEdit] = useState(false);
+  const [enableNotification, setEnableNotification] = useState(
+    task.notification
+  );
   const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
 
   const handleDelete = () => {
     axios
       .put(
         isPattern
-          ? `${apiEndpoint}/pattern/delete`
+          ? `${apiEndpoint}/pattern/deleteAnIndividual`
           : `${apiEndpoint}/todo/delete`,
-        isPattern ? { patternId: task._id } : { taskId: task._id }
+        isPattern ? { patternId: task._id, date: date } : { taskId: task._id }
       )
       .then((res) => {
         window.location.reload();
@@ -25,6 +28,37 @@ const Task = ({ task }) => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const handleNotification = () => {
+    axios
+      .put(
+        isPattern
+          ? `${apiEndpoint}/pattern/changeAnIndividual`
+          : `${apiEndpoint}/todo/update`,
+        {
+          id: task._id,
+          patternId: task._id,
+          title: task.title,
+          description: task.description,
+          startTime: `${date}T${dayjs(task.startTime).format("HH:mm")}`,
+          endTime: `${date}T${dayjs(task.endTime).format("HH:mm")}`,
+          frequency: task.frequency,
+          date: date,
+          notification: !enableNotification,
+          notificationTime: task.notificationTime,
+          alarmTime: task.alarmTime,
+          createdBy: task.createdBy,
+        }
+      )
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    setEnableNotification(!enableNotification);
   };
 
   return (
@@ -71,6 +105,23 @@ const Task = ({ task }) => {
               }}
             >
               <i className="bi bi-trash3"></i>
+            </Button>
+            <Button
+              variant="outline-light"
+              onClick={handleNotification}
+              style={{
+                textAlign: "center",
+                height: "30px",
+                width: "30px",
+                borderRadius: "50%",
+                padding: "0",
+              }}
+            >
+              <i
+                className={
+                  enableNotification ? "bi bi-bell-fill" : "bi bi-bell-slash"
+                }
+              ></i>
             </Button>
           </Stack>
         </Card.Header>

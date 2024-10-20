@@ -25,7 +25,7 @@ const Header = () => {
 
   return (
     <Navbar expand="lg" className="bg-light">
-      <Container>
+      <Container style={{ width: "100%", margin: 0 }}>
         <Navbar.Brand>
           <Nav.Link href={user ? "/calendar" : "/login"}>
             <Image src={icon} roundedCircle style={{ height: "50px" }} />

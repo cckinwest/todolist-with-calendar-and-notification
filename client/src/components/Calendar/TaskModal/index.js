@@ -18,6 +18,7 @@ function TaskModal({ date, task, showTitle = true }) {
   };
 
   const handleClick = () => {
+    console.log(task);
     setShow(true);
   };
 
@@ -50,7 +51,9 @@ function TaskModal({ date, task, showTitle = true }) {
         ></i>
       </Button>
 
-      {show && <TaskDisplay task={task} show={show} setShow={setShow} />}
+      {show && (
+        <TaskDisplay date={date} task={task} show={show} setShow={setShow} />
+      )}
     </>
   );
 }

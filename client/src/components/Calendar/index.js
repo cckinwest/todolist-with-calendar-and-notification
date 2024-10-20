@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import Notification from "../Notification";
 import { useMediaQuery } from "react-responsive";
+import LoginModal from "../LoginModal";
 
 import {
   getNotificationConsent,
@@ -24,7 +25,7 @@ function Calendar() {
   const [status, setStatus] = useState("default");
 
   const token = localStorage.getItem("token");
-  const user = jwtDecode(token);
+  const user = token ? jwtDecode(token) : "";
 
   const isSmallScreen = useMediaQuery({ query: "(max-width: 600px)" });
   const isMediumScreen = useMediaQuery({ query: "(max-width: 1024px)" });
@@ -109,28 +110,32 @@ function Calendar() {
       }
     }
 
-    fetchData();
+    token && fetchData();
   }, []);
 
-  return isSmallScreen ? (
-    <Week weekArr={thisWeek()} tasks={tasks}>
-      <Notification tasks={tasks} />
-    </Week>
+  return token ? (
+    isSmallScreen ? (
+      <Week weekArr={thisWeek()} tasks={tasks}>
+        <Notification tasks={tasks} />
+      </Week>
+    ) : (
+      <Container>
+        <Notification tasks={tasks} />
+        <Row className="mt-3 d-flex align-items-center justify-content-between">
+          <MonthMenu
+            year={year}
+            setYear={setYear}
+            month={month}
+            setMonth={setMonth}
+          />
+        </Row>
+        <Row>
+          <Month year={year} month={month} tasks={tasks} />
+        </Row>
+      </Container>
+    )
   ) : (
-    <Container>
-      <Notification tasks={tasks} />
-      <Row className="mt-3 d-flex align-items-center justify-content-between">
-        <MonthMenu
-          year={year}
-          setYear={setYear}
-          month={month}
-          setMonth={setMonth}
-        />
-      </Row>
-      <Row>
-        <Month year={year} month={month} tasks={tasks} />
-      </Row>
-    </Container>
+    <LoginModal />
   );
 }
 

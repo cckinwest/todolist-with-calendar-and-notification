@@ -5,120 +5,142 @@ import dayjs from "dayjs";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
-function Single({ task, responsed, setResponsed }) {
+function Single({ task }) {
   const apiEndpoint = process.env.REACT_APP_URL || "http://localhost:3002";
 
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
 
   const startTime = dayjs(task.startTime).format("HH:mm");
   const endTime = dayjs(task.endTime).format("HH:mm");
 
+  setInterval(() => {
+    const isPattern = task.frequency ? true : false;
+
+    const taskStart = isPattern
+      ? dayjs(
+          `${dayjs().format("YYYY-MM-DD")}T${dayjs(task.startTime).format(
+            "HH:mm"
+          )}`
+        )
+      : dayjs(task.startTime);
+
+    const today = dayjs().format("YYYY-MM-DD");
+    const now = dayjs();
+
+    task.alarmTime &&
+      task.notification &&
+      dayjs(task.alarmTime).format("YYYY-MM-DD") === today &&
+      dayjs(task.alarmTime).diff(now) <= 0 &&
+      now.diff(taskStart) <= 0 &&
+      setShow(true);
+  }, 1000);
+
   const handleNotNotify = async () => {
     const isPattern = task.frequency ? true : false;
 
-    console.log({
-      ...task,
-      notification: false,
-      date: dayjs().format("YYYY-MM-DD"),
-    });
+    await axios
+      .put(
+        isPattern
+          ? `${apiEndpoint}/pattern/changeAnIndividual`
+          : `${apiEndpoint}/todo/update`,
+        {
+          id: task._id,
+          title: task.title,
+          description: task.description,
+          notificationTime: task.notificationTime,
+          createdBy: task.createdBy,
+          notification: false,
+          startTime: `${dayjs().format("YYYY-MM-DD")}T${dayjs(
+            task.startTime
+          ).format("HH:mm")}`,
+          endTime: `${dayjs().format("YYYY-MM-DD")}T${dayjs(
+            task.endTime
+          ).format("HH:mm")}`,
+          date: dayjs().format("YYYY-MM-DD"),
+          patternId: task._id,
+        }
+      )
+      .catch((err) => {
+        console.log(err);
+      });
+
+    setShow(false);
+    window.location.reload();
+  };
+
+  const handleNotifyAgain = async () => {
+    const isPattern = task.frequency ? true : false;
+
+    const todayStart = `${dayjs().format("YYYY-MM-DD")}T${dayjs(
+      task.startTime
+    ).format("HH:mm")}`;
 
     await axios.put(
       isPattern
         ? `${apiEndpoint}/pattern/changeAnIndividual`
         : `${apiEndpoint}/todo/update`,
       {
-        ...task,
-        notification: false,
-        date: dayjs().format("YYYY-MM-DD"),
+        id: task._id,
         patternId: task._id,
+        title: task.title,
+        description: task.description,
+        notificationTime: task.notificationTime,
+        createdBy: task.createdBy,
+
+        alarmTime:
+          dayjs(todayStart).diff(dayjs().add(5, "minute")) > 0
+            ? dayjs().add(5, "minute").format("YYYY-MM-DDTHH:mm")
+            : dayjs(todayStart).format("YYYY-MM-DDTHH:mm"),
+        startTime: `${dayjs().format("YYYY-MM-DD")}T${dayjs(
+          task.startTime
+        ).format("HH:mm")}`,
+        endTime: `${dayjs().format("YYYY-MM-DD")}T${dayjs(task.endTime).format(
+          "HH:mm"
+        )}`,
+        notification: task.notification,
+        startDate: task.startDate,
+        endDate: task.endDate,
+        frequency: task.frequency,
+
+        date: dayjs().format("YYYY-MM-DD"),
       }
     );
 
     setShow(false);
-    setResponsed([...responsed, task._id]);
-  };
-
-  const handleNotifyAgain = () => {
-    setShow(false);
-    setResponsed([...responsed, task._id]);
+    window.location.reload();
   };
 
   return (
-    show && (
-      <Fragment key={task._id}>
-        <Row className="mb-2">
-          <h5>{`${task.title} (${startTime} - ${endTime})`}</h5>
-        </Row>
-        <Row className="mb-2" style={{ marginLeft: "0px", marginRight: "0px" }}>
-          <Button variant="outline-danger" onClick={handleNotNotify}>
-            Don't notify again
-          </Button>
-        </Row>
-        <Row className="mb-2" style={{ marginLeft: "0px", marginRight: "0px" }}>
-          <Button variant="outline-success" onClick={handleNotifyAgain}>
-            Pls notify again
-          </Button>
-        </Row>
-      </Fragment>
-    )
+    <Modal
+      show={show}
+      onHide={() => {
+        setShow(false);
+      }}
+      key={task._id}
+    >
+      <Modal.Header>
+        <h4>{`${task.title} (${startTime} - ${endTime})`}</h4>
+      </Modal.Header>
+      <Modal.Body>{task.description}</Modal.Body>
+      <Modal.Footer>
+        <Button variant="outline-danger" onClick={handleNotNotify}>
+          Don't notify again
+        </Button>
+        <Button variant="outline-success" onClick={handleNotifyAgain}>
+          Pls notify again 5 min later
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 }
 
 function Notification({ tasks }) {
-  const user = jwtDecode(localStorage.getItem("token"));
-  const [show, setShow] = useState(false);
-  const [responsed, setResponsed] = useState([]);
-
-  const arrOfTasks = tasks.filter((task) => {
-    const today = dayjs().format("YYYY-MM-DD");
-    const dates = task.dates;
-    const time = dayjs(task.startTime).format("HH:mm");
-
-    return (
-      task.notification &&
-      dates.includes(today) &&
-      new Date(`${today}T${time}`).getTime() - new Date().getTime() < 3600000 &&
-      new Date(`${today}T${time}`).getTime() > new Date().getTime()
-    );
-  });
-
-  const handleClose = () => {
-    setShow(false);
-    window.location.reload();
-  };
-
-  setInterval(() => {
-    setShow(true);
-  }, 300000);
-
-  if (responsed.length === arrOfTasks.length && arrOfTasks.length > 0) {
-    window.location.reload();
-  }
-
   return (
-    responsed.length < arrOfTasks.length &&
-    arrOfTasks.length > 0 &&
-    show && (
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>{`Tasks one hour later`}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {arrOfTasks.map((task) => {
-            return (
-              <Single
-                task={task}
-                responsed={responsed}
-                setResponsed={setResponsed}
-              />
-            );
-          })}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={handleClose}>Close</Button>
-        </Modal.Footer>
-      </Modal>
-    )
+    <>
+      {tasks.map((task) => {
+        return <Single task={task} key={task._id} />;
+      })}
+    </>
   );
 }
 
