@@ -1,4 +1,4 @@
-const CACHE_NAME = "v8";
+const CACHE_NAME = "v9";
 
 const urlsToCache = [
   "/",
@@ -22,8 +22,8 @@ const urlsToCache = [
   "/static/media/todolistIcon.42dd5c93e2a8aaf3032a.jpg",
 ];
 
-const apiEndpoint = "https://localhost:3000";
-//"https://schedule-calendar-notification-2df5a697a30a.herokuapp.com";
+const apiEndpoint =
+  "https://schedule-calendar-notification-2df5a697a30a.herokuapp.com";
 
 self.addEventListener("install", (event) => {
   console.log("The service worker is installing.");
