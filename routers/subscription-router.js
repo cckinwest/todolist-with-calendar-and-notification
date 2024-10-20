@@ -96,11 +96,20 @@ router.get("/pushNotification", async (res, req) => {
       const subscription = subscriber.subscription;
 
       const todos = subscriber.userId.todos.filter((todo) => {
+        const startTime = todo.startTime;
+
         return todo.dates.includes(today);
       });
 
       const patterns = subscriber.userId.patterns.filter((pattern) => {
-        return pattern.dates.includes(today);
+        const startTime = `${today}T${dayjs(pattern.startTime).format(
+          "HH:mm"
+        )}`;
+        return (
+          pattern.dates.includes(today) &&
+          dayjs(startTime).diff(dayjs(), "minute") <= 120 &&
+          dayjs(startTime).diff(dayjs(), "minute") >= 0
+        );
       });
 
       arrOfTasks = [...todos, ...patterns];

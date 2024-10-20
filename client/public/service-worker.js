@@ -1,4 +1,4 @@
-const CACHE_NAME = "v7";
+const CACHE_NAME = "v8";
 
 const urlsToCache = [
   "/",
@@ -12,9 +12,9 @@ const urlsToCache = [
   "/manifest.json",
   "/static/js/845.542b102c.chunk.js",
   "/static/js/845.542b102c.chunk.js.map",
-  "/static/js/main.83beed1b.js",
-  "/static/js/main.83beed1b.js.LICENSE.txt",
-  "/static/js/main.83beed1b.js.map",
+  "/static/js/main.eb6c46f4.js",
+  "/static/js/main.eb6c46f4.js.LICENSE.txt",
+  "/static/js/main.eb6c46f4.js.map",
   "/static/css/main.46b98132.css",
   "/static/css/main.46b98132.css.map",
   "/static/media/bootstrap-icons.39795c0b4513de014cf8.woff",
@@ -22,8 +22,8 @@ const urlsToCache = [
   "/static/media/todolistIcon.42dd5c93e2a8aaf3032a.jpg",
 ];
 
-const apiEndpoint =
-  "https://schedule-calendar-notification-2df5a697a30a.herokuapp.com";
+const apiEndpoint = "https://localhost:3000";
+//"https://schedule-calendar-notification-2df5a697a30a.herokuapp.com";
 
 self.addEventListener("install", (event) => {
   console.log("The service worker is installing.");
@@ -79,94 +79,31 @@ self.addEventListener("push", (event) => {
     tag: id,
     data: startDate,
     requireInteraction: true,
-    actions: [
-      {
-        action: "off-action",
-        title: "Don't notify again.",
-      },
-      {
-        action: "continue-action",
-        title: "Pls notify again.",
-      },
-    ],
   };
 
   event.waitUntil(self.registration.showNotification(title, options));
 });
 
 self.addEventListener("notificationclick", (event) => {
-  const isPattern = event.notification.data.length > 0;
+  const taskId = event.notification.tag;
 
-  var endpoint = `${apiEndpoint}/todo/update`;
+  var url = `${apiEndpoint}/dashboard/${taskId}`;
 
-  var data = {
-    id: event.notification.tag,
-    notification: false,
-  };
+  console.log(url);
 
-  if (isPattern) {
-    endpoint = `${apiEndpoint}/pattern/changeAnIndividual`;
-    data = {
-      patternId: event.notification.tag,
-      notification: false,
-    };
-  }
+  event.waitUntil(
+    clients.matchAll({ type: "window" }).then(function (clientList) {
+      clientList.forEach((client) => {
+        if (client.url === url && "focus" in client) {
+          return client.focus();
+        }
+      });
 
-  if (!event.action) {
-    console.log(`On notification click: ${event.notification.title}`);
+      console.log(url);
 
-    return;
-  }
-
-  switch (event.action) {
-    case "off-action":
-      event.waitUntil(
-        fetch(endpoint, {
-          body: JSON.stringify(data),
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-          .then((res) => {
-            if (!res.ok) {
-              throw new Error("There were errors in network.");
-            }
-
-            clients
-              .matchAll({ type: "window", includeUncontrolled: true })
-              .then(function (clients) {
-                const targetUrl = `${apiEndpoint}/dashboard/${event.notification.tag}`;
-                console.log(targetUrl);
-                clients.forEach((client) => {
-                  console.log(client.url);
-                  if (client.url === targetUrl && "focus" in client) {
-                    client.focus();
-                    return client
-                      .navigate(targetUrl)
-                      .then(() => client.reload());
-                  }
-                });
-
-                if (clients.openWindow) {
-                  return clients.openWindow(targetUrl);
-                }
-              });
-
-            return res.json();
-          })
-          .then((data) => {
-            console.log(`Updated data: ${data}`);
-          })
-          .catch((err) => {
-            console.log(err);
-          })
-      );
-
-      break;
-    case "continue-action":
-      console.log(event.notification.tag);
-      console.log(`Ok will notify you again!`);
-      break;
-  }
+      if (clients.openWindow) {
+        return clients.openWindow(url);
+      }
+    })
+  );
 });
